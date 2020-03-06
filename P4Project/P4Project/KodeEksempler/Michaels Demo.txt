@@ -1,44 +1,11 @@
-Static void Main(){
-	new Element Normal();
-	new Element Luft();
-	Elements.Normal.Damage.Luft = 0.5;
-	Elements.Normal.Defence.Luft = 0.5;
+global stringval strengtest = "Test Streng";
+global stringval strengtest2 = "Test " : "Med" : "Mig" + ("Jeg" : "Er" : "Syntaktisk") + ("Korrekt");
 
 
-	// Character Pikachu = new Character("Navn", Level, Element);
-	Character Charmander = new Character("Charmander", 5, Elements.Luft);
-	Character Pikachu = new Character("Pikachu", 6, Elements.Normal);
-	
-	new Action Tackle(Attack);
-	Actions.Tackle.Damage = 5;
-	Actions.Tackle.Element = Elements.Normal;
-	Actions.Tackle.Accuracy = 0.4; //default er 1
-
-	Pikachu.actions <- Actions.Tackle; //tilføjer action til listen
-	Pikachu.actions -> Actions.Tackle; //fjerner action fra listen
-	
-	Pikachu.actions <- Actions.Tackle;
-	Charmander.actions <- Actions.Tackle;
-	
-	//tilføj karakterer til de to globale hold lister.	
-	Team1 <- Pickachu;
-	Team2 <- Charmander;
-
-
-	new TurnSystem(Shifting); // shifting er en metode der beskriver hvordan turerne forløbes, kan erstattes med egen implementering
-	StartGame();
-}
-
-Overwriteable Character klassens properties:
+func void Main ()
 {
-Navn;
-MaxHealth;
-CurrentHealth;
-MaxMana;
-CurrentMana;
-Element;
-Level;
-XP;
-Actions; (liste af mulige angreb eller andre mulige aktioner)
-Stats/Attribut; (default: attack, defence)
+local float floatværdi = 5;
+local bool Boolskværdi= false
+local int intværdi = 345*4 + (true && Boolskværdi);
+local bool ErDetSandt? = Boolskværdi || floatværdi < intværdi;
 }
