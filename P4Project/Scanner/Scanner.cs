@@ -10,8 +10,27 @@ namespace ScannerLib
         public static char symbol = ' ';
         private static Dictionary<string, Token.TokenType> Keywords = new Dictionary<string, Token.TokenType>
         {
-            {"play", Token.TokenType.play_token }, 
-            {"if", Token.TokenType.if_token }
+            {"if", Token.TokenType.if_token},
+            {"else", Token.TokenType.else_token},
+            {"elif", Token.TokenType.elif_token},
+            {"while", Token.TokenType.while_token},
+            {"play", Token.TokenType.play_token},
+            {"until", Token.TokenType.until_token},
+            {"vs", Token.TokenType.vs_token},
+            {"in", Token.TokenType.in_token},
+            {"return", Token.TokenType.return_token},
+            {"int", Token.TokenType.intdcl_token},
+            {"float", Token.TokenType.floatdcl_token},
+            {"struct", Token.TokenType.struct_token},
+            {"string", Token.TokenType.stringdcl_token},
+            {"bool", Token.TokenType.booldcl_token},
+            {"true", Token.TokenType.boolval_token}, // OBS: true og false mapper til samme token-type.
+            {"false", Token.TokenType.boolval_token},
+            {"void", Token.TokenType.void_token},
+            {"func", Token.TokenType.func_token},
+            {"local", Token.TokenType.local_token},
+            {"global", Token.TokenType.global_token}
+
         };
 
         public static Token Scan(StreamReader reader)
