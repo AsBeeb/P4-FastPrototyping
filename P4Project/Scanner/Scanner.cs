@@ -246,10 +246,12 @@ namespace ScannerLib
                 value += (char)reader.Read();
             }
 
+            // Tjekker om ordet er et reserveret keyword. Her gemmes value kun ved "true" og "false".
             if (Keywords.TryGetValue(value, out type))
             {
-                return new Token(value, type);
+                return (type == Token.TokenType.boolval_token) ? new Token(value, type) : new Token(type);
             }
+            // Alternativt læses ordet som en identifier token.
             else
             {
                 type = Token.TokenType.id_token;
