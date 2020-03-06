@@ -6,7 +6,7 @@ namespace ScannerLib
 {
     public class LexicalException : Exception
     {
-        public LexicalException(int line, int symbol) : base($"Lexical error on line:{line} with symbol {symbol}")
+        public LexicalException(int line) : base($"Lexical error on line:{line}")
         {
         }
     }

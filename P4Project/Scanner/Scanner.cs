@@ -6,8 +6,7 @@ namespace ScannerLib
 {
     public static class Scanner
     {
-        public static int line = 0;
-        public static char symbol = ' ';
+        public static int line = 1;
         private static Dictionary<string, Token.TokenType> Keywords = new Dictionary<string, Token.TokenType>
         {
             {"if", Token.TokenType.if_token},
@@ -40,7 +39,8 @@ namespace ScannerLib
             // Advance if blank space
             while (Char.IsWhiteSpace((char)reader.Peek()))
             {
-                if 
+                if ((char)reader.Peek() == '\n')
+                    line += 1;
                 reader.Read();
 
             }
@@ -145,16 +145,29 @@ namespace ScannerLib
                         case '\"':
                             ans = GetString(reader);
                             break;
+                        case '#':
+                            SkipComment(reader);
+                            break;
 
                         default:
-                            Console.WriteLine("Syntaks fejl: Token ikke fundet");
-                            break;
+                            throw new LexicalException(line);
                     }
                 }
             }
 
             return ans;
         }
+
+        private static void SkipComment(StreamReader reader) 
+        {
+            while ((char)reader.Peek() != '\n' && reader.Peek() > -1)
+            {
+                reader.Read();
+            }
+
+        }
+
+
 
         private static Token GetString(StreamReader reader)
         {
@@ -170,7 +183,7 @@ namespace ScannerLib
             }
             else
             {
-                throw new LexicalException(5, 10);
+                throw new LexicalException(line);
             }
         }
 
@@ -184,7 +197,7 @@ namespace ScannerLib
             // Scenariet ved '&&' og '||'
             else if (option1 == option2)
             {
-                throw new LexicalException(5, 10);
+                throw new LexicalException(line);
             }
             else
             {
@@ -209,6 +222,11 @@ namespace ScannerLib
             {
                 type = Token.TokenType.fnum_token;
                 value += (char)reader.Read();
+                if (!Char.IsDigit((char)reader.Peek()))
+                {
+                    throw new LexicalException(line);
+                }
+                    
 
                 while (Char.IsDigit((char)reader.Peek()))
                 {

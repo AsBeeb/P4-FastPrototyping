@@ -22,7 +22,9 @@ namespace P4Project
             using (StreamReader reader = new StreamReader(filename)) {
                 do
                 {
-                    tokenList.Add(Scanner.Scan(reader));
+                    Token token = Scanner.Scan(reader);
+                    if (token != null)
+                        tokenList.Add(token);
                     Console.WriteLine("Value: " + tokenList.Last().Value + " Type: " + tokenList.Last().Type.ToString() + "\n");
                 } while (tokenList.Last().Type != Token.TokenType.eof_token);
 
