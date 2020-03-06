@@ -52,7 +52,9 @@
   <ItemGroup>
     <Content Include="KodeEksempler\Demo1.txt" />
     <Content Include="KodeEksempler\Demo2.txt" />
+    <Content Include="KodeEksempler\Demo4.txt" />
     <Content Include="KodeEksempler\Demo6.txt" />
+    <Content Include="KodeEksempler\Michaels Demo.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
