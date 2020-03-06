@@ -4,8 +4,8 @@ global string strengtest2 = "Test " : "Med" : "Mig" + ("Jeg" : "Er" : "Syntaktis
 
 func void Main ()
 {
-local float floatværdi = 5;
-local bool Boolskværdi= false
-local int intværdi = 345*4 + (true && Boolskværdi);
+local float floatværdi				= 5;
+local bool Boolskværdi                             = false;
+local int intværdi = 345*4 + (true && Boolskværdi)*(52);
 local bool ErDetSandt? = Boolskværdi || floatværdi < intværdi;
 }
