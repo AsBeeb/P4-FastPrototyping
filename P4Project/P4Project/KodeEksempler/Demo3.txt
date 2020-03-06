@@ -1,0 +1,39 @@
+﻿
+struct hero {
+	local string Name = "Dave";
+	local int HP = 100;
+	local int Attackpower = 100;
+
+	hero () {
+	}
+}
+
+struct opp {
+	local string Name = "Batman";
+	local int HP = 80;
+	local int Defensepower = 80;
+
+	opp() {
+	}
+}
+
+func void main () {
+local hero Jónnyboy = hero ();
+local opp Dannyboy = opp ();
+	begingame ();
+
+}
+
+func void begingame (){
+
+play(player hero vs	opp in Orderofplay()) {
+	
+	}
+	until (true)
+}
+
+ func int[] Orderofplay {
+	local int[] Turns = Empty();
+	return Turns;
+ }
+
