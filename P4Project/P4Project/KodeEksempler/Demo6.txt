@@ -2,36 +2,36 @@
 
 struct a 
 {
-	local int health;
-	local string name;
-	local move[] moves;
+	local int Health;
+	local string Name;
+	local move[] Moves;
 
-	a (int _health, string _name) 
+	a (int health, string name) 
 	{
-		health = _health;
-		name = _name;
+		Health = health;
+		Name = name;
 		
 	}
 }
 
 struct move 
 {
-	local int damage;
-	local string type;
+	local int Damage;
+	local string Type;
 }
 
 func main ()
 {
 	local a dude1 = a(100, dude1);
 	local move[] dude1Moves;
-	dude1Moves.damage = 100;
-	dude1Moves.type = "water"
+	dude1Moves.Damage = 100;
+	dude1Moves.Type = "water"
 
 	local int i = 0;
 	while (i <= len(dude1Moves))
 	{
-		dude1.moves[i].damage = dude1moves.damage;
-		dude1.moves[i].type = dude1moves.type;
+		dude1.moves[i].Damage = dude1moves.Damage;
+		dude1.moves[i].Type = dude1moves.Type;
 		i = i + 1;
 	}
 }
