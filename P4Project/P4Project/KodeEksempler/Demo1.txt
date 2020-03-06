@@ -1,1 +1,40 @@
-﻿
+﻿# Eksempel på kodeeksempel 1
+
+struct spiller
+{
+    local string Name;
+    local int Life;
+
+    spiller (string name, int life) 
+    {
+        Name = name;
+        Life = life;
+    }
+}
+
+global spiller[] spillerere = Empty();
+
+func void main()
+{
+    local spiller Aage = spiller("Aage", 23);
+    local spiller Niels = spiller("Niels", 423);
+    local spiller Jens = spiller("Jens", 73);
+    spillerere = Add(Aage);
+    spillerere = Add(Niels);
+    spillerere = Add(Jens);
+
+    startgame();
+}
+
+func spiller[] GetTurnArray()
+{
+    return spillerere;
+}
+
+func void startgame() 
+{
+    play(currentPlayer vs opponents in GetTurnArray()) 
+    {
+        currentPlayer
+    } until(true);
+}
