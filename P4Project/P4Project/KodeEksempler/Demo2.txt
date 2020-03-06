@@ -1,0 +1,21 @@
+﻿global string hejStr = "Hej " : " med " : " dig!";
+
+func void main()
+{
+	if(true)
+	{
+		local int newValue = 2222;
+		local int anotherVal = (newValue + 20);
+	} 
+	else
+	{
+		local string minString = myFunc();
+	}
+}
+
+func string myFunc()
+{
+	local string nyStr = "Hej Hej";
+	
+	return nyStr;
+}

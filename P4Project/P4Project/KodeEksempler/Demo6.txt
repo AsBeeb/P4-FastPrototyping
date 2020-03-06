@@ -1,0 +1,37 @@
+﻿# Kodeeksempel 6
+
+struct a 
+{
+	local int health;
+	local string name;
+	local move[] moves;
+
+	a (int _health, string _name) 
+	{
+		health = _health;
+		name = _name;
+		
+	}
+}
+
+struct move 
+{
+	local int damage;
+	local string type;
+}
+
+func main ()
+{
+	local a dude1 = a(100, dude1);
+	local move[] dude1Moves;
+	dude1Moves.damage = 100;
+	dude1Moves.type = "water"
+
+	local int i = 0;
+	while (i <= len(dude1Moves))
+	{
+		dude1.moves[i].damage = dude1moves.damage;
+		dude1.moves[i].type = dude1moves.type;
+		i = i + 1;
+	}
+}
