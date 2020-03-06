@@ -18,8 +18,13 @@ namespace P4Project
             //string sti = Console.ReadLine();
             //Console.WriteLine("Skriv filnavn:");
             //string filnavn = "\\" + Console.ReadLine() + ".txt";
-            string filename = @"C:\Users\andre\Documents\GitHub\P4-FastPrototyping\P4Project\P4Project\KodeEksempler\Numbers.txt";
-            using (StreamReader reader = new StreamReader(filename)) {
+            string docPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            string gitPath = @"\GitHub\P4-FastPrototyping\P4Project\P4Project\KodeEksempler\";
+            string fileToOpen = "Numbers";
+            string fileExtension = ".txt";
+
+            string filePath = String.Format("{0}{1}{2}{3}", docPath, gitPath, fileToOpen, fileExtension);
+            using (StreamReader reader = new StreamReader(filePath)) {
                 do
                 {
                     tokenList.Add(Scanner.Scan(reader));
