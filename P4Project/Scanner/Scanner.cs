@@ -30,7 +30,6 @@ namespace ScannerLib
             {"func", Token.TokenType.func_token},
             {"local", Token.TokenType.local_token},
             {"global", Token.TokenType.global_token}
-
         };
 
         public static Token Scan(StreamReader reader)
@@ -259,7 +258,7 @@ namespace ScannerLib
             }
 
             /* Check for reserved keywords. In this case, only "true" and "false" are saved as values.
-            Other values, such as "if" and "play" are always the same, and are therefore discarded to save space. */
+            Other values, such as "if" and "play", are always the same, and are therefore discarded to save space. */
             if (Keywords.TryGetValue(value, out type))
             {
                 return (type == Token.TokenType.boolval_token) ? new Token(value, type) : new Token(type);
