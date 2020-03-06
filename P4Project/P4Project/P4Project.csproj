@@ -34,7 +34,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="ScannerLib">
-      <HintPath>..\Scanner\bin\Debug\netstandard2.0\ScannerLib.dll</HintPath>
+      <HintPath>..\Scanner\obj\Debug\netstandard2.0\ScannerLib.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />

@@ -6,6 +6,8 @@ namespace ScannerLib
 {
     public static class Scanner
     {
+        public static int line = 0;
+        public static char symbol = ' ';
         private static Dictionary<string, Token.TokenType> Keywords = new Dictionary<string, Token.TokenType>
         {
             {"play", Token.TokenType.play_token }, 
@@ -19,7 +21,9 @@ namespace ScannerLib
             // Advance if blank space
             while (Char.IsWhiteSpace((char)reader.Peek()))
             {
+                if 
                 reader.Read();
+
             }
 
             // If end of file, return eof token
@@ -147,10 +151,7 @@ namespace ScannerLib
             }
             else
             {
-                // Throw exception
-                Console.WriteLine("Syntaks fejl: Fejl i string");
-                Console.Read();
-                return null;
+                throw new LexicalException(5, 10);
             }
         }
 
@@ -164,9 +165,7 @@ namespace ScannerLib
             // Scenariet ved '&&' og '||'
             else if (option1 == option2)
             {
-                // Throw exception
-                Console.WriteLine("Syntaks fejl: Forventet && eller ||");
-                return null;
+                throw new LexicalException(5, 10);
             }
             else
             {

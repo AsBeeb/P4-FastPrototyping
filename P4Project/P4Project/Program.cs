@@ -18,7 +18,7 @@ namespace P4Project
             //string sti = Console.ReadLine();
             //Console.WriteLine("Skriv filnavn:");
             //string filnavn = "\\" + Console.ReadLine() + ".txt";
-            string filename = @"C:\Users\andre\Documents\GitHub\P4-FastPrototyping\P4Project\P4Project\KodeEksempler\Numbers.txt";
+            string filename = @"C:\Users\Michael\Source\Repos\P4-FastPrototyping\P4Project\P4Project\KodeEksempler\Numbers.txt";
             using (StreamReader reader = new StreamReader(filename)) {
                 do
                 {
