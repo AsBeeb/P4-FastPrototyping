@@ -7,6 +7,7 @@ namespace ScannerLib
     public static class Scanner
     {
         public static int line = 1;
+        //Specifies all the keyword tokens
         private static Dictionary<string, Token.TokenType> Keywords = new Dictionary<string, Token.TokenType>
         {
             {"if", Token.TokenType.if_token},
@@ -39,6 +40,7 @@ namespace ScannerLib
             // Advance if blank space
             while (Char.IsWhiteSpace((char)reader.Peek()))
             {
+                //Counts the line number for the exception message
                 if ((char)reader.Peek() == '\n')
                     line += 1;
                 reader.Read();
@@ -160,6 +162,7 @@ namespace ScannerLib
 
         private static void SkipComment(StreamReader reader) 
         {
+            //Reads until the symbol right before the end of the line or file
             while ((char)reader.Peek() != '\n' && reader.Peek() > -1)
             {
                 reader.Read();
@@ -172,15 +175,18 @@ namespace ScannerLib
         private static Token GetString(StreamReader reader)
         {
             string value = "";
+            // Reads every character until it meets a new line symbol, or " symbol or EOF.
             while ((char)reader.Peek() != '\n' && (char)reader.Peek() != '\"' && reader.Peek() > -1)
             {
                 value += (char)reader.Read();
             }
+            // Checks if the cause of the stopped while loop is a " symbol.
             if ((char)reader.Peek() == '\"')
             {
                 reader.Read();
                 return new Token(value, Token.TokenType.stringval_token);
             }
+            // Throw exception because of EOF or runaway string.
             else
             {
                 throw new LexicalException(line);
@@ -189,12 +195,14 @@ namespace ScannerLib
 
         private static Token TokenComp(StreamReader reader, char expectedSymbol, Token.TokenType option1, Token.TokenType option2)
         {
+            // Checks whether the symbol is the one expected.
             if ((char)reader.Peek() == expectedSymbol)
             {
                 reader.Read();
                 return new Token(option2);
             }
-            // Scenariet ved '&&' og '||'
+            // If it isn't the expected symbol and the options are the same it throws an exception. 
+            // This could be if we expect && but only read &, then the second one would throw the exception.
             else if (option1 == option2)
             {
                 throw new LexicalException(line);
@@ -209,25 +217,28 @@ namespace ScannerLib
         {
             string value = "";
             Token.TokenType type;
+            // Reads until it meets a symbol that isn't a digit.
             while (Char.IsDigit((char)reader.Peek()))
             {
                 value += (char)reader.Read();
             }
-
+            // Checks whether the next symbol is a dot, if it isn't, the number is an integer.
             if ((char)reader.Peek() != '.')
             {
                 type = Token.TokenType.inum_token;
             }
+            // If the next symbol was a dot the number is a float and we read the dot + a string of digits after.
             else
             {
                 type = Token.TokenType.fnum_token;
                 value += (char)reader.Read();
+                // If there is no digits after the dot we throw an exception.
                 if (!Char.IsDigit((char)reader.Peek()))
                 {
                     throw new LexicalException(line);
                 }
                     
-
+                // Reads the digits after the dot.
                 while (Char.IsDigit((char)reader.Peek()))
                 {
                     value += (char)reader.Read();
@@ -241,6 +252,7 @@ namespace ScannerLib
         {
             string value = "";
             Token.TokenType type;
+            // Reads all letters or digits until a nonletter and nondigit is read.
             while (Char.IsLetterOrDigit((char)reader.Peek()))
             {
                 value += (char)reader.Read();
