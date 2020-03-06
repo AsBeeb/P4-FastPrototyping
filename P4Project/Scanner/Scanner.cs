@@ -22,7 +22,7 @@ namespace ScannerLib
             {"struct", Token.TokenType.struct_token},
             {"string", Token.TokenType.stringdcl_token},
             {"bool", Token.TokenType.booldcl_token},
-            {"true", Token.TokenType.boolval_token}, // OBS: true og false mapper til samme token-type.
+            {"true", Token.TokenType.boolval_token}, // OBS: true and false map to the same token type.
             {"false", Token.TokenType.boolval_token},
             {"void", Token.TokenType.void_token},
             {"func", Token.TokenType.func_token},
@@ -229,12 +229,13 @@ namespace ScannerLib
                 value += (char)reader.Read();
             }
 
-            // Tjekker om ordet er et reserveret keyword. Her gemmes value kun ved "true" og "false".
+            /* Check for reserved keywords. In this case, only "true" and "false" are saved as values.
+            Other values, such as "if" and "play" are always the same, and are therefore discarded to save space. */
             if (Keywords.TryGetValue(value, out type))
             {
                 return (type == Token.TokenType.boolval_token) ? new Token(value, type) : new Token(type);
             }
-            // Alternativt læses ordet som en identifier token.
+            // Alternatively, the word is saved as an identifier token.
             else
             {
                 type = Token.TokenType.id_token;
