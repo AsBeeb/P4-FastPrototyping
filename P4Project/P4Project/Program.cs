@@ -4,29 +4,32 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
+using ScannerLib;
+
 namespace P4Project
 {
     class Program
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Indskriv sti til mappe:");
-            string sti = Console.ReadLine();
-            Console.WriteLine("Skriv filnavn:");
-            string filnavn = "\\" + Console.ReadLine() + ".txt";
-            using (StreamReader sr = new StreamReader(sti+filnavn)) {
-                while (sr.Peek() > -1 )
+            List<Token> tokenList = new List<Token>();
+
+            //Console.WriteLine("Indskriv sti til mappe:");
+            //string sti = Console.ReadLine();
+            //Console.WriteLine("Skriv filnavn:");
+            //string filnavn = "\\" + Console.ReadLine() + ".txt";
+            string filename = @"C:\Users\andre\Documents\GitHub\P4-FastPrototyping\P4Project\P4Project\KodeEksempler\Numbers.txt";
+            using (StreamReader reader = new StreamReader(filename)) {
+                do
                 {
-                    string tekst = "";
-                    while ( ((char)sr.Peek() != ' ' && ((char)sr.Peek()) != '\n') && sr.Peek() > -1)
-                    {
-                        tekst += ((Char)sr.Read()).ToString();
-                    }
-                    if (sr.Peek() > -1) { sr.Read(); }
-                    Console.WriteLine(tekst);
-                } 
+                    tokenList.Add(Scanner.Scan(reader));
+                    Console.WriteLine("Value: " + tokenList.Last().Value + " Type: " + tokenList.Last().Type.ToString() + "\n");
+                } while (tokenList.Last().Type != Token.TokenType.eof_token);
+
+                Console.WriteLine(tokenList.Count);
             }
             Console.Read();
+
         }
     }
 }
