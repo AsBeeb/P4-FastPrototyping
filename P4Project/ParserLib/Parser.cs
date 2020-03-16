@@ -56,7 +56,7 @@ namespace ParserLib
             }
             else if (tokens.Peek().IsInPredictSet(TokenType.eof_token))
             {
-                // Do nothing
+                return;
             }
             else
             {
@@ -153,6 +153,7 @@ namespace ParserLib
             else if (tokens.Peek().IsInPredictSet(TokenType.rcbracket_token))
             {
                 // EPSILON
+                return;
             }
             else
             {
@@ -172,6 +173,7 @@ namespace ParserLib
             else if (tokens.Peek().IsInPredictSet(TokenType.id_token))
             {
                 // EPSILON
+                return;
             }
             else
             {
@@ -209,6 +211,7 @@ namespace ParserLib
             else if (tokens.Peek().IsInPredictSet(TokenType.rparen_token))
             {
                 // EPSILON
+                return;
             }
             else
             {
@@ -228,6 +231,7 @@ namespace ParserLib
             else if (tokens.Peek().IsInPredictSet(TokenType.rparen_token))
             {
                 // EPSILON
+                return;
             }
             else
             {
