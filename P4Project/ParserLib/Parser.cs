@@ -407,7 +407,7 @@ namespace ParserLib
             }
             else if (tokens.Peek().IsInPredictSet(TokenType.else_token, TokenType.semicolon_token))
             {
-                // Do nothing
+                return;
             }
             else
             {
@@ -425,7 +425,7 @@ namespace ParserLib
             }
             else if (tokens.Peek().IsInPredictSet(TokenType.semicolon_token))
             {
-                // Do nothing
+                return;
             }
             else
             {
@@ -443,6 +443,10 @@ namespace ParserLib
                 ParseBoolExpr();
                 Match(TokenType.rparen_token);
                 ParseBlock();
+            }
+            else
+            {
+                // ERROR
             }
         }
 
@@ -469,7 +473,7 @@ namespace ParserLib
             }
             else if (tokens.Peek().IsInPredictSet(TokenType.semicolon_token))
             {
-                // Do nothing
+                return;
             }
             else
             {
