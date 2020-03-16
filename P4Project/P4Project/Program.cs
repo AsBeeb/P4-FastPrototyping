@@ -28,8 +28,7 @@ namespace P4Project
             using (StreamReader reader = new StreamReader(filePath)) {
                 do
                 {
-                    Token tempToken;
-                    tempToken = Scanner.Scan(reader);
+                    Token tempToken = Scanner.Scan(reader);
                     if (tempToken != null)
                     {
                         tokenList.Add(tempToken);
