@@ -113,35 +113,146 @@ namespace ParserLib
         }
         private void ParseReturnType()
         {
-
+            if(tokens.Peek().IsInPredictSet(TokenType.intdcl_token, TokenType.floatdcl_token, TokenType.stringdcl_token,
+                                            TokenType.booldcl_token, TokenType.id_token))
+            {
+                ParseType();
+            }
+            else if (tokens.Peek().IsInPredictSet(TokenType.void_token))
+            {
+                Match(TokenType.void_token);
+            }
+            else
+            {
+                // Error
+            }
         }
 
         private void ParseBlock()
         {
-
+            if (tokens.Peek().IsInPredictSet(TokenType.lcbracket_token)){
+                Match(TokenType.lcbracket_token);
+                ParseStmt();
+                Match(TokenType.semicolon_token);
+                ParseStmts();
+                Match(TokenType.rcbracket_token);
+            }
+            else
+            {
+                // Error
+            }
         }
         private void ParseStmts()
         {
-
+            if(tokens.Peek().IsInPredictSet(TokenType.id_token, TokenType.local_token, TokenType.while_token,
+                                            TokenType.play_token, TokenType.if_token, TokenType.return_token))
+            {
+                ParseStmt();
+                Match(TokenType.semicolon_token);
+                ParseStmts();
+            }
+            else if (tokens.Peek().IsInPredictSet(TokenType.rcbracket_token))
+            {
+                return;
+            }
+            else
+            {
+                // Error
+            }
         }
         private void ParseStmt()
         {
-
+            if (tokens.Peek().IsInPredictSet(TokenType.local_token))
+            {
+                ParseDcl();
+            }
+            else if (tokens.Peek().IsInPredictSet(TokenType.id_token))
+            {
+                Match(TokenType.id_token);
+                ParseAssignOrCall();
+            }
+            else if (tokens.Peek().IsInPredictSet(TokenType.if_token))
+            {
+                ParseIfStmt();
+            }
+            else if (tokens.Peek().IsInPredictSet(TokenType.while_token))
+            {
+                ParseWhileLoop();
+            }
+            else if (tokens.Peek().IsInPredictSet(TokenType.return_token))
+            {
+                ParseReturn();
+            }
+            else if (tokens.Peek().IsInPredictSet(TokenType.play_token))
+            {
+                ParsePlayLoop();
+            }
+            else
+            {
+                // Error
+            }
         }
         private void ParseDcl()
         {
-
+            if (tokens.Peek().IsInPredictSet(TokenType.local_token))
+            {
+                Match(TokenType.local_token);
+                ParseType();
+                ParseBrackets();
+                Match(TokenType.id_token);
+                ParseInit();
+            }
+            else
+            {
+                // Error
+            }
         }
         private void ParseAssignOrCall()
         {
-
+            if (tokens.Peek().IsInPredictSet(TokenType.assign_token, TokenType.lsbracket_token, TokenType.dot_token))
+            {
+                ParseAssign();
+            }
+            else if (tokens.Peek().IsInPredictSet(TokenType.lparen_token))
+            {
+                ParseCall();
+            }
+            else
+            {
+                // Error
+            }
         }
         private void ParseBrackets()
         {
-
+            if (tokens.Peek().IsInPredictSet(TokenType.lsbracket_token))
+            {
+                Match(TokenType.lsbracket_token);
+                Match(TokenType.rsbracket_token);
+            }
+            else if (tokens.Peek().IsInPredictSet(TokenType.id_token))
+            {
+                return;
+            }
+            else
+            {
+                // Error
+            }
         }
         private void ParseInit()
         {
+            if (tokens.Peek().IsInPredictSet(TokenType.assign_token))
+            {
+                Match(TokenType.assign_token);
+                ParseExpr();
+            }
+            else if (tokens.Peek().IsInPredictSet(TokenType.semicolon_token))
+            {
+                return;
+            }
+            else
+            {
+                // Error
+            }
 
         }
         private void ParseAssign()
