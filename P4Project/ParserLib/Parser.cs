@@ -679,32 +679,166 @@ namespace ParserLib
 
         private void ParseCompExpr3()
         {
-
+            if(tokens.Peek().IsInPredictSet(TokenType.not_token, 
+                                            TokenType.booldcl_token, 
+                                            TokenType.minus_token,
+                                            TokenType.lparen_token,
+                                            TokenType.inum_token,
+                                            TokenType.fnum_token,
+                                            TokenType.id_token))
+            {
+                ParseCompExpr4();
+                ParseSizeComp();
+            }
+            else
+            {
+                // Error
+            }
         }
         private void ParseSizeComp()
         {
-
+            if (tokens.Peek().IsInPredictSet(TokenType.greaterorequal_token))
+            {
+                Match(TokenType.greaterorequal_token);
+                ParseCompExpr4();
+            } 
+            else if (tokens.Peek().IsInPredictSet(TokenType.lessorequal_token))
+            {
+                Match(TokenType.lessorequal_token);
+                ParseCompExpr4();
+            }
+            else if (tokens.Peek().IsInPredictSet(TokenType.lessthan_token))
+            {
+                Match(TokenType.lessthan_token);
+                ParseCompExpr4();
+            }
+            else if (tokens.Peek().IsInPredictSet(TokenType.greaterthan_token))
+            {
+                Match(TokenType.greaterthan_token);
+                ParseCompExpr4();
+            }
+            else if (tokens.Peek().IsInPredictSet(TokenType.equal_token,
+                                                  TokenType.notequal_token, 
+                                                  TokenType.and_token, 
+                                                  TokenType.or_token, 
+                                                  TokenType.rparen_token, 
+                                                  TokenType.colon_token, 
+                                                  TokenType.comma_token, 
+                                                  TokenType.semicolon_token))
+            {
+                // Epsilon - Do nothing
+                return;
+            }
+            else
+            {
+                // Error
+            }
         }
         private void ParseCompExpr4()
         {
-
+            if (tokens.Peek().IsInPredictSet(TokenType.not_token))
+            {
+                Match(TokenType.not_token);
+                ParseBasicBool();
+            }
+            else if (tokens.Peek().IsInPredictSet(TokenType.booldcl_token,
+                                                  TokenType.minus_token,
+                                                  TokenType.lparen_token,
+                                                  TokenType.inum_token,
+                                                  TokenType.fnum_token,
+                                                  TokenType.id_token))
+            {
+                ParseBasicBool();
+            }
+            else
+            {
+                // Error
+            }
         }
         private void ParseBasicBool()
         {
-
+            if (tokens.Peek().IsInPredictSet(TokenType.minus_token,
+                                             TokenType.lparen_token,
+                                             TokenType.inum_token,
+                                             TokenType.fnum_token,
+                                             TokenType.id_token))
+            {
+                ParseArithExpr();
+            }
+            else if (tokens.Peek().IsInPredictSet(TokenType.booldcl_token))
+            {
+                Match(TokenType.booldcl_token);
+            }
+            else
+            {
+                // Error
+            }
         }
         private void ParseArithExpr()
         {
-
+            if (tokens.Peek().IsInPredictSet(TokenType.minus_token,
+                                             TokenType.lparen_token,
+                                             TokenType.inum_token,
+                                             TokenType.fnum_token,
+                                             TokenType.id_token))
+            {
+                ParseArithExpr1();
+                ParseArithOp1();
+            }
+            else
+            {
+                // Error
+            }
         }
-
         private void ParseArithOp1()
         {
-
+            if (tokens.Peek().IsInPredictSet(TokenType.plus_token))
+            {
+                Match(TokenType.plus_token);
+                ParseArithExpr();
+            }
+            else if (tokens.Peek().IsInPredictSet(TokenType.minus_token))
+            {
+                Match(TokenType.minus_token);
+                ParseArithExpr();
+            }
+            else if (tokens.Peek().IsInPredictSet(TokenType.rsbracket_token,
+                                                  TokenType.greaterorequal_token,
+                                                  TokenType.lessorequal_token,
+                                                  TokenType.lessthan_token,
+                                                  TokenType.greaterthan_token,
+                                                  TokenType.equal_token,
+                                                  TokenType.notequal_token,
+                                                  TokenType.and_token,
+                                                  TokenType.or_token,
+                                                  TokenType.rparen_token,
+                                                  TokenType.colon_token,
+                                                  TokenType.comma_token,
+                                                  TokenType.semicolon_token))
+            {
+                // Epsilon - Do nothing
+                return;
+            }
+            else
+            {
+                // Error
+            }
         }
         private void ParseArithExpr1()
         {
-
+            if (tokens.Peek().IsInPredictSet(TokenType.minus_token,
+                                             TokenType.lparen_token,
+                                             TokenType.inum_token,
+                                             TokenType.fnum_token,
+                                             TokenType.id_token))
+            {
+                ParseArithExpr2();
+                ParseArithOp2();
+            }
+            else
+            {
+                // Error
+            }
         }
         private void ParseArithOp2()
         {
