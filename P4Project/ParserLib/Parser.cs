@@ -59,7 +59,22 @@ namespace ParserLib
         
         private void ParseTopDcl()
         {
-
+            if (tokens.Peek().IsInPredictSet(TokenType.global_token))
+            {
+                ParseGlobalDcl();
+            }
+            else if (tokens.Peek().IsInPredictSet(TokenType.struct_token))
+            {
+                ParseStructDcl();
+            }
+            else if (tokens.Peek().IsInPredictSet(TokenType.func_token))
+            {
+                ParseFunctionDcl();
+            }
+            else
+            {
+                // ERROR
+            }
         }
         
         private void ParseGlobalDcl()
@@ -82,36 +97,129 @@ namespace ParserLib
 
         private void ParseStructDcl()
         {
-
+            if (tokens.Peek().IsInPredictSet(TokenType.struct_token))
+            {
+                Match(TokenType.struct_token);
+                Match(TokenType.id_token);
+                ParseStructBlock();
+            }
+            else
+            {
+                // ERROR
+            }
         }
         
         private void ParseStructBlock()
         {
-
+            if (tokens.Peek().IsInPredictSet(TokenType.lcbracket_token))
+            {
+                Match(TokenType.lcbracket_token);
+                ParseDcls();
+                ParseConstructor();
+                Match(TokenType.rcbracket_token);
+            }
+            else
+            {
+                // ERROR
+            }
         }
         private void ParseConstructor()
         {
-
+            if (tokens.Peek().IsInPredictSet(TokenType.id_token))
+            {
+                Match(TokenType.id_token);
+                Match(TokenType.lparen_token);
+                ParseFormalParams();
+                Match(TokenType.rparen_token);
+                ParseBlock();
+            }
+            else if (tokens.Peek().IsInPredictSet(TokenType.rcbracket_token))
+            {
+                // EPSILON
+            }
+            else
+            {
+                // ERROR
+            }
         }
         private void ParseDcls()
         {
-
+            if (tokens.Peek().IsInPredictSet(TokenType.local_token))
+            {
+                ParseDcl();
+                Match(TokenType.semicolon_token);
+                ParseDcls();
+            }
+            else if (tokens.Peek().IsInPredictSet(TokenType.id_token))
+            {
+                // EPSILON
+            }
+            else
+            {
+                // ERROR
+            }
         }
         private void ParseFunctionDcl()
         {
-
+            if (tokens.Peek().IsInPredictSet(TokenType.func_token))
+            {
+                Match(TokenType.func_token);
+                ParseReturnType();
+                Match(TokenType.id_token);
+                Match(TokenType.lparen_token);
+                ParseFormalParams();
+                Match(TokenType.rparen_token);
+                ParseBlock();
+            }
+            else
+            {
+                // ERROR
+            }
         }
         private void ParseFormalParams()
         {
-
+            if (tokens.Peek().IsInPredictSet(TokenType.intdcl_token, TokenType.floatdcl_token, TokenType.stringdcl_token, TokenType.booldcl_token, TokenType.id_token))
+            {
+                ParseFormalParam();
+                ParseRemainingParams();
+            }
+            else if (tokens.Peek().IsInPredictSet(TokenType.rparen_token))
+            {
+                // EPSILON
+            }
+            else
+            {
+                // ERROR
+            }
         }
         private void ParseRemainingParams()
         {
-
+            if (tokens.Peek().IsInPredictSet(TokenType.comma_token))
+            {
+                Match(TokenType.comma_token);
+                ParseFormalParam();
+                ParseRemainingParams();
+            }
+            else if (tokens.Peek().IsInPredictSet(TokenType.rparen_token))
+            {
+                // EPSILON
+            }
+            else
+            {
+                // ERROR
+            }
         }
         private void ParseFormalParam()
         {
-
+            if (tokens.Peek().IsInPredictSet(TokenType.intdcl_token, TokenType.floatdcl_token, TokenType.stringdcl_token, TokenType.booldcl_token, TokenType.id_token))
+            {
+                ParseType();
+                Match(TokenType.id_token);
+            }
+            else
+            {
+                // ERROR
+            }
         }
         private void ParseReturnType()
         {
