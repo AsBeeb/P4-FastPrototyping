@@ -63,7 +63,6 @@ namespace ParserLib
         
         private void ParseGlobalDcl()
         {
-            //7	GlobalDcl → global Type id = Expr ;                     	global
             if (tokens.Peek().IsInPredictSet(TokenType.global_token))
             {
                 Match(TokenType.global_token);
