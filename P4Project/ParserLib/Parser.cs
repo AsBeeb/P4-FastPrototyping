@@ -266,6 +266,10 @@ namespace ParserLib
                 ParseCompExpr2();
                 ParseAndExpr();
             }
+            else
+            {
+                // Error
+            }
         }
 
         private void ParseAndExpr()
@@ -384,6 +388,7 @@ namespace ParserLib
                 //Error
             }
         }
+
         private void ParseArithExpr4()
         {
             if (tokens.Peek().IsInPredictSet(TokenType.lparen_token)){
@@ -409,6 +414,7 @@ namespace ParserLib
                 //Error
             }
         }
+
         private void ParseIdCallOrOperations()
         {
             if (tokens.Peek().IsInPredictSet(TokenType.lparen_token))
@@ -424,6 +430,7 @@ namespace ParserLib
                 //Error
             }
         }
+
         private void ParseCall()
         {
             if (tokens.Peek().IsInPredictSet(TokenType.lparen_token)){
@@ -436,6 +443,7 @@ namespace ParserLib
                 //Error
             }
         }
+
         private void ParseActualParams()
         {
             if (tokens.Peek().IsInPredictSet(TokenType.stringval_token, TokenType.not_token, TokenType.boolval_token, TokenType.minus_token, TokenType.lparen_token, TokenType.inum_token, TokenType.fnum_token, TokenType.id_token)){
