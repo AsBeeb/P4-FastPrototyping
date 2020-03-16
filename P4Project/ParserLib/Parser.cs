@@ -255,41 +255,149 @@ namespace ParserLib
         {
 
         }
-        private void ParseExpr3()
+        private void ParseArithExpr3()
         {
-
+            if (tokens.Peek().IsInPredictSet(TokenType.lparen_token, TokenType.inum_token, TokenType.fnum_token, TokenType.id_token))
+            {
+                ParseArithExpr4();
+                ParseArithOp3();
+            }
+            else
+            {
+                // ERROR
+            }
         }
-        private void ParseOp3()
+        private void ParseArithOp3()
         {
-
+            if (tokens.Peek().IsInPredictSet(TokenType.power_token))
+            {
+                Match(TokenType.power_token);
+                ParseArithExpr3();
+            }
+            else if (tokens.Peek().IsInPredictSet(TokenType.multiply_token, TokenType.divide_token, TokenType.modulo_token, TokenType.plus_token, TokenType.minus_token, TokenType.rsbracket_token, TokenType.greaterorequal_token, TokenType.lessorequal_token, TokenType.lessthan_token, TokenType.greaterthan_token, TokenType.equal_token, TokenType.notequal_token, TokenType.and_token, TokenType.or_token, TokenType.rparen_token, TokenType.colon_token, TokenType.comma_token, TokenType.semicolon_token)){
+                return;
+            }
+            else
+            {
+                //Error
+            }
         }
-        private void ParseExpr4()
+        private void ParseArithExpr4()
         {
-
+            if (tokens.Peek().IsInPredictSet(TokenType.lparen_token)){
+                Match(TokenType.lparen_token);
+                ParseExpr();
+                Match(TokenType.rparen_token);
+            }
+            else if (tokens.Peek().IsInPredictSet(TokenType.inum_token))
+            {
+                Match(TokenType.inum_token);
+            }
+            else if (tokens.Peek().IsInPredictSet(TokenType.fnum_token))
+            {
+                Match(TokenType.fnum_token);
+            }
+            else if (tokens.Peek().IsInPredictSet(TokenType.id_token))
+            {
+                Match(TokenType.id_token);
+                ParseIdCallOrOperations();
+            }
+            else
+            {
+                //Error
+            }
         }
         private void ParseIdCallOrOperations()
         {
-
+            if (tokens.Peek().IsInPredictSet(TokenType.lparen_token))
+            {
+                ParseCall();
+            }
+            else if (tokens.Peek().IsInPredictSet(TokenType.lsbracket_token)){
+                ParseIdOperations();
+                Match(TokenType.dot_token);
+            }
+            else
+            {
+                //Error
+            }
         }
         private void ParseCall()
         {
-
+            if (tokens.Peek().IsInPredictSet(TokenType.lparen_token)){
+                Match(TokenType.lparen_token);
+                ParseActualParams();
+                Match(TokenType.rparen_token);
+            }
+            else
+            {
+                //Error
+            }
         }
         private void ParseActualParams()
         {
-
+            if (tokens.Peek().IsInPredictSet(TokenType.stringval_token, TokenType.not_token, TokenType.boolval_token, TokenType.minus_token, TokenType.lparen_token, TokenType.inum_token, TokenType.fnum_token, TokenType.id_token)){
+                ParseExpr();
+                ParseFuncValue();
+            }
+            else if (tokens.Peek().IsInPredictSet(TokenType.rparen_token))
+            {
+                return;
+            }
+            else
+            {
+                //Error
+            }
         }
         private void ParseFuncValue()
         {
-
+            if (tokens.Peek().IsInPredictSet(TokenType.comma_token))
+            {
+                Match(TokenType.comma_token);
+                ParseExpr();
+                ParseFuncValue();
+            }
+            else if (tokens.Peek().IsInPredictSet(TokenType.rparen_token))
+            {
+                return;
+            }
+            else
+            {
+                //Error
+            }
         }
         private void ParseIdOperations()
         {
-
+            if(tokens.Peek().IsInPredictSet(TokenType.lsbracket_token, TokenType.dot_token))
+            {
+                ParseIdOperation();
+                ParseIdOperations();
+            }
+            else if(tokens.Peek().IsInPredictSet(TokenType.multiply_token, TokenType.divide_token, TokenType.modulo_token, TokenType.plus_token, TokenType.minus_token, TokenType.rsbracket_token, TokenType.greaterorequal_token, TokenType.lessorequal_token, TokenType.lessthan_token, TokenType.greaterthan_token, TokenType.equal_token, TokenType.notequal_token, TokenType.and_token, TokenType.or_token, TokenType.rparen_token, TokenType.colon_token, TokenType.comma_token, TokenType.semicolon_token))
+            {
+                return;
+            }
+            else
+            {
+                //Error
+            }
         }
         private void ParseIdOperation()
         {
-
+            if (tokens.Peek().IsInPredictSet(TokenType.lsbracket_token))
+            {
+                Match(TokenType.lsbracket_token);
+                ParseArithExpr();
+                Match(TokenType.rsbracket_token);
+            }
+            else if (tokens.Peek().IsInPredictSet(TokenType.dot_token)){
+                Match(TokenType.and_token);
+                Match(TokenType.id_token);
+            }
+            else
+            {
+                //Error
+            }
         }
     }
 }
