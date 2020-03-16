@@ -58,6 +58,10 @@
     <Content Include="KodeEksempler\Numbers.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ParserLib\ParserLib.csproj">
+      <Project>{b0a6701e-b326-4b69-930c-7bcb20b07ead}</Project>
+      <Name>ParserLib</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Scanner\ScannerLib.csproj">
       <Project>{c54be4bc-8fd4-43ab-8bcf-ab5986351c48}</Project>
       <Name>ScannerLib</Name>
