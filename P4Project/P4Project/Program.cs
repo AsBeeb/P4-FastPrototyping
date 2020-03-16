@@ -12,8 +12,7 @@ namespace P4Project
     {
         static void Main(string[] args)
         {
-            List<Token> tokenList = new List<Token>();
-
+            Queue<Token> tokenQueue = new Queue<Token>();
             //Console.WriteLine("Indskriv sti til mappe:");
             //string sti = Console.ReadLine();
             //Console.WriteLine("Skriv filnavn:");
@@ -22,23 +21,23 @@ namespace P4Project
             string gitPath = @"\GitHub\P4-FastPrototyping\P4Project\P4Project\KodeEksempler\";
             string fileToOpen = "Numbers";
             string fileExtension = ".txt";
-
             string filePath = String.Format("{0}{1}{2}{3}", docPath, gitPath, fileToOpen, fileExtension);
 
-            using (StreamReader reader = new StreamReader(filePath)) {
+            using (StreamReader reader = new StreamReader(filePath))
+            {
                 do
                 {
                     Token tempToken = Scanner.Scan(reader);
                     if (tempToken != null)
                     {
-                        tokenList.Add(tempToken);
+                        tokenQueue.Enqueue(tempToken);
                     }
-                    Console.WriteLine("Value: " + tokenList.Last().Value + " Type: " + tokenList.Last().Type.ToString() + "\n");
-                } while (tokenList.Last().Type != Token.TokenType.eof_token);
+                    Console.WriteLine("Value: " + tokenQueue.Last().Value + " Type: " + tokenQueue.Last().Type.ToString() + "\n");
 
-                Console.WriteLine(tokenList.Count);
+                } while (tokenQueue.Last().Type != Token.TokenType.eof_token);
+
+                Console.WriteLine(tokenQueue.Count);
             }
-            Console.Read();
         }
     }
 }
