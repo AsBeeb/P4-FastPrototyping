@@ -6,12 +6,11 @@ namespace ParserLib
 {
     public class Parser
     {
-        Queue<Token> tokens;
+        private readonly Queue<Token> tokens;
 
         public Parser(Queue<Token> tokenStream) 
         {
             tokens = tokenStream;
-            
         }
 
         private void Match(TokenType tokenType)
