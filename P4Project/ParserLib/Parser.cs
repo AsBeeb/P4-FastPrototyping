@@ -14,6 +14,14 @@ namespace ParserLib
             tokens = tokenStream;
         }
 
+        public void StartParse()
+        {
+            Console.WriteLine("Starter parsing");
+            ParseProg();
+            Console.WriteLine("Done med parsing");
+        }
+
+
         private void Match(TokenType tokenType)
         {
             if (!tokens.Any())

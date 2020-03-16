@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 using ScannerLib;
-
+using ParserLib;
 namespace P4Project
 {
     class Program
@@ -21,7 +21,8 @@ namespace P4Project
             string gitPath = @"\GitHub\P4-FastPrototyping\P4Project\P4Project\KodeEksempler\";
             string fileToOpen = "Numbers";
             string fileExtension = ".txt";
-            string filePath = String.Format("{0}{1}{2}{3}", docPath, gitPath, fileToOpen, fileExtension);
+            //string filePath = String.Format("{0}{1}{2}{3}", docPath, gitPath, fileToOpen, fileExtension);
+            string filePath = @"C:\Users\Michael\Source\Repos\P4-FastPrototyping\P4Project\P4Project\KodeEksempler\Michaels Demo.txt";
 
             using (StreamReader reader = new StreamReader(filePath))
             {
@@ -38,6 +39,14 @@ namespace P4Project
 
                 Console.WriteLine(tokenQueue.Count);
             }
+            Console.WriteLine("Scan ended");
+            Console.Read();
+
+            Parser parser = new Parser(tokenQueue);
+            parser.StartParse();
+            Console.WriteLine("Sker der noget?");
+            Console.Read();
+            Console.Read();
         }
     }
 }
