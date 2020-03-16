@@ -871,7 +871,7 @@ namespace ParserLib
             }
             else if (tokens.Peek().IsInPredictSet(TokenType.booldcl_token))
             {
-                Match(TokenType.booldcl_token);
+                Match(TokenType.boolval_token);
             }
             else
             {

@@ -1,5 +1,5 @@
 global string strengtest = "Test Streng";
-global string strengtest2 = "Test " : "Med" : "Mig" + ("Jeg" : "Er" : "Syntaktisk") + ("Korrekt");
+global string strengtest2 = "Test " : "Med" : ("Mig") + ("Jeg" : "Er" : "Syntaktisk") + ("Korrekt");
 
 
 func void Main ()

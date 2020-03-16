@@ -40,13 +40,12 @@ namespace P4Project
                 Console.WriteLine(tokenQueue.Count);
             }
             Console.WriteLine("Scan ended");
-            Console.Read();
+            Console.ReadKey();
 
             Parser parser = new Parser(tokenQueue);
             parser.StartParse();
             Console.WriteLine("Sker der noget?");
-            Console.Read();
-            Console.Read();
+            Console.ReadKey();
         }
     }
 }
