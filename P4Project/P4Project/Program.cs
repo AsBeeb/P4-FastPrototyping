@@ -24,17 +24,22 @@ namespace P4Project
             string fileExtension = ".txt";
 
             string filePath = String.Format("{0}{1}{2}{3}", docPath, gitPath, fileToOpen, fileExtension);
+
             using (StreamReader reader = new StreamReader(filePath)) {
                 do
                 {
-                    tokenList.Add(Scanner.Scan(reader));
+                    Token tempToken;
+                    tempToken = Scanner.Scan(reader);
+                    if (tempToken != null)
+                    {
+                        tokenList.Add(tempToken);
+                    }
                     Console.WriteLine("Value: " + tokenList.Last().Value + " Type: " + tokenList.Last().Type.ToString() + "\n");
                 } while (tokenList.Last().Type != Token.TokenType.eof_token);
 
                 Console.WriteLine(tokenList.Count);
             }
             Console.Read();
-
         }
     }
 }

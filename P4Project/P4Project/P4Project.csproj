@@ -33,9 +33,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ScannerLib">
-      <HintPath>..\Scanner\obj\Debug\netstandard2.0\ScannerLib.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -59,6 +56,12 @@
     <Content Include="KodeEksempler\Demo6.txt" />
     <Content Include="KodeEksempler\Michaels Demo.txt" />
     <Content Include="KodeEksempler\Numbers.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Scanner\ScannerLib.csproj">
+      <Project>{c54be4bc-8fd4-43ab-8bcf-ab5986351c48}</Project>
+      <Name>ScannerLib</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -136,7 +136,7 @@ namespace ScannerLib
                             ans = new Token(Token.TokenType.rcbracket_token);
                             break;
 
-                        // Misc
+                        // Diverse
                         case '.':
                             ans = new Token(Token.TokenType.dot_token);
                             break;
@@ -168,8 +168,6 @@ namespace ScannerLib
             }
 
         }
-
-
 
         private static Token GetString(StreamReader reader)
         {
