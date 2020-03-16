@@ -23,6 +23,7 @@ namespace ParserLib
             else
             {
                 // Throw exception...
+                Console.WriteLine("Fejl!");
             }
         }
 
@@ -36,6 +37,7 @@ namespace ParserLib
             else
             {
                 // Expected something else.. ERROR
+                Console.WriteLine("Fejl!");
             }
         }
 
@@ -53,6 +55,9 @@ namespace ParserLib
             else
             {
                 // Expected this and this..
+                Console.WriteLine("Fejl!");
+
+
             }
         }
         
@@ -73,6 +78,8 @@ namespace ParserLib
             else
             {
                 // ERROR
+                Console.WriteLine("Fejl!");
+
             }
         }
         
@@ -90,6 +97,8 @@ namespace ParserLib
             else
             {
                 // ERROR
+                Console.WriteLine("Fejl!");
+
             }
         }
 
@@ -104,6 +113,8 @@ namespace ParserLib
             else
             {
                 // ERROR
+                Console.WriteLine("Fejl!");
+
             }
         }
         
@@ -119,6 +130,8 @@ namespace ParserLib
             else
             {
                 // ERROR
+                Console.WriteLine("Fejl!");
+
             }
         }
         private void ParseConstructor()
@@ -138,6 +151,8 @@ namespace ParserLib
             else
             {
                 // ERROR
+                Console.WriteLine("Fejl!");
+
             }
         }
         private void ParseDcls()
@@ -155,6 +170,8 @@ namespace ParserLib
             else
             {
                 // ERROR
+                Console.WriteLine("Fejl!");
+
             }
         }
         private void ParseFunctionDcl()
@@ -172,6 +189,8 @@ namespace ParserLib
             else
             {
                 // ERROR
+                Console.WriteLine("Fejl!");
+
             }
         }
         private void ParseFormalParams()
@@ -188,6 +207,8 @@ namespace ParserLib
             else
             {
                 // ERROR
+                Console.WriteLine("Fejl!");
+
             }
         }
         private void ParseRemainingParams()
@@ -205,6 +226,8 @@ namespace ParserLib
             else
             {
                 // ERROR
+                Console.WriteLine("Fejl!");
+
             }
         }
         private void ParseFormalParam()
@@ -217,6 +240,8 @@ namespace ParserLib
             else
             {
                 // ERROR
+                Console.WriteLine("Fejl!");
+
             }
         }
         private void ParseReturnType()
@@ -233,6 +258,8 @@ namespace ParserLib
             else
             {
                 // Error
+                Console.WriteLine("Fejl!");
+
             }
         }
 
@@ -248,6 +275,8 @@ namespace ParserLib
             else
             {
                 // Error
+                Console.WriteLine("Fejl!");
+
             }
         }
         private void ParseStmts()
@@ -266,6 +295,8 @@ namespace ParserLib
             else
             {
                 // Error
+                Console.WriteLine("Fejl!");
+
             }
         }
         private void ParseStmt()
@@ -298,6 +329,8 @@ namespace ParserLib
             else
             {
                 // Error
+                Console.WriteLine("Fejl!");
+
             }
         }
         private void ParseDcl()
@@ -313,6 +346,8 @@ namespace ParserLib
             else
             {
                 // Error
+                Console.WriteLine("Fejl!");
+
             }
         }
         private void ParseAssignOrCall()
@@ -328,6 +363,8 @@ namespace ParserLib
             else
             {
                 // Error
+                Console.WriteLine("Fejl!");
+
             }
         }
         private void ParseBrackets()
@@ -344,6 +381,8 @@ namespace ParserLib
             else
             {
                 // Error
+                Console.WriteLine("Fejl!");
+
             }
         }
         private void ParseInit()
@@ -360,6 +399,8 @@ namespace ParserLib
             else
             {
                 // Error
+                Console.WriteLine("Fejl!");
+
             }
 
         }
@@ -375,6 +416,8 @@ namespace ParserLib
             else
             {
                 // ERROR
+                Console.WriteLine("Fejl!");
+
             }
 
         }
@@ -390,6 +433,11 @@ namespace ParserLib
                 ParseBlock();
                 ParseElifs();
                 ParseElse();
+            }
+            else
+            {
+                Console.WriteLine("Fejl!");
+
             }
 
         }
@@ -412,6 +460,8 @@ namespace ParserLib
             else
             {
                 // ERROR
+                Console.WriteLine("Fejl!");
+
             }
 
         }
@@ -429,6 +479,8 @@ namespace ParserLib
             }
             else
             {
+                Console.WriteLine("Fejl!");
+
                 // ERROR 
             }
 
@@ -447,6 +499,8 @@ namespace ParserLib
             else
             {
                 // ERROR
+                Console.WriteLine("Fejl!");
+
             }
         }
 
@@ -461,6 +515,8 @@ namespace ParserLib
             else
             {
                 // ERROR
+                Console.WriteLine("Fejl!");
+
             }
         }
 
@@ -478,6 +534,8 @@ namespace ParserLib
             else
             {
                 // ERROR
+                Console.WriteLine("Fejl!");
+
             }
         }
         
@@ -504,6 +562,8 @@ namespace ParserLib
             else
             {
                 // ERROR
+                Console.WriteLine("Fejl!");
+
             }
 
         }
@@ -533,6 +593,8 @@ namespace ParserLib
             else
             {
                 // ERROR
+                Console.WriteLine("Fejl!");
+
             }
         }
 
@@ -546,6 +608,8 @@ namespace ParserLib
             else
             {
                 // Error
+                Console.WriteLine("Fejl!");
+
             }
         }
 
@@ -561,6 +625,8 @@ namespace ParserLib
             }
             else
             {
+                Console.WriteLine("Fejl!");
+
                 // Error
             }
         }
@@ -579,6 +645,8 @@ namespace ParserLib
             else
             {
                 // Error
+                Console.WriteLine("Fejl!");
+
             }
         }
 
@@ -592,6 +660,8 @@ namespace ParserLib
             else
             {
                 // Error
+                Console.WriteLine("Fejl!");
+
             }
         }
 
@@ -609,6 +679,8 @@ namespace ParserLib
             else
             {
                 // Error
+                Console.WriteLine("Fejl!");
+
             }
         }
 
@@ -622,6 +694,8 @@ namespace ParserLib
             else
             {
                 // Error
+                Console.WriteLine("Fejl!");
+
             }
         }
 
@@ -639,6 +713,8 @@ namespace ParserLib
             else
             {
                 // Error
+                Console.WriteLine("Fejl!");
+
             }
         }
 
@@ -652,6 +728,8 @@ namespace ParserLib
             else
             {
                 // Error
+                Console.WriteLine("Fejl!");
+
             }
         }
 
@@ -674,6 +752,8 @@ namespace ParserLib
             else
             {
                 // Error
+                Console.WriteLine("Fejl!");
+
             }
         }
 
@@ -693,6 +773,8 @@ namespace ParserLib
             else
             {
                 // Error
+                Console.WriteLine("Fejl!");
+
             }
         }
         private void ParseSizeComp()
@@ -732,6 +814,8 @@ namespace ParserLib
             else
             {
                 // Error
+                Console.WriteLine("Fejl!");
+
             }
         }
         private void ParseCompExpr4()
@@ -753,6 +837,8 @@ namespace ParserLib
             else
             {
                 // Error
+                Console.WriteLine("Fejl!");
+
             }
         }
         private void ParseBasicBool()
@@ -772,6 +858,8 @@ namespace ParserLib
             else
             {
                 // Error
+                Console.WriteLine("Fejl!");
+
             }
         }
         private void ParseArithExpr()
@@ -788,6 +876,8 @@ namespace ParserLib
             else
             {
                 // Error
+                Console.WriteLine("Fejl!");
+
             }
         }
         private void ParseArithOp1()
@@ -822,6 +912,8 @@ namespace ParserLib
             else
             {
                 // Error
+                Console.WriteLine("Fejl!");
+
             }
         }
         private void ParseArithExpr1()
@@ -838,6 +930,8 @@ namespace ParserLib
             else
             {
                 // Error
+                Console.WriteLine("Fejl!");
+
             }
         }
         private void ParseArithOp2()
@@ -861,6 +955,8 @@ namespace ParserLib
             else
             {
                 // Error
+                Console.WriteLine("Fejl!");
+
             }
         }
         private void ParseArithExpr2()
@@ -877,6 +973,8 @@ namespace ParserLib
             else
             {
                 // Error
+                Console.WriteLine("Fejl!");
+
             }
         }
         private void ParseArithExpr3()
@@ -889,6 +987,8 @@ namespace ParserLib
             else
             {
                 // ERROR
+                Console.WriteLine("Fejl!");
+
             }
         }
         private void ParseArithOp3()
@@ -904,6 +1004,8 @@ namespace ParserLib
             else
             {
                 //Error
+                Console.WriteLine("Fejl!");
+
             }
         }
 
@@ -930,6 +1032,8 @@ namespace ParserLib
             else
             {
                 //Error
+                Console.WriteLine("Fejl!");
+
             }
         }
 
@@ -946,6 +1050,8 @@ namespace ParserLib
             else
             {
                 //Error
+                Console.WriteLine("Fejl!");
+
             }
         }
 
@@ -959,6 +1065,8 @@ namespace ParserLib
             else
             {
                 //Error
+                Console.WriteLine("Fejl!");
+
             }
         }
 
@@ -975,6 +1083,8 @@ namespace ParserLib
             else
             {
                 //Error
+                Console.WriteLine("Fejl!");
+
             }
         }
         private void ParseFuncValue()
@@ -992,6 +1102,8 @@ namespace ParserLib
             else
             {
                 //Error
+                Console.WriteLine("Fejl!");
+
             }
         }
         private void ParseIdOperations()
@@ -1007,6 +1119,8 @@ namespace ParserLib
             }
             else
             {
+                Console.WriteLine("Fejl!");
+
                 //Error
             }
         }
@@ -1025,6 +1139,8 @@ namespace ParserLib
             else
             {
                 //Error
+                Console.WriteLine("Fejl!");
+
             }
         }
     }
