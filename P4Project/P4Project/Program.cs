@@ -23,12 +23,17 @@ namespace P4Project
             string fileToOpen = "Numbers";
             string fileExtension = ".txt";
 
-            string filePath = String.Format("{0}{1}{2}{3}", docPath, gitPath, fileToOpen, fileExtension);
+            //string filePath = String.Format("{0}{1}{2}{3}", docPath, gitPath, fileToOpen, fileExtension);
+            string filePath = @"C:\Users\Michael\Source\Repos\P4-FastPrototyping\P4Project\P4Project\KodeEksempler\Numbers.txt";
             using (StreamReader reader = new StreamReader(filePath)) {
                 do
                 {
-                    tokenList.Add(Scanner.Scan(reader));
-                    Console.WriteLine("Value: " + tokenList.Last().Value + " Type: " + tokenList.Last().Type.ToString() + "\n");
+                    Token token = Scanner.Scan(reader);
+                    if (token != null)
+                    {
+                        tokenList.Add(token);
+                        Console.WriteLine("Value: " + tokenList.Last().Value + " Type: " + tokenList.Last().Type.ToString() + "\n");
+                    }
                 } while (tokenList.Last().Type != Token.TokenType.eof_token);
 
                 Console.WriteLine(tokenList.Count);
