@@ -148,40 +148,173 @@ namespace ParserLib
         }
         private void ParseAssign()
         {
+            // Assign -> IdOperations = Expr 
+            if (tokens.Peek().IsInPredictSet(TokenType.lsbracket_token, TokenType.dot_token, TokenType.assign_token))
+            {
+                ParseIdOperations();
+                Match(TokenType.assign_token);
+                ParseExpr();
+            }
+            else
+            {
+                // ERROR
+            }
 
         }
         private void ParseIfStmt()
         {
+            // IfStmt-> if (BoolExpr) Block Elifs Else
+            if (tokens.Peek().IsInPredictSet(TokenType.if_token))
+            {
+                Match(TokenType.if_token);
+                Match(TokenType.lparen_token);
+                ParseBoolExpr();
+                Match(TokenType.rparen_token);
+                ParseBlock();
+                ParseElifs();
+                ParseElse();
+            }
 
         }
         private void ParseElifs()
         {
+            // Elifs->elif(BoolExpr) Block Elifs | EPSILON
+            if (tokens.Peek().IsInPredictSet(TokenType.elif_token))
+            {
+                Match(TokenType.elif_token);
+                Match(TokenType.lparen_token);
+                ParseBoolExpr();
+                Match(TokenType.rparen_token);
+                ParseBlock();
+                ParseElifs();
+            }
+            else if (tokens.Peek().IsInPredictSet(TokenType.else_token, TokenType.semicolon_token))
+            {
+                // Do nothing
+            }
+            else
+            {
+                // ERROR
+            }
 
         }
         private void ParseElse()
         {
+            // Else -> else Block | EPSILON
+            if (tokens.Peek().IsInPredictSet(TokenType.else_token))
+            {
+                Match(TokenType.else_token);
+                ParseBlock();
+            }
+            else if (tokens.Peek().IsInPredictSet(TokenType.semicolon_token))
+            {
+                // Do nothing
+            }
+            else
+            {
+                // ERROR 
+            }
 
         }
         private void ParseWhileLoop()
         {
-
+            // WhileLoop -> while ( BoolExpr ) Block
+            if (tokens.Peek().IsInPredictSet(TokenType.while_token))
+            {
+                Match(TokenType.while_token);
+                Match(TokenType.lparen_token);
+                ParseBoolExpr();
+                Match(TokenType.rparen_token);
+                ParseBlock();
+            }
         }
+
         private void ParseReturn()
         {
-
+            // Return -> return ReturnValue
+            if (tokens.Peek().IsInPredictSet(TokenType.return_token))
+            {
+                Match(TokenType.return_token);
+                ParseReturnValue();
+            }
+            else
+            {
+                // ERROR
+            }
         }
+
         private void ParseReturnValue()
         {
-
+            // ReturnValue -> Expr | EPSILON
+            if (tokens.Peek().IsInPredictSet(TokenType.stringval_token, TokenType.not_token, TokenType.boolval_token, TokenType.minus_token, TokenType.lparen_token, TokenType.inum_token, TokenType.fnum_token, TokenType.id_token))
+            {
+                ParseExpr();
+            }
+            else if (tokens.Peek().IsInPredictSet(TokenType.semicolon_token))
+            {
+                // Do nothing
+            }
+            else
+            {
+                // ERROR
+            }
         }
+        
         private void ParsePlayLoop()
         {
+            // PlayLoop -> play ( id vs id in id IdCallOrOperations ) Block until ( BoolExpr )
+            if (tokens.Peek().IsInPredictSet(TokenType.play_token))
+            {
+                Match(TokenType.play_token);
+                Match(TokenType.lparen_token);
+                Match(TokenType.id_token);
+                Match(TokenType.vs_token);
+                Match(TokenType.id_token);
+                Match(TokenType.in_token);
+                Match(TokenType.id_token);
+                ParseIdCallOrOperations();
+                Match(TokenType.rparen_token);
+                ParseBlock();
+                Match(TokenType.until_token);
+                Match(TokenType.lparen_token);
+                ParseBoolExpr();
+                Match(TokenType.rparen_token);
+            }
+            else
+            {
+                // ERROR
+            }
 
         }
         private void ParseType()
         {
-
+            // Type -> intdcl | floatdcl | stringdcl | booldcl | id
+            if (tokens.Peek().IsInPredictSet(TokenType.intdcl_token))
+            {
+                Match(TokenType.intdcl_token);
+            }
+            else if (tokens.Peek().IsInPredictSet(TokenType.floatdcl_token))
+            {
+                Match(TokenType.floatdcl_token);
+            }
+            else if (tokens.Peek().IsInPredictSet(TokenType.stringdcl_token))
+            {
+                Match(TokenType.stringdcl_token);
+            }
+            else if (tokens.Peek().IsInPredictSet(TokenType.booldcl_token))
+            {
+                Match(TokenType.booldcl_token);
+            }
+            else if (tokens.Peek().IsInPredictSet(TokenType.id_token))
+            {
+                Match(TokenType.id_token);
+            }
+            else
+            {
+                // ERROR
+            }
         }
+
         private void ParseExpr()
         {
 
