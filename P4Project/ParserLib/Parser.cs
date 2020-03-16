@@ -19,6 +19,7 @@ namespace ParserLib
             if (!tokens.Any())
             {
                 // Unexpected end of tokens stream.
+                Console.WriteLine("Unexpected end of token stream");
             }
             else if (tokens.Peek().Type == tokenType)
             {
