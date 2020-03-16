@@ -16,11 +16,8 @@ namespace ParserLib
 
         public void StartParse()
         {
-            Console.WriteLine("Starter parsing");
             ParseProg();
-            Console.WriteLine("Done med parsing");
         }
-
 
         private void Match(TokenType tokenType)
         {
@@ -32,6 +29,7 @@ namespace ParserLib
             else if (tokens.Peek().Type == tokenType)
             {
                 // Advance
+                Console.WriteLine("Advancing..");
                 tokens.Dequeue();
             }
             else
@@ -653,6 +651,7 @@ namespace ParserLib
         {
             if (tokens.Peek().IsInPredictSet(TokenType.colon_token))
             {
+                Match(TokenType.colon_token);
                 ParseString();
                 ParseConcat();
             }
