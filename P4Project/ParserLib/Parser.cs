@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using ScannerLib;
+using System.Linq;
 
 namespace ParserLib
 {
@@ -15,7 +16,11 @@ namespace ParserLib
 
         private void Match(TokenType tokenType)
         {
-            if (tokens.Peek().Type == tokenType)
+            if (!tokens.Any())
+            {
+                // Unexpected end of tokens stream.
+            }
+            else if (tokens.Peek().Type == tokenType)
             {
                 // Advance
                 tokens.Dequeue();
