@@ -8,28 +8,28 @@ namespace ScannerLib
     {
         public static int line = 1;
         //Specifies all the keyword tokens
-        private static Dictionary<string, Token.TokenType> Keywords = new Dictionary<string, Token.TokenType>
+        private static Dictionary<string, TokenType> Keywords = new Dictionary<string, TokenType>
         {
-            {"if", Token.TokenType.if_token},
-            {"else", Token.TokenType.else_token},
-            {"elif", Token.TokenType.elif_token},
-            {"while", Token.TokenType.while_token},
-            {"play", Token.TokenType.play_token},
-            {"until", Token.TokenType.until_token},
-            {"vs", Token.TokenType.vs_token},
-            {"in", Token.TokenType.in_token},
-            {"return", Token.TokenType.return_token},
-            {"int", Token.TokenType.intdcl_token},
-            {"float", Token.TokenType.floatdcl_token},
-            {"struct", Token.TokenType.struct_token},
-            {"string", Token.TokenType.stringdcl_token},
-            {"bool", Token.TokenType.booldcl_token},
-            {"true", Token.TokenType.boolval_token}, // OBS: true and false map to the same token type.
-            {"false", Token.TokenType.boolval_token},
-            {"void", Token.TokenType.void_token},
-            {"func", Token.TokenType.func_token},
-            {"local", Token.TokenType.local_token},
-            {"global", Token.TokenType.global_token}
+            {"if", TokenType.if_token},
+            {"else", TokenType.else_token},
+            {"elif", TokenType.elif_token},
+            {"while", TokenType.while_token},
+            {"play", TokenType.play_token},
+            {"until", TokenType.until_token},
+            {"vs", TokenType.vs_token},
+            {"in", TokenType.in_token},
+            {"return", TokenType.return_token},
+            {"int", TokenType.intdcl_token},
+            {"float", TokenType.floatdcl_token},
+            {"struct", TokenType.struct_token},
+            {"string", TokenType.stringdcl_token},
+            {"bool", TokenType.booldcl_token},
+            {"true", TokenType.boolval_token}, // OBS: true and false map to the same token type.
+            {"false", TokenType.boolval_token},
+            {"void", TokenType.void_token},
+            {"func", TokenType.func_token},
+            {"local", TokenType.local_token},
+            {"global", TokenType.global_token}
         };
 
         public static Token Scan(StreamReader reader)
@@ -49,7 +49,7 @@ namespace ScannerLib
             // If end of file, return eof token
             if (reader.EndOfStream)
             {
-                ans = new Token(Token.TokenType.eof_token);
+                ans = new Token(TokenType.eof_token);
             }
             else
             {
@@ -70,78 +70,78 @@ namespace ScannerLib
                     {
                         // Aritmetiske
                         case '+':
-                            ans = new Token(Token.TokenType.plus_token);
+                            ans = new Token(TokenType.plus_token);
                             break;
                         case '-':
-                            ans = new Token(Token.TokenType.minus_token);
+                            ans = new Token(TokenType.minus_token);
                             break;
                         case '=':
-                            ans = TokenComp(reader, '=', Token.TokenType.assign_token, Token.TokenType.equal_token);
+                            ans = TokenComp(reader, '=', TokenType.assign_token, TokenType.equal_token);
                             break;
                         case '*':
-                            ans = new Token(Token.TokenType.multiply_token);
+                            ans = new Token(TokenType.multiply_token);
                             break;
                         case '/':
-                            ans = new Token(Token.TokenType.divide_token);
+                            ans = new Token(TokenType.divide_token);
                             break;
                         case '%':
-                            ans = new Token(Token.TokenType.modulo_token);
+                            ans = new Token(TokenType.modulo_token);
                             break;
                         case '^':
-                            ans = new Token(Token.TokenType.power_token);
+                            ans = new Token(TokenType.power_token);
                             break;
 
                         // Logiske
                         case '!':
-                            ans = TokenComp(reader, '=', Token.TokenType.not_token, Token.TokenType.notequal_token);
+                            ans = TokenComp(reader, '=', TokenType.not_token, TokenType.notequal_token);
                             break;
                         case '<':
-                            ans = TokenComp(reader, '=', Token.TokenType.lessthan_token, Token.TokenType.lessorequal_token);
+                            ans = TokenComp(reader, '=', TokenType.lessthan_token, TokenType.lessorequal_token);
                             break;
                         case '>':
-                            ans = TokenComp(reader, '=', Token.TokenType.greaterthan_token, Token.TokenType.greaterorequal_token);
+                            ans = TokenComp(reader, '=', TokenType.greaterthan_token, TokenType.greaterorequal_token);
                             break;
                         case '&':
-                            ans = TokenComp(reader, '&', Token.TokenType.and_token, Token.TokenType.and_token);
+                            ans = TokenComp(reader, '&', TokenType.and_token, TokenType.and_token);
                             break;
                         case '|':
-                            ans = TokenComp(reader, '|', Token.TokenType.or_token, Token.TokenType.or_token);
+                            ans = TokenComp(reader, '|', TokenType.or_token, TokenType.or_token);
                             break;
 
                         // Kontrolstruktur
                         case ';':
-                            ans = new Token(Token.TokenType.semicolon_token);
+                            ans = new Token(TokenType.semicolon_token);
                             break;
                         case ',':
-                            ans = new Token(Token.TokenType.comma_token);
+                            ans = new Token(TokenType.comma_token);
                             break;
 
                         // Datatyper
                         case '(':
-                            ans = new Token(Token.TokenType.lparen_token);
+                            ans = new Token(TokenType.lparen_token);
                             break;
                         case ')':
-                            ans = new Token(Token.TokenType.rparen_token);
+                            ans = new Token(TokenType.rparen_token);
                             break;
                         case '[':
-                            ans = new Token(Token.TokenType.lsbracket_token);
+                            ans = new Token(TokenType.lsbracket_token);
                             break;
                         case ']':
-                            ans = new Token(Token.TokenType.rsbracket_token);
+                            ans = new Token(TokenType.rsbracket_token);
                             break;
                         case '{':
-                            ans = new Token(Token.TokenType.lcbracket_token);
+                            ans = new Token(TokenType.lcbracket_token);
                             break;
                         case '}':
-                            ans = new Token(Token.TokenType.rcbracket_token);
+                            ans = new Token(TokenType.rcbracket_token);
                             break;
 
                         // Diverse
                         case '.':
-                            ans = new Token(Token.TokenType.dot_token);
+                            ans = new Token(TokenType.dot_token);
                             break;
                         case ':':
-                            ans = new Token(Token.TokenType.colon_token);
+                            ans = new Token(TokenType.colon_token);
                             break;
                         case '\"':
                             ans = GetString(reader);
@@ -181,7 +181,7 @@ namespace ScannerLib
             if ((char)reader.Peek() == '\"')
             {
                 reader.Read();
-                return new Token(value, Token.TokenType.stringval_token);
+                return new Token(value, TokenType.stringval_token);
             }
             // Throw exception because of EOF or runaway string.
             else
@@ -190,7 +190,7 @@ namespace ScannerLib
             }
         }
 
-        private static Token TokenComp(StreamReader reader, char expectedSymbol, Token.TokenType option1, Token.TokenType option2)
+        private static Token TokenComp(StreamReader reader, char expectedSymbol, TokenType option1, TokenType option2)
         {
             // Checks whether the symbol is the one expected.
             if ((char)reader.Peek() == expectedSymbol)
@@ -213,7 +213,7 @@ namespace ScannerLib
         private static Token ScanDigits(StreamReader reader)
         {
             string value = "";
-            Token.TokenType type;
+            TokenType type;
             // Reads until it meets a symbol that isn't a digit.
             while (Char.IsDigit((char)reader.Peek()))
             {
@@ -222,12 +222,12 @@ namespace ScannerLib
             // Checks whether the next symbol is a dot, if it isn't, the number is an integer.
             if ((char)reader.Peek() != '.')
             {
-                type = Token.TokenType.inum_token;
+                type = TokenType.inum_token;
             }
             // If the next symbol was a dot the number is a float and we read the dot + a string of digits after.
             else
             {
-                type = Token.TokenType.fnum_token;
+                type = TokenType.fnum_token;
                 value += (char)reader.Read();
                 // If there is no digits after the dot we throw an exception.
                 if (!Char.IsDigit((char)reader.Peek()))
@@ -248,7 +248,7 @@ namespace ScannerLib
         private static Token ScanWords(StreamReader reader)
         {
             string value = "";
-            Token.TokenType type;
+            TokenType type;
             // Reads all letters or digits until a nonletter and nondigit is read.
             while (Char.IsLetterOrDigit((char)reader.Peek()))
             {
@@ -259,12 +259,12 @@ namespace ScannerLib
             Other values, such as "if" and "play", are always the same, and are therefore discarded to save space. */
             if (Keywords.TryGetValue(value, out type))
             {
-                return (type == Token.TokenType.boolval_token) ? new Token(value, type) : new Token(type);
+                return (type == TokenType.boolval_token) ? new Token(value, type) : new Token(type);
             }
             // Alternatively, the word is saved as an identifier token.
             else
             {
-                type = Token.TokenType.id_token;
+                type = TokenType.id_token;
                 return new Token(value, type);
             }
         }

@@ -34,7 +34,7 @@ namespace P4Project
                     }
                     Console.WriteLine("Value: " + tokenQueue.Last().Value + " Type: " + tokenQueue.Last().Type.ToString() + "\n");
 
-                } while (tokenQueue.Last().Type != Token.TokenType.eof_token);
+                } while (tokenQueue.Last().Type != TokenType.eof_token);
 
                 Console.WriteLine(tokenQueue.Count);
             }
