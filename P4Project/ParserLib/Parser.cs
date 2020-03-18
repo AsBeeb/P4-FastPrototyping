@@ -176,7 +176,7 @@ namespace ParserLib
                 Match(TokenType.semicolon_token);
                 ParseDcls();
             }
-            else if (tokens.Peek().IsInPredictSet(TokenType.id_token))
+            else if (tokens.Peek().IsInPredictSet(TokenType.id_token, TokenType.rcbracket_token))
             {
                 // EPSILON
                 return;
