@@ -19,16 +19,18 @@ namespace ScannerLib
     {
         public string Value;
         public TokenType Type;
-
-        public Token(string value, TokenType type)
+        public int Line;
+        public Token(string value, TokenType type, int line)
         {
             Value = value;
             Type = type;
+            Line = line;
         }
 
-        public Token(TokenType type)
+        public Token(TokenType type, int line)
         {
             Type = type;
+            Line = line;
         }
 
         public bool IsInPredictSet(params TokenType[] types)

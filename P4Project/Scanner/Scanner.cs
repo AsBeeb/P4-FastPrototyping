@@ -49,7 +49,7 @@ namespace ScannerLib
             // If end of file, return eof token
             if (reader.EndOfStream)
             {
-                ans = new Token(TokenType.eof_token);
+                ans = new Token(TokenType.eof_token, line);
             }
             else
             {
@@ -70,25 +70,25 @@ namespace ScannerLib
                     {
                         // Aritmetiske
                         case '+':
-                            ans = new Token(TokenType.plus_token);
+                            ans = new Token(TokenType.plus_token, line);
                             break;
                         case '-':
-                            ans = new Token(TokenType.minus_token);
+                            ans = new Token(TokenType.minus_token, line);
                             break;
                         case '=':
                             ans = TokenComp(reader, '=', TokenType.assign_token, TokenType.equal_token);
                             break;
                         case '*':
-                            ans = new Token(TokenType.multiply_token);
+                            ans = new Token(TokenType.multiply_token, line);
                             break;
                         case '/':
-                            ans = new Token(TokenType.divide_token);
+                            ans = new Token(TokenType.divide_token, line);
                             break;
                         case '%':
-                            ans = new Token(TokenType.modulo_token);
+                            ans = new Token(TokenType.modulo_token, line);
                             break;
                         case '^':
-                            ans = new Token(TokenType.power_token);
+                            ans = new Token(TokenType.power_token, line);
                             break;
 
                         // Logiske
@@ -110,38 +110,38 @@ namespace ScannerLib
 
                         // Kontrolstruktur
                         case ';':
-                            ans = new Token(TokenType.semicolon_token);
+                            ans = new Token(TokenType.semicolon_token, line);
                             break;
                         case ',':
-                            ans = new Token(TokenType.comma_token);
+                            ans = new Token(TokenType.comma_token, line);
                             break;
 
                         // Datatyper
                         case '(':
-                            ans = new Token(TokenType.lparen_token);
+                            ans = new Token(TokenType.lparen_token, line);
                             break;
                         case ')':
-                            ans = new Token(TokenType.rparen_token);
+                            ans = new Token(TokenType.rparen_token, line);
                             break;
                         case '[':
-                            ans = new Token(TokenType.lsbracket_token);
+                            ans = new Token(TokenType.lsbracket_token, line);
                             break;
                         case ']':
-                            ans = new Token(TokenType.rsbracket_token);
+                            ans = new Token(TokenType.rsbracket_token, line);
                             break;
                         case '{':
-                            ans = new Token(TokenType.lcbracket_token);
+                            ans = new Token(TokenType.lcbracket_token, line);
                             break;
                         case '}':
-                            ans = new Token(TokenType.rcbracket_token);
+                            ans = new Token(TokenType.rcbracket_token, line);
                             break;
 
                         // Diverse
                         case '.':
-                            ans = new Token(TokenType.dot_token);
+                            ans = new Token(TokenType.dot_token, line);
                             break;
                         case ':':
-                            ans = new Token(TokenType.colon_token);
+                            ans = new Token(TokenType.colon_token, line);
                             break;
                         case '\"':
                             ans = GetString(reader);
@@ -181,7 +181,7 @@ namespace ScannerLib
             if ((char)reader.Peek() == '\"')
             {
                 reader.Read();
-                return new Token(value, TokenType.stringval_token);
+                return new Token(value, TokenType.stringval_token, line);
             }
             // Throw exception because of EOF or runaway string.
             else
@@ -196,7 +196,7 @@ namespace ScannerLib
             if ((char)reader.Peek() == expectedSymbol)
             {
                 reader.Read();
-                return new Token(option2);
+                return new Token(option2, line);
             }
             // If it isn't the expected symbol and the options are the same it throws an exception. 
             // This could be if we expect && but only read &, then the second one would throw the exception.
@@ -206,7 +206,7 @@ namespace ScannerLib
             }
             else
             {
-                return new Token(option1);
+                return new Token(option1, line);
             }
         }
 
@@ -242,7 +242,7 @@ namespace ScannerLib
                 }
             }
 
-            return new Token(value, type);
+            return new Token(value, type, line);
         }
 
         private static Token ScanWords(StreamReader reader)
@@ -259,13 +259,13 @@ namespace ScannerLib
             Other values, such as "if" and "play", are always the same, and are therefore discarded to save space. */
             if (Keywords.TryGetValue(value, out type))
             {
-                return (type == TokenType.boolval_token) ? new Token(value, type) : new Token(type);
+                return (type == TokenType.boolval_token) ? new Token(value, type, line) : new Token(type, line);
             }
             // Alternatively, the word is saved as an identifier token.
             else
             {
                 type = TokenType.id_token;
-                return new Token(value, type);
+                return new Token(value, type, line);
             }
         }
     }

@@ -6,5 +6,5 @@ BoolTest(Boolskværdi);
 
 func bool BoolTest (bool testbool){
 local string teststring = "test";
-local string localboooool = teststring : teststring;
+local string localboooool = (teststring) ;
 }

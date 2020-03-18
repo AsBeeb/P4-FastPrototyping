@@ -35,7 +35,7 @@ namespace ParserLib
             else
             {
                 // Throw exception...
-                Console.WriteLine("Match Fejl!");
+                throw new Exception($"Expected type was {tokenType}, but the token was {tokens.Peek().Type}");
             }
         }
 
@@ -49,7 +49,7 @@ namespace ParserLib
             else
             {
                 // Expected something else.. ERROR
-                Console.WriteLine("parseprog Fejl!");
+                throw new SyntacticalException(tokens.Peek());
             }
         }
 
@@ -67,8 +67,7 @@ namespace ParserLib
             else
             {
                 // Expected this and this..
-                Console.WriteLine("parse top dcls flertal Fejl!");
-
+                throw new SyntacticalException(tokens.Peek());
 
             }
         }
@@ -90,7 +89,7 @@ namespace ParserLib
             else
             {
                 // ERROR
-                Console.WriteLine("parsetopdcl Fejl!");
+                throw new SyntacticalException(tokens.Peek());
 
             }
         }
@@ -109,8 +108,8 @@ namespace ParserLib
             else
             {
                 // ERROR
-                Console.WriteLine("parse global dcl Fejl!");
-
+               
+                throw new SyntacticalException(tokens.Peek());
             }
         }
 
@@ -125,7 +124,7 @@ namespace ParserLib
             else
             {
                 // ERROR
-                Console.WriteLine("parse structdcl Fejl!");
+                throw new SyntacticalException(tokens.Peek());
 
             }
         }
@@ -142,7 +141,7 @@ namespace ParserLib
             else
             {
                 // ERROR
-                Console.WriteLine("parsestructblock Fejl!");
+                throw new SyntacticalException(tokens.Peek());
 
             }
         }
@@ -164,7 +163,7 @@ namespace ParserLib
             else
             {
                 // ERROR
-                Console.WriteLine("parseconstructor Fejl!");
+                throw new SyntacticalException(tokens.Peek());
 
             }
         }
@@ -184,7 +183,7 @@ namespace ParserLib
             else
             {
                 // ERROR
-                Console.WriteLine("parsedcls Fejl!");
+                throw new SyntacticalException(tokens.Peek());
 
             }
         }
@@ -203,7 +202,7 @@ namespace ParserLib
             else
             {
                 // ERROR
-                Console.WriteLine("parse functiondcl Fejl!");
+                throw new SyntacticalException(tokens.Peek());
 
             }
         }
@@ -222,7 +221,7 @@ namespace ParserLib
             else
             {
                 // ERROR
-                Console.WriteLine("parse formalparams Fejl!");
+                throw new SyntacticalException(tokens.Peek());
 
             }
         }
@@ -242,7 +241,7 @@ namespace ParserLib
             else
             {
                 // ERROR
-                Console.WriteLine("parse remaining params Fejl!");
+                throw new SyntacticalException(tokens.Peek());
 
             }
         }
@@ -256,7 +255,7 @@ namespace ParserLib
             else
             {
                 // ERROR
-                Console.WriteLine("parse formal param Fejl!");
+                throw new SyntacticalException(tokens.Peek());
 
             }
         }
@@ -274,7 +273,7 @@ namespace ParserLib
             else
             {
                 // Error
-                Console.WriteLine("parse return type Fejl!");
+                throw new SyntacticalException(tokens.Peek());
 
             }
         }
@@ -291,7 +290,7 @@ namespace ParserLib
             else
             {
                 // Error
-                Console.WriteLine("parse block Fejl!");
+                throw new SyntacticalException(tokens.Peek());
 
             }
         }
@@ -311,7 +310,7 @@ namespace ParserLib
             else
             {
                 // Error
-                Console.WriteLine("partse stmts flertal Fejl!");
+                throw new SyntacticalException(tokens.Peek());
 
             }
         }
@@ -345,7 +344,7 @@ namespace ParserLib
             else
             {
                 // Error
-                Console.WriteLine("parse smtmt Fejl!");
+                throw new SyntacticalException(tokens.Peek());
 
             }
         }
@@ -362,7 +361,7 @@ namespace ParserLib
             else
             {
                 // Error
-                Console.WriteLine("parse dcl Fejl!");
+                throw new SyntacticalException(tokens.Peek());
 
             }
         }
@@ -379,7 +378,7 @@ namespace ParserLib
             else
             {
                 // Error
-                Console.WriteLine("parseassign or call Fejl!");
+                throw new SyntacticalException(tokens.Peek());
 
             }
         }
@@ -397,7 +396,7 @@ namespace ParserLib
             else
             {
                 // Error
-                Console.WriteLine("parsebrackets Fejl!");
+                throw new SyntacticalException(tokens.Peek());
 
             }
         }
@@ -415,7 +414,7 @@ namespace ParserLib
             else
             {
                 // Error
-                Console.WriteLine("parse init Fejl!");
+                throw new SyntacticalException(tokens.Peek());
 
             }
 
@@ -432,7 +431,7 @@ namespace ParserLib
             else
             {
                 // ERROR
-                Console.WriteLine("parse assign Fejl!");
+                throw new SyntacticalException(tokens.Peek());
 
             }
 
@@ -452,8 +451,7 @@ namespace ParserLib
             }
             else
             {
-                Console.WriteLine("parse if stmt Fejl!");
-
+                throw new SyntacticalException(tokens.Peek());
             }
 
         }
@@ -476,8 +474,7 @@ namespace ParserLib
             else
             {
                 // ERROR
-                Console.WriteLine("parse else if Fejl!");
-
+                throw new SyntacticalException(tokens.Peek());
             }
 
         }
@@ -495,9 +492,7 @@ namespace ParserLib
             }
             else
             {
-                Console.WriteLine("parse else Fejl!");
-
-                // ERROR 
+                throw new SyntacticalException(tokens.Peek());
             }
 
         }
@@ -515,8 +510,7 @@ namespace ParserLib
             else
             {
                 // ERROR
-                Console.WriteLine("parsewhileloop Fejl!");
-
+                throw new SyntacticalException(tokens.Peek());
             }
         }
 
@@ -531,8 +525,7 @@ namespace ParserLib
             else
             {
                 // ERROR
-                Console.WriteLine("parse return Fejl!");
-
+                throw new SyntacticalException(tokens.Peek());
             }
         }
 
@@ -549,9 +542,7 @@ namespace ParserLib
             }
             else
             {
-                // ERROR
-                Console.WriteLine("parsereturnvalue Fejl!");
-
+                throw new SyntacticalException(tokens.Peek());
             }
         }
         
@@ -577,9 +568,7 @@ namespace ParserLib
             }
             else
             {
-                // ERROR
-                Console.WriteLine("parseplayloop Fejl!");
-
+                throw new SyntacticalException(tokens.Peek());
             }
 
         }
@@ -608,9 +597,7 @@ namespace ParserLib
             }
             else
             {
-                // ERROR
-                Console.WriteLine("parsetype Fejl!");
-
+                throw new SyntacticalException(tokens.Peek());
             }
         }
 
@@ -623,9 +610,7 @@ namespace ParserLib
             }
             else
             {
-                // Error
-                Console.WriteLine("parse expr Fejl!");
-
+                throw new SyntacticalException(tokens.Peek());
             }
         }
 
@@ -641,9 +626,7 @@ namespace ParserLib
             }
             else
             {
-                Console.WriteLine("parse string Fejl!");
-
-                // Error
+                throw new SyntacticalException(tokens.Peek());
             }
         }
 
@@ -661,9 +644,7 @@ namespace ParserLib
             }
             else
             {
-                // Error
-                Console.WriteLine("parse Concat Fejl!");
-
+                throw new SyntacticalException(tokens.Peek());
             }
         }
 
@@ -676,9 +657,7 @@ namespace ParserLib
             }
             else
             {
-                // Error
-                Console.WriteLine("parse Bool Expr Fejl!");
-
+                throw new SyntacticalException(tokens.Peek());
             }
         }
 
@@ -695,9 +674,7 @@ namespace ParserLib
             }
             else
             {
-                // Error
-                Console.WriteLine("parse OR expr Fejl!");
-
+                throw new SyntacticalException(tokens.Peek());
             }
         }
 
@@ -710,9 +687,7 @@ namespace ParserLib
             }
             else
             {
-                // Error
-                Console.WriteLine("parse compexpr 1 Fejl!");
-
+                throw new SyntacticalException(tokens.Peek());
             }
         }
 
@@ -729,9 +704,7 @@ namespace ParserLib
             }
             else
             {
-                // Error
-                Console.WriteLine("parse AND expr Fejl!");
-
+                throw new SyntacticalException(tokens.Peek());
             }
         }
 
@@ -744,9 +717,7 @@ namespace ParserLib
             }
             else
             {
-                // Error
-                Console.WriteLine("parse compexpr 2 Fejl!");
-
+                throw new SyntacticalException(tokens.Peek());
             }
         }
 
@@ -768,9 +739,7 @@ namespace ParserLib
             }
             else
             {
-                // Error
-                Console.WriteLine("parse equalexpr Fejl!");
-
+                throw new SyntacticalException(tokens.Peek());
             }
         }
 
@@ -789,9 +758,7 @@ namespace ParserLib
             }
             else
             {
-                // Error
-                Console.WriteLine("parse compexpr 3 Fejl!");
-
+                throw new SyntacticalException(tokens.Peek());
             }
         }
         private void ParseSizeComp()
@@ -830,9 +797,7 @@ namespace ParserLib
             }
             else
             {
-                // Error
-                Console.WriteLine("parse sizecomp Fejl!");
-
+                throw new SyntacticalException(tokens.Peek());
             }
         }
         private void ParseCompExpr4()
@@ -853,9 +818,7 @@ namespace ParserLib
             }
             else
             {
-                // Error
-                Console.WriteLine("parse comp expr 4 Fejl!");
-
+                throw new SyntacticalException(tokens.Peek());
             }
         }
         private void ParseBasicBool()
@@ -874,9 +837,7 @@ namespace ParserLib
             }
             else
             {
-                // Error
-                Console.WriteLine("parse basic bool Fejl!");
-
+                throw new SyntacticalException(tokens.Peek());
             }
         }
         private void ParseArithExpr()
@@ -892,9 +853,7 @@ namespace ParserLib
             }
             else
             {
-                // Error
-                Console.WriteLine("parse arith expr Fejl!");
-
+                throw new SyntacticalException(tokens.Peek());
             }
         }
         private void ParseArithOp1()
@@ -928,9 +887,7 @@ namespace ParserLib
             }
             else
             {
-                // Error
-                Console.WriteLine(" parse arith op 1 Fejl!");
-
+                throw new SyntacticalException(tokens.Peek());
             }
         }
         private void ParseArithExpr1()
@@ -946,9 +903,7 @@ namespace ParserLib
             }
             else
             {
-                // Error
-                Console.WriteLine("parsearith expr 1 Fejl!");
-
+                throw new SyntacticalException(tokens.Peek());
             }
         }
         private void ParseArithOp2()
@@ -971,9 +926,7 @@ namespace ParserLib
             }
             else
             {
-                // Error
-                Console.WriteLine("parse arith op 2 Fejl!");
-
+                throw new SyntacticalException(tokens.Peek());
             }
         }
         private void ParseArithExpr2()
@@ -989,9 +942,7 @@ namespace ParserLib
             }
             else
             {
-                // Error
-                Console.WriteLine("parse arith expr 2 Fejl!");
-
+                throw new SyntacticalException(tokens.Peek());
             }
         }
         private void ParseArithExpr3()
@@ -1003,9 +954,7 @@ namespace ParserLib
             }
             else
             {
-                // ERROR
-                Console.WriteLine("Parse arith expr 3 Fejl!");
-
+                throw new SyntacticalException(tokens.Peek());
             }
         }
         private void ParseArithOp3()
@@ -1020,9 +969,7 @@ namespace ParserLib
             }
             else
             {
-                //Error
-                Console.WriteLine("Parse arith op 3 Fejl!");
-
+                throw new SyntacticalException(tokens.Peek());
             }
         }
 
@@ -1048,9 +995,7 @@ namespace ParserLib
             }
             else
             {
-                //Error
-                Console.WriteLine("PARSE ARITH EXPR 4 Fejl!");
-
+                throw new SyntacticalException(tokens.Peek());
             }
         }
 
@@ -1065,9 +1010,7 @@ namespace ParserLib
             }
             else
             {
-                //Error
-                Console.WriteLine("ParseIDORCALLOPERATIONS Fejl!");
-
+                throw new SyntacticalException(tokens.Peek());
             }
         }
 
@@ -1080,9 +1023,7 @@ namespace ParserLib
             }
             else
             {
-                //Error
-                Console.WriteLine("ParseCall Fejl!");
-
+                throw new SyntacticalException(tokens.Peek());
             }
         }
 
@@ -1098,9 +1039,7 @@ namespace ParserLib
             }
             else
             {
-                //Error
-                Console.WriteLine("Actual PArams Fejl!");
-
+                throw new SyntacticalException(tokens.Peek());
             }
         }
         private void ParseFuncValue()
@@ -1117,9 +1056,7 @@ namespace ParserLib
             }
             else
             {
-                //Error
-                Console.WriteLine("FuncValue Fejl!");
-
+                throw new SyntacticalException(tokens.Peek());
             }
         }
         private void ParseIdOperations()
@@ -1135,9 +1072,7 @@ namespace ParserLib
             }
             else
             {
-                Console.WriteLine("IDOPERATIONS Fejl!");
-
-                //Error
+                throw new SyntacticalException(tokens.Peek());
             }
         }
         private void ParseIdOperation()
@@ -1154,9 +1089,7 @@ namespace ParserLib
             }
             else
             {
-                //Error
-                Console.WriteLine("IDOPERATION UDEN FLERTAL Fejl!");
-
+                throw new SyntacticalException(tokens.Peek());
             }
         }
     }
