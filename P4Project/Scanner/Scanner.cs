@@ -32,7 +32,7 @@ namespace ScannerLib
             {"global", TokenType.global_token}
         };
 
-        public static Token Scan(StreamReader reader)
+        public static Token Scan(StreamReaderExpanded reader)
         {
             Token ans = null;
 
@@ -40,7 +40,7 @@ namespace ScannerLib
             while (Char.IsWhiteSpace((char)reader.Peek()))
             {
                 //Counts the line number for the exception message
-                if ((char)reader.Peek() == '\n')
+                if (reader.PeekChar() == '\n')
                     line += 1;
                 reader.Read();
 
@@ -54,18 +54,18 @@ namespace ScannerLib
             else
             {
                 // Scan digits
-                if (Char.IsDigit((char)reader.Peek()))
+                if (Char.IsDigit(reader.PeekChar()))
                 {
                     ans = ScanDigits(reader);
                 }
                 // Scan identifiers and keywords
-                else if(Char.IsLetter((char)reader.Peek())) 
+                else if(Char.IsLetter(reader.PeekChar())) 
                 {
                     ans = ScanWords(reader);
                 }
                 else
                 {
-                    char ch = (char)reader.Read();
+                    char ch = reader.ReadChar();
                     switch (ch)
                     {
                         // Aritmetiske
@@ -159,26 +159,26 @@ namespace ScannerLib
             return ans;
         }
 
-        private static void SkipComment(StreamReader reader) 
+        private static void SkipComment(StreamReaderExpanded reader) 
         {
             //Reads until the symbol right before the end of the line or file
-            while ((char)reader.Peek() != '\n' && reader.Peek() > -1)
+            while (reader.PeekChar() != '\n' && reader.Peek() > -1)
             {
                 reader.Read();
             }
 
         }
 
-        private static Token GetString(StreamReader reader)
+        private static Token GetString(StreamReaderExpanded reader)
         {
             string value = "";
             // Reads every character until it meets a new line symbol, or " symbol or EOF.
-            while ((char)reader.Peek() != '\n' && (char)reader.Peek() != '\"' && reader.Peek() > -1)
+            while (reader.PeekChar() != '\n' && reader.PeekChar() != '\"' && reader.Peek() > -1)
             {
-                value += (char)reader.Read();
+                value += reader.ReadChar();
             }
             // Checks if the cause of the stopped while loop is a " symbol.
-            if ((char)reader.Peek() == '\"')
+            if (reader.PeekChar() == '\"')
             {
                 reader.Read();
                 return new Token(value, TokenType.stringval_token, line);
@@ -190,10 +190,10 @@ namespace ScannerLib
             }
         }
 
-        private static Token TokenComp(StreamReader reader, char expectedSymbol, TokenType option1, TokenType option2)
+        private static Token TokenComp(StreamReaderExpanded reader, char expectedSymbol, TokenType option1, TokenType option2)
         {
             // Checks whether the symbol is the one expected.
-            if ((char)reader.Peek() == expectedSymbol)
+            if (reader.PeekChar() == expectedSymbol)
             {
                 reader.Read();
                 return new Token(option2, line);
@@ -210,17 +210,17 @@ namespace ScannerLib
             }
         }
 
-        private static Token ScanDigits(StreamReader reader)
+        private static Token ScanDigits(StreamReaderExpanded reader)
         {
             string value = "";
             TokenType type;
             // Reads until it meets a symbol that isn't a digit.
-            while (Char.IsDigit((char)reader.Peek()))
+            while (Char.IsDigit(reader.PeekChar()))
             {
-                value += (char)reader.Read();
+                value += reader.ReadChar();
             }
             // Checks whether the next symbol is a dot, if it isn't, the number is an integer.
-            if ((char)reader.Peek() != '.')
+            if (reader.PeekChar() != '.')
             {
                 type = TokenType.inum_token;
             }
@@ -228,31 +228,31 @@ namespace ScannerLib
             else
             {
                 type = TokenType.fnum_token;
-                value += (char)reader.Read();
+                value += reader.ReadChar();
                 // If there is no digits after the dot we throw an exception.
-                if (!Char.IsDigit((char)reader.Peek()))
+                if (!Char.IsDigit(reader.PeekChar()))
                 {
                     throw new LexicalException(line);
                 }
                     
                 // Reads the digits after the dot.
-                while (Char.IsDigit((char)reader.Peek()))
+                while (Char.IsDigit(reader.PeekChar()))
                 {
-                    value += (char)reader.Read();
+                    value += reader.ReadChar();
                 }
             }
 
             return new Token(value, type, line);
         }
 
-        private static Token ScanWords(StreamReader reader)
+        private static Token ScanWords(StreamReaderExpanded reader)
         {
             string value = "";
             TokenType type;
             // Reads all letters or digits until a nonletter and nondigit is read.
-            while (Char.IsLetterOrDigit((char)reader.Peek()))
+            while (Char.IsLetterOrDigit(reader.PeekChar()))
             {
-                value += (char)reader.Read();
+                value += reader.ReadChar();
             }
 
             /* Check for reserved keywords. In this case, only "true" and "false" are saved as values.
