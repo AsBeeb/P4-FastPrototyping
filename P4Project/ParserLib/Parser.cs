@@ -35,7 +35,7 @@ namespace ParserLib
             else
             {
                 // Throw exception...
-                Console.WriteLine("Fejl!");
+                Console.WriteLine("Match Fejl!");
             }
         }
 
@@ -49,7 +49,7 @@ namespace ParserLib
             else
             {
                 // Expected something else.. ERROR
-                Console.WriteLine("Fejl!");
+                Console.WriteLine("parseprog Fejl!");
             }
         }
 
@@ -67,7 +67,7 @@ namespace ParserLib
             else
             {
                 // Expected this and this..
-                Console.WriteLine("Fejl!");
+                Console.WriteLine("parse top dcls flertal Fejl!");
 
 
             }
@@ -90,7 +90,7 @@ namespace ParserLib
             else
             {
                 // ERROR
-                Console.WriteLine("Fejl!");
+                Console.WriteLine("parsetopdcl Fejl!");
 
             }
         }
@@ -109,7 +109,7 @@ namespace ParserLib
             else
             {
                 // ERROR
-                Console.WriteLine("Fejl!");
+                Console.WriteLine("parse global dcl Fejl!");
 
             }
         }
@@ -125,7 +125,7 @@ namespace ParserLib
             else
             {
                 // ERROR
-                Console.WriteLine("Fejl!");
+                Console.WriteLine("parse structdcl Fejl!");
 
             }
         }
@@ -142,7 +142,7 @@ namespace ParserLib
             else
             {
                 // ERROR
-                Console.WriteLine("Fejl!");
+                Console.WriteLine("parsestructblock Fejl!");
 
             }
         }
@@ -164,7 +164,7 @@ namespace ParserLib
             else
             {
                 // ERROR
-                Console.WriteLine("Fejl!");
+                Console.WriteLine("parseconstructor Fejl!");
 
             }
         }
@@ -176,7 +176,7 @@ namespace ParserLib
                 Match(TokenType.semicolon_token);
                 ParseDcls();
             }
-            else if (tokens.Peek().IsInPredictSet(TokenType.id_token))
+            else if (tokens.Peek().IsInPredictSet(TokenType.id_token, TokenType.rsbracket_token))
             {
                 // EPSILON
                 return;
@@ -184,7 +184,7 @@ namespace ParserLib
             else
             {
                 // ERROR
-                Console.WriteLine("Fejl!");
+                Console.WriteLine("parsedcls Fejl!");
 
             }
         }
@@ -203,7 +203,7 @@ namespace ParserLib
             else
             {
                 // ERROR
-                Console.WriteLine("Fejl!");
+                Console.WriteLine("parse functiondcl Fejl!");
 
             }
         }
@@ -222,7 +222,7 @@ namespace ParserLib
             else
             {
                 // ERROR
-                Console.WriteLine("Fejl!");
+                Console.WriteLine("parse formalparams Fejl!");
 
             }
         }
@@ -242,7 +242,7 @@ namespace ParserLib
             else
             {
                 // ERROR
-                Console.WriteLine("Fejl!");
+                Console.WriteLine("parse remaining params Fejl!");
 
             }
         }
@@ -256,7 +256,7 @@ namespace ParserLib
             else
             {
                 // ERROR
-                Console.WriteLine("Fejl!");
+                Console.WriteLine("parse formal param Fejl!");
 
             }
         }
@@ -274,7 +274,7 @@ namespace ParserLib
             else
             {
                 // Error
-                Console.WriteLine("Fejl!");
+                Console.WriteLine("parse return type Fejl!");
 
             }
         }
@@ -291,7 +291,7 @@ namespace ParserLib
             else
             {
                 // Error
-                Console.WriteLine("Fejl!");
+                Console.WriteLine("parse block Fejl!");
 
             }
         }
@@ -311,7 +311,7 @@ namespace ParserLib
             else
             {
                 // Error
-                Console.WriteLine("Fejl!");
+                Console.WriteLine("partse stmts flertal Fejl!");
 
             }
         }
@@ -345,7 +345,7 @@ namespace ParserLib
             else
             {
                 // Error
-                Console.WriteLine("Fejl!");
+                Console.WriteLine("parse smtmt Fejl!");
 
             }
         }
@@ -362,7 +362,7 @@ namespace ParserLib
             else
             {
                 // Error
-                Console.WriteLine("Fejl!");
+                Console.WriteLine("parse dcl Fejl!");
 
             }
         }
@@ -379,7 +379,7 @@ namespace ParserLib
             else
             {
                 // Error
-                Console.WriteLine("Fejl!");
+                Console.WriteLine("parseassign or call Fejl!");
 
             }
         }
@@ -397,7 +397,7 @@ namespace ParserLib
             else
             {
                 // Error
-                Console.WriteLine("Fejl!");
+                Console.WriteLine("parsebrackets Fejl!");
 
             }
         }
@@ -415,7 +415,7 @@ namespace ParserLib
             else
             {
                 // Error
-                Console.WriteLine("Fejl!");
+                Console.WriteLine("parse init Fejl!");
 
             }
 
@@ -432,7 +432,7 @@ namespace ParserLib
             else
             {
                 // ERROR
-                Console.WriteLine("Fejl!");
+                Console.WriteLine("parse assign Fejl!");
 
             }
 
@@ -452,7 +452,7 @@ namespace ParserLib
             }
             else
             {
-                Console.WriteLine("Fejl!");
+                Console.WriteLine("parse if stmt Fejl!");
 
             }
 
@@ -476,7 +476,7 @@ namespace ParserLib
             else
             {
                 // ERROR
-                Console.WriteLine("Fejl!");
+                Console.WriteLine("parse else if Fejl!");
 
             }
 
@@ -495,7 +495,7 @@ namespace ParserLib
             }
             else
             {
-                Console.WriteLine("Fejl!");
+                Console.WriteLine("parse else Fejl!");
 
                 // ERROR 
             }
@@ -515,7 +515,7 @@ namespace ParserLib
             else
             {
                 // ERROR
-                Console.WriteLine("Fejl!");
+                Console.WriteLine("parsewhileloop Fejl!");
 
             }
         }
@@ -531,7 +531,7 @@ namespace ParserLib
             else
             {
                 // ERROR
-                Console.WriteLine("Fejl!");
+                Console.WriteLine("parse return Fejl!");
 
             }
         }
@@ -550,7 +550,7 @@ namespace ParserLib
             else
             {
                 // ERROR
-                Console.WriteLine("Fejl!");
+                Console.WriteLine("parsereturnvalue Fejl!");
 
             }
         }
@@ -578,7 +578,7 @@ namespace ParserLib
             else
             {
                 // ERROR
-                Console.WriteLine("Fejl!");
+                Console.WriteLine("parseplayloop Fejl!");
 
             }
 
@@ -609,7 +609,7 @@ namespace ParserLib
             else
             {
                 // ERROR
-                Console.WriteLine("Fejl!");
+                Console.WriteLine("parsetype Fejl!");
 
             }
         }
@@ -624,7 +624,7 @@ namespace ParserLib
             else
             {
                 // Error
-                Console.WriteLine("Fejl!");
+                Console.WriteLine("parse expr Fejl!");
 
             }
         }
@@ -641,7 +641,7 @@ namespace ParserLib
             }
             else
             {
-                Console.WriteLine("Fejl!");
+                Console.WriteLine("parse string Fejl!");
 
                 // Error
             }
@@ -662,7 +662,7 @@ namespace ParserLib
             else
             {
                 // Error
-                Console.WriteLine("Fejl!");
+                Console.WriteLine("parse Concat Fejl!");
 
             }
         }
@@ -677,7 +677,7 @@ namespace ParserLib
             else
             {
                 // Error
-                Console.WriteLine("Fejl!");
+                Console.WriteLine("parse Bool Expr Fejl!");
 
             }
         }
@@ -696,7 +696,7 @@ namespace ParserLib
             else
             {
                 // Error
-                Console.WriteLine("Fejl!");
+                Console.WriteLine("parse OR expr Fejl!");
 
             }
         }
@@ -711,7 +711,7 @@ namespace ParserLib
             else
             {
                 // Error
-                Console.WriteLine("Fejl!");
+                Console.WriteLine("parse compexpr 1 Fejl!");
 
             }
         }
@@ -730,7 +730,7 @@ namespace ParserLib
             else
             {
                 // Error
-                Console.WriteLine("Fejl!");
+                Console.WriteLine("parse AND expr Fejl!");
 
             }
         }
@@ -745,7 +745,7 @@ namespace ParserLib
             else
             {
                 // Error
-                Console.WriteLine("Fejl!");
+                Console.WriteLine("parse compexpr 2 Fejl!");
 
             }
         }
@@ -769,7 +769,7 @@ namespace ParserLib
             else
             {
                 // Error
-                Console.WriteLine("Fejl!");
+                Console.WriteLine("parse equalexpr Fejl!");
 
             }
         }
@@ -790,7 +790,7 @@ namespace ParserLib
             else
             {
                 // Error
-                Console.WriteLine("Fejl!");
+                Console.WriteLine("parse compexpr 3 Fejl!");
 
             }
         }
@@ -831,7 +831,7 @@ namespace ParserLib
             else
             {
                 // Error
-                Console.WriteLine("Fejl!");
+                Console.WriteLine("parse sizecomp Fejl!");
 
             }
         }
@@ -854,7 +854,7 @@ namespace ParserLib
             else
             {
                 // Error
-                Console.WriteLine("Fejl!");
+                Console.WriteLine("parse comp expr 4 Fejl!");
 
             }
         }
@@ -875,7 +875,7 @@ namespace ParserLib
             else
             {
                 // Error
-                Console.WriteLine("Fejl!");
+                Console.WriteLine("parse basic bool Fejl!");
 
             }
         }
@@ -893,7 +893,7 @@ namespace ParserLib
             else
             {
                 // Error
-                Console.WriteLine("Fejl!");
+                Console.WriteLine("parse arith expr Fejl!");
 
             }
         }
@@ -929,7 +929,7 @@ namespace ParserLib
             else
             {
                 // Error
-                Console.WriteLine("Fejl!");
+                Console.WriteLine(" parse arith op 1 Fejl!");
 
             }
         }
@@ -947,7 +947,7 @@ namespace ParserLib
             else
             {
                 // Error
-                Console.WriteLine("Fejl!");
+                Console.WriteLine("parsearith expr 1 Fejl!");
 
             }
         }
@@ -972,7 +972,7 @@ namespace ParserLib
             else
             {
                 // Error
-                Console.WriteLine("Fejl!");
+                Console.WriteLine("parse arith op 2 Fejl!");
 
             }
         }
@@ -990,7 +990,7 @@ namespace ParserLib
             else
             {
                 // Error
-                Console.WriteLine("Fejl!");
+                Console.WriteLine("parse arith expr 2 Fejl!");
 
             }
         }
@@ -1004,7 +1004,7 @@ namespace ParserLib
             else
             {
                 // ERROR
-                Console.WriteLine("Fejl!");
+                Console.WriteLine("Parse arith expr 3 Fejl!");
 
             }
         }
@@ -1021,7 +1021,7 @@ namespace ParserLib
             else
             {
                 //Error
-                Console.WriteLine("Fejl!");
+                Console.WriteLine("Parse arith op 3 Fejl!");
 
             }
         }
@@ -1049,7 +1049,7 @@ namespace ParserLib
             else
             {
                 //Error
-                Console.WriteLine("Fejl!");
+                Console.WriteLine("PARSE ARITH EXPR 4 Fejl!");
 
             }
         }
@@ -1060,13 +1060,13 @@ namespace ParserLib
             {
                 ParseCall();
             }
-            else if (tokens.Peek().IsInPredictSet(TokenType.lsbracket_token, TokenType.dot_token)){
+            else if (tokens.Peek().IsInPredictSet(TokenType.lsbracket_token, TokenType.dot_token, TokenType.assign_token, TokenType.rparen_token, TokenType.power_token, TokenType.multiply_token, TokenType.divide_token, TokenType.modulo_token, TokenType.plus_token, TokenType.minus_token, TokenType.rsbracket_token, TokenType.greaterorequal_token, TokenType.lessorequal_token, TokenType.lessthan_token, TokenType.greaterthan_token, TokenType.equal_token, TokenType.notequal_token, TokenType.and_token, TokenType.or_token, TokenType.colon_token, TokenType.comma_token, TokenType.semicolon_token)){
                 ParseIdOperations();
             }
             else
             {
                 //Error
-                Console.WriteLine("Fejl!");
+                Console.WriteLine("ParseIDORCALLOPERATIONS Fejl!");
 
             }
         }
@@ -1081,7 +1081,7 @@ namespace ParserLib
             else
             {
                 //Error
-                Console.WriteLine("Fejl!");
+                Console.WriteLine("ParseCall Fejl!");
 
             }
         }
@@ -1099,7 +1099,7 @@ namespace ParserLib
             else
             {
                 //Error
-                Console.WriteLine("Fejl!");
+                Console.WriteLine("Actual PArams Fejl!");
 
             }
         }
@@ -1118,7 +1118,7 @@ namespace ParserLib
             else
             {
                 //Error
-                Console.WriteLine("Fejl!");
+                Console.WriteLine("FuncValue Fejl!");
 
             }
         }
@@ -1135,7 +1135,7 @@ namespace ParserLib
             }
             else
             {
-                Console.WriteLine("Fejl!");
+                Console.WriteLine("IDOPERATIONS Fejl!");
 
                 //Error
             }
@@ -1155,7 +1155,7 @@ namespace ParserLib
             else
             {
                 //Error
-                Console.WriteLine("Fejl!");
+                Console.WriteLine("IDOPERATION UDEN FLERTAL Fejl!");
 
             }
         }

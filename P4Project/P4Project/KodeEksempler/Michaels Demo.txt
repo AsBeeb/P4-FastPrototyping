@@ -1,11 +1,10 @@
-global string strengtest = "Test Streng";
-global string strengtest2 = "Test " : "Med" : ("Mig") + ("Jeg" : "Er" : "Syntaktisk") + ("Korrekt");
-
-
 func void Main ()
 {
-local float floatværdi				= 5;
 local bool Boolskværdi                             = false;
-local int intværdi = (Boolskværdi);
+BoolTest(Boolskværdi);
+}
 
+func bool BoolTest (bool testbool){
+local string teststring = "test";
+local string localboooool = teststring : teststring;
 }
