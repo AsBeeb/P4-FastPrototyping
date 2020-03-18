@@ -248,7 +248,7 @@ namespace ParserLib
         }
         private void ParseFormalParam()
         {
-            if (tokens.Peek().IsInPredictSet(TokenType.intdcl_token, TokenType.floatdcl_token, TokenType.stringdcl_token, TokenType.boolval_token, TokenType.id_token))
+            if (tokens.Peek().IsInPredictSet(TokenType.intdcl_token, TokenType.floatdcl_token, TokenType.stringdcl_token, TokenType.booldcl_token, TokenType.id_token))
             {
                 ParseType();
                 Match(TokenType.id_token);
@@ -263,7 +263,7 @@ namespace ParserLib
         private void ParseReturnType()
         {
             if(tokens.Peek().IsInPredictSet(TokenType.intdcl_token, TokenType.floatdcl_token, TokenType.stringdcl_token,
-                                            TokenType.boolval_token, TokenType.id_token))
+                                            TokenType.booldcl_token, TokenType.id_token))
             {
                 ParseType();
             }
