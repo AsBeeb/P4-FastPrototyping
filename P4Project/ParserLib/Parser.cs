@@ -77,26 +77,27 @@ namespace ParserLib
         
         private TopDclNode ParseTopDcl()
         {
+            TopDclNode topDclNode = null;
             
             if (tokens.Peek().IsInPredictSet(TokenType.global_token))
             {
-                return ParseGlobalDcl();
+                topDclNode = ParseGlobalDcl();
              
             }
             else if (tokens.Peek().IsInPredictSet(TokenType.struct_token))
             {
-                return ParseStructDcl();
+                topDclNode = ParseStructDcl();
             }
             else if (tokens.Peek().IsInPredictSet(TokenType.func_token))
             {
-                return ParseFunctionDcl();
+                topDclNode = ParseFunctionDcl();
             }
             else
             {
-                // ERROR
                 throw new SyntacticalException(tokens.Peek());
-
             }
+
+            return topDclNode;
         }
         
         private GlobalDclNode ParseGlobalDcl()
