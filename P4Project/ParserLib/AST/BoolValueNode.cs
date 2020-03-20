@@ -7,5 +7,10 @@ namespace ParserLib.AST
     public class BoolValueNode : ExpressionNode
     {
         public bool BoolValue;
+
+        public BoolValueNode(bool boolValue)
+        {
+            BoolValue = boolValue;
+        }
     }
 }

@@ -14,5 +14,12 @@ namespace ParserLib.AST
         public ExpressionNode LeftExpr;
         public ExpressionNode RightExpr;
         public BinaryOperator Operator;
+
+        public BinaryExpressionNode(ExpressionNode leftExpr, ExpressionNode rightExpr, BinaryOperator op)
+        {
+            LeftExpr = leftExpr;
+            RightExpr = rightExpr;
+            Operator = op;
+        }
     }
 }

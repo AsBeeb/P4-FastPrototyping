@@ -9,5 +9,12 @@ namespace ParserLib.AST
         public IdNode Id;
         public List<FormalParamNode> FormalParamNodes;
         public List<StmtNode> StmtNodes;
+
+        public ConstructorNode(IdNode id, List<FormalParamNode> formalParamNodes, List<StmtNode> stmtNodes)
+        {
+            Id = id;
+            FormalParamNodes = formalParamNodes;
+            StmtNodes = stmtNodes;
+        }
     }
 }
