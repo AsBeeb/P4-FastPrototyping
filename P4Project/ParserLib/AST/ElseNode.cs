@@ -7,5 +7,10 @@ namespace ParserLib.AST
     public class ElseNode : StmtNode
     {
         public BlockNode ElseBody;
+
+        public ElseNode(BlockNode elseBody)
+        {
+            ElseBody = elseBody;
+        }
     }
 }
