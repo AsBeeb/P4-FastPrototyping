@@ -420,7 +420,7 @@ namespace ParserLib
 
             if (tokens.Peek().IsInPredictSet(TokenType.assign_token, TokenType.lsbracket_token, TokenType.dot_token))
             {
-                ParseAssign();
+                Tuple<List<IdOperationNode>, ExpressionNode> assign = ParseAssign();
             }
             else if (tokens.Peek().IsInPredictSet(TokenType.lparen_token))
             {
@@ -1241,8 +1241,9 @@ namespace ParserLib
             if (tokens.Peek().IsInPredictSet(TokenType.lsbracket_token))
             {
                 Match(TokenType.lsbracket_token);
-                ParseArithExpr();
+                ExpressionNode exprNode = ParseArithExpr();
                 Match(TokenType.rsbracket_token);
+                idOperation = new ArrayAccessNode(exprNode);
             }
             else if (tokens.Peek().IsInPredictSet(TokenType.dot_token)){
                 Match(TokenType.dot_token);

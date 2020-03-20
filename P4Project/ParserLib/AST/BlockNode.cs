@@ -7,5 +7,9 @@ namespace ParserLib.AST
     public class BlockNode : ASTnode
     {
         public List<StmtNode> StmtNodes;
+        public BlockNode(List<StmtNode> stmtNodes)
+        {
+            StmtNodes = stmtNodes;
+        }
     }
 }

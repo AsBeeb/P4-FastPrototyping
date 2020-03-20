@@ -9,5 +9,14 @@ namespace ParserLib.AST
         public IdNode Id;
         public string Type;
         public ExpressionNode InitialValue;
+        public bool IsArray;
+
+        public DeclarationNode(IdNode id, string type, ExpressionNode initialValue, bool isArray)
+        {
+            Id = id;
+            Type = type;
+            InitialValue = initialValue;
+            IsArray = isArray;
+        }
     }
 }
