@@ -8,7 +8,7 @@ namespace ParserLib.AST
     {
         public bool BoolValue;
 
-        public BoolValueNode(bool boolValue)
+        public BoolValueNode(bool boolValue) : base("Bool")
         {
             BoolValue = boolValue;
         }
