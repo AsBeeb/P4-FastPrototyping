@@ -8,5 +8,10 @@ namespace ParserLib.AST
     {
         public ExpressionNode ControlExpr;
         public BlockNode WhileLoopBody;
+        public WhileNode(ExpressionNode ControlExpr, BlockNode WhileLoopBody)
+        {
+            this.ControlExpr = ControlExpr;
+            this.WhileLoopBody = WhileLoopBody;
+        }
     }
 }

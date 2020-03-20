@@ -7,5 +7,9 @@ namespace ParserLib.AST
     public class StringValueNode : ExpressionNode
     {
         public string StringValue;
+        public StringValueNode(string StringValue)
+        {
+            this.StringValue = StringValue;
+        }
     }
 }

@@ -12,6 +12,10 @@ namespace ParserLib.AST
     {
         public ExpressionNode ExprNode;
         public UnaryOperator Operator;
-        
+        public UnaryExpressionNode(ExpressionNode ExprNode, UnaryOperator Operator)
+        {
+            this.ExprNode = ExprNode;
+            this.Operator = Operator;
+        }
     }
 }

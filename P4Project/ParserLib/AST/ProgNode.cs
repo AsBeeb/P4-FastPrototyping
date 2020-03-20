@@ -8,9 +8,9 @@ namespace ParserLib.AST
     {
         public List<TopDclNode> TopDclNodes;
 
-        public ProgNode(List<TopDclNode> nodes)
+        public ProgNode(List<TopDclNode> TopDclNodes)
         {
-            TopDclNodes = nodes;   
+            this.TopDclNodes = TopDclNodes;   
         }
     }
 }
