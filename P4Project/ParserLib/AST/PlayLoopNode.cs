@@ -11,5 +11,13 @@ namespace ParserLib.AST
         public IdNode AllPlayers;
         public BlockNode PlayLoopBody;
         public ExpressionNode UntilCondition;
+        public PlayLoopNode(IdNode Player, IdNode Opponent, IdNode AllPlayers, BlockNode PlayLoopBody, ExpressionNode UntilCondition)
+        {
+            this.Player = Player;
+            this.Opponent = Opponent;
+            this.AllPlayers = AllPlayers;
+            this.PlayLoopBody = PlayLoopBody;
+            this.UntilCondition = UntilCondition;
+        }
     }
 }

@@ -7,5 +7,9 @@ namespace ParserLib.AST
     public class ReturnNode : StmtNode
     {
         public ExpressionNode ReturnValue;
+        public ReturnNode(ExpressionNode ReturnValue)
+        {
+            this.ReturnValue = ReturnValue;
+        }
     }
 }

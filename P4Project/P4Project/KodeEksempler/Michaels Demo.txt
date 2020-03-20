@@ -1,10 +1,7 @@
 func void Main ()
 {
-local bool Boolskværdi                             = false;
-BoolTest(Boolskværdi);
-}
-
-func bool BoolTest (bool testbool){
-local string teststring = "test";
-local string localboooool = (teststring) ;
+play(currentPlayer vs opponents in GetTurnArray()) 
+    {
+        currentPlayer
+    } until(true);
 }
