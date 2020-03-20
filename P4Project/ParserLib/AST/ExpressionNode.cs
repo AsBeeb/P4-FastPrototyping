@@ -8,6 +8,11 @@ namespace ParserLib.AST
     {
         public string Type;
 
+        public ExpressionNode()
+        {
+
+        }
+
         public ExpressionNode(string type)
         {
             Type = type;

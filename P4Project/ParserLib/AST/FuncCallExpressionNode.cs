@@ -9,7 +9,7 @@ namespace ParserLib.AST
         public IdNode Id;
         public List<ExpressionNode> ActualParameters;
 
-        public FuncCallExpressionNode(IdNode id, List<ExpressionNode> actualParameters) : base("FuncCall")
+        public FuncCallExpressionNode(IdNode id, List<ExpressionNode> actualParameters)
         {
             Id = id;
             ActualParameters = actualParameters;

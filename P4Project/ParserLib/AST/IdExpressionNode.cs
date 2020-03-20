@@ -9,7 +9,7 @@ namespace ParserLib.AST
         public string Id;
         public List<IdOperationNode> IdOperations;
 
-        public IdExpressionNode(string id, List<IdOperationNode> operations) : base("Identifier")
+        public IdExpressionNode(string id, List<IdOperationNode> operations)
         {
             Id = id;
             IdOperations = operations;
