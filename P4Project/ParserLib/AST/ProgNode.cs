@@ -7,5 +7,10 @@ namespace ParserLib.AST
     public class ProgNode : ASTnode
     {
         public List<TopDclNode> TopDclNodes;
+
+        public ProgNode(List<TopDclNode> nodes)
+        {
+            TopDclNodes = nodes;   
+        }
     }
 }
