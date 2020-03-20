@@ -4,7 +4,7 @@ using System.Text;
 
 namespace ParserLib.AST
 {
-    public class ExpressionNode : ASTnode
+    public abstract class ExpressionNode : ASTnode
     {
         public string Type;
 
