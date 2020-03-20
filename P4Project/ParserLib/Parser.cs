@@ -313,9 +313,9 @@ namespace ParserLib
             return returnType;
         }
 
-        private List<StmtNode> ParseBlock()
+        private BlockNode ParseBlock()
         {
-            List<StmtNode> block = null;
+            BlockNode block = null;
 
             if (tokens.Peek().IsInPredictSet(TokenType.lcbracket_token)){
                 Match(TokenType.lcbracket_token);
