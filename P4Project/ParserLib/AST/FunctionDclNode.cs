@@ -10,5 +10,13 @@ namespace ParserLib.AST
         public string ReturnType;
         public List<FormalParamNode> FormalParamNodes;
         public BlockNode FuncBody;
+
+        public FunctionDclNode(IdNode id, string returnType, List<FormalParamNode> formalParams, BlockNode body)
+        {
+            Id = id;
+            ReturnType = returnType;
+            FormalParamNodes = formalParams;
+            FuncBody = body;
+        }
     }
 }

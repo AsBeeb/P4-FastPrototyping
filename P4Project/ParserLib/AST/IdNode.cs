@@ -8,5 +8,11 @@ namespace ParserLib.AST
     {
         public string Id;
         public List<IdOperationNode> IdOperations;
+
+        public IdNode(string id, List<IdOperationNode> idOperations)
+        {
+            Id = id;
+            IdOperations = idOperations;
+        }
     }
 }

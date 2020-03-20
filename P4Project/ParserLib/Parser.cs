@@ -709,7 +709,8 @@ namespace ParserLib
 
             if (tokens.Peek().IsInPredictSet(TokenType.stringval_token))
             {
-                Match(TokenType.stringval_token);
+                Token tok = Match(TokenType.stringval_token);
+                expr = new StringValueNode(tok.Value);
             }
             else if(tokens.Peek().IsInPredictSet(TokenType.not_token, TokenType.boolval_token, TokenType.minus_token, TokenType.lparen_token, TokenType.inum_token, TokenType.fnum_token, TokenType.id_token))
             {

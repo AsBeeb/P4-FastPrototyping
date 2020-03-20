@@ -7,5 +7,10 @@ namespace ParserLib.AST
     public class StringValueNode : ExpressionNode
     {
         public string StringValue;
+
+        public StringValueNode(string val) : base("String")
+        {
+            StringValue = val;
+        }
     }
 }

@@ -7,5 +7,10 @@ namespace ParserLib.AST
     public class ExpressionNode : ASTnode
     {
         public string Type;
+
+        public ExpressionNode(string type)
+        {
+            Type = type;
+        }
     }
 }

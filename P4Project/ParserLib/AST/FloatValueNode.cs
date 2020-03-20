@@ -7,5 +7,10 @@ namespace ParserLib.AST
     public class FloatValueNode : ExpressionNode
     {
         public float FloatValue;
+
+        public FloatValueNode(float floatValue) : base("Float")
+        {
+            FloatValue = floatValue;
+        }
     }
 }
