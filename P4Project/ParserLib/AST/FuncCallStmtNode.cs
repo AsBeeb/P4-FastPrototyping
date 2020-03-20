@@ -8,5 +8,11 @@ namespace ParserLib.AST
     {
         public IdNode Id;
         public List<ExpressionNode> ActualParameters;
+
+        public FuncCallStmtNode(IdNode id, List<ExpressionNode> actualParameters)
+        {
+            Id = id;
+            ActualParameters = actualParameters;
+        }
     }
 }

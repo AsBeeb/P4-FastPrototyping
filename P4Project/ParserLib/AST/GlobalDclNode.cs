@@ -9,5 +9,12 @@ namespace ParserLib.AST
         public IdNode Id;
         public ExpressionNode InitialValue;
         public string Type;
+
+        public GlobalDclNode(IdNode id, ExpressionNode initVal, string type)
+        {
+            Id = id;
+            InitialValue = initVal;
+            Type = type;
+        }
     }
 }

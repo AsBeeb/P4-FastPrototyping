@@ -7,5 +7,10 @@ namespace ParserLib.AST
     public class FieldAccessNode : IdOperationNode
     {
         public IdNode Id;
+
+        public FieldAccessNode(IdNode id)
+        {
+            Id = id;
+        }
     }
 }

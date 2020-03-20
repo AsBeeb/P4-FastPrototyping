@@ -8,5 +8,11 @@ namespace ParserLib.AST
     {
         public IdNode Id;
         public string Type;
+
+        public FormalParamNode(IdNode id, string type)
+        {
+            Id = id;
+            Type = type;
+        }
     }
 }

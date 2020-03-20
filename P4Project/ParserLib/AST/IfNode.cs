@@ -10,5 +10,13 @@ namespace ParserLib.AST
         public List<ElifNode> ElifNodes;
         public ElseNode ElseNode;
         public BlockNode IfBody;
+
+        public IfNode(ExpressionNode ControlExpression, BlockNode IfBody, List<ElifNode> ElifNodes, ElseNode ElseNode)
+        {
+            this.ControlExpression = ControlExpression;
+            this.IfBody = IfBody;
+            this.ElifNodes = ElifNodes;
+            this.ElseNode = ElseNode;
+        }
     }
 }

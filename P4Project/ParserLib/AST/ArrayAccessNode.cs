@@ -8,9 +8,9 @@ namespace ParserLib.AST
     {
         public ExpressionNode IndexValue;
 
-        public ArrayAccessNode(ExpressionNode exprNode)
+        public ArrayAccessNode(ExpressionNode indexValue)
         {
-            IndexValue = exprNode;
+            IndexValue = indexValue;
         }
     }
 }
