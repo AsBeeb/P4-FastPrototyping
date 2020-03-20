@@ -41,15 +41,16 @@ namespace ParserLib
 
             if (tokens.Peek().IsInPredictSet(TokenType.global_token, TokenType.func_token, TokenType.struct_token, TokenType.eof_token))
             {
-                ParseTopDcls();
+                List<TopDclNode> topDclNodes = ParseTopDcls();
                 Match(TokenType.eof_token);
-                return node;
+                node = new ProgNode(topDclNodes);
             }
             else
             {
                 // Expected something else.. ERROR
                 throw new SyntacticalException(tokens.Peek());
             }
+            return node;
         }
 
         private List<TopDclNode> ParseTopDcls()
@@ -76,7 +77,7 @@ namespace ParserLib
         
         private TopDclNode ParseTopDcl()
         {
-
+            
             if (tokens.Peek().IsInPredictSet(TokenType.global_token))
             {
                 return ParseGlobalDcl();
@@ -105,16 +106,16 @@ namespace ParserLib
             if (tokens.Peek().IsInPredictSet(TokenType.global_token))
             {
                 Match(TokenType.global_token);
-                ParseType();
-                Match(TokenType.id_token);
+                string type = ParseType();
+                IdNode id = new IdNode(Match(TokenType.id_token).Value, null);
                 Match(TokenType.assign_token);
-                ParseExpr();
+                ExpressionNode initVal = ParseExpr();
                 Match(TokenType.semicolon_token);
+                globalNode = new GlobalDclNode(id, initVal, type);
             }
             else
             {
-                // ERROR
-               
+                // ERROR               
                 throw new SyntacticalException(tokens.Peek());
             }
 
@@ -128,8 +129,9 @@ namespace ParserLib
             if (tokens.Peek().IsInPredictSet(TokenType.struct_token))
             {
                 Match(TokenType.struct_token);
-                Match(TokenType.id_token);
-                ParseStructBlock();
+                IdNode id = new IdNode(Match(TokenType.id_token).Value, null);
+                var (Constructor, Declarations) = ParseStructBlock();
+                structNode = new StructDclNode (id, Declarations, Constructor);
             }
             else
             {

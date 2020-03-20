@@ -8,5 +8,11 @@ namespace ParserLib.AST
     {
         public ExpressionNode ControlExpr;
         public BlockNode ElifBody;
+
+        public ElifNode(ExpressionNode controlExpr, BlockNode elifBody)
+        {
+            ControlExpr = controlExpr;
+            ElifBody = elifBody;
+        }
     }
 }
