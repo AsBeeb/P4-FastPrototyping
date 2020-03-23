@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace ParserLib
+namespace VisitorLib
 {
     public abstract class Visitor
     {
