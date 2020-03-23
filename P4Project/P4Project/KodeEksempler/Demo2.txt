@@ -1,6 +1,4 @@
-﻿global string hejStr = "Hej " : " med " : " dig!";
-
-func void main()
+﻿func void main()
 {
 	if(true)
 	{
@@ -10,7 +8,7 @@ func void main()
 	else
 	{
 		local string minString = myFunc();
-	}
+	};
 }
 
 func string myFunc()

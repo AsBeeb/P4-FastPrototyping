@@ -31,7 +31,7 @@ namespace ParserLib
             else
             {
                 // Throw exception...
-                throw new Exception($"Expected type was {tokenType}, but the token was {tokens.Peek().Type}");
+                throw new Exception($"Line: {tokens.Peek().Line}. Expected type was {tokenType}, but the token was {tokens.Peek().Type}");
             }
         }
 
@@ -945,12 +945,15 @@ namespace ParserLib
                 }
 
                 Tuple<ExpressionNode, TokenType> sizeComp = ParseSizeComp();
-                ExpressionNode sizeCompExpr = sizeComp.Item1;
-
-                if (sizeComp.Item2 != TokenType.default_token)
+                if (sizeComp != null)
                 {
-                    BinaryOperator Operator = GetBinaryOperator(sizeComp.Item2); // Not operator
-                    compExpr3 = new BinaryExpressionNode(compExpr3, sizeCompExpr, Operator);
+                    ExpressionNode sizeCompExpr = sizeComp.Item1;
+
+                    if (sizeComp.Item2 != TokenType.default_token)
+                    {
+                        BinaryOperator Operator = GetBinaryOperator(sizeComp.Item2); // Not operator
+                        compExpr3 = new BinaryExpressionNode(compExpr3, sizeCompExpr, Operator);
+                    }
                 }
             }
             else
