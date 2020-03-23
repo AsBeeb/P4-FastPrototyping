@@ -15,9 +15,9 @@ namespace ParserLib
             tokens = tokenStream;
         }
 
-        public void StartParse()
+        public ASTnode StartParse()
         {
-            ParseProg();
+            return ParseProg();
         }
 
         private Token Match(TokenType tokenType)
