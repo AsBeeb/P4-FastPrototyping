@@ -731,14 +731,15 @@ namespace ParserLib
                 ExpressionNode exprNode = ParseConcat();
                 if(exprNode != null)
                 {
-                    //BinaryExpressionNode binaryNode = new BinaryExpressionNode 
-                    // return binaryNode; 
+                    BinaryExpressionNode binaryNode = new BinaryExpressionNode(expr, exprNode, BinaryOperator.STRING_CONCAT);
+                    return binaryNode; 
                 }                   
             }
             else
             {
                 throw new SyntacticalException(tokens.Peek());
             }
+
             return expr;
         }
 
@@ -753,12 +754,13 @@ namespace ParserLib
             }
             else if(tokens.Peek().IsInPredictSet(TokenType.not_token, TokenType.boolval_token, TokenType.minus_token, TokenType.lparen_token, TokenType.inum_token, TokenType.fnum_token, TokenType.id_token))
             {
-                ParseBoolExpr();
+                expr = ParseBoolExpr();
             }
             else
             {
                 throw new SyntacticalException(tokens.Peek());
             }
+
             return expr;
         }
 
@@ -769,16 +771,23 @@ namespace ParserLib
             if (tokens.Peek().IsInPredictSet(TokenType.colon_token))
             {
                 Match(TokenType.colon_token);
-                ParseString();
-                ParseConcat();
+                expr = ParseString();
+                ExpressionNode concatNode = ParseConcat();
+                if(concatNode != null)
+                {
+                    BinaryExpressionNode binExprNode = new BinaryExpressionNode(expr, concatNode, BinaryOperator.STRING_CONCAT);
+                    return binExprNode;
+                }
             }
             else if (tokens.Peek().IsInPredictSet(TokenType.comma_token, TokenType.rparen_token, TokenType.semicolon_token))
             {
+                // Epsilon
             }
             else
             {
                 throw new SyntacticalException(tokens.Peek());
             }
+
             return expr;
         }
 
@@ -788,14 +797,19 @@ namespace ParserLib
 
             if(tokens.Peek().IsInPredictSet(TokenType.not_token, TokenType.boolval_token, TokenType.minus_token, TokenType.lparen_token, TokenType.inum_token, TokenType.fnum_token, TokenType.id_token))
             {
-                // Samme fremgangsmåde som parseExpr :))
-                ParseCompExpr1();
-                ParseOrExpr();
+                boolExpr = ParseCompExpr1();
+                ExpressionNode orExpr = ParseOrExpr();
+                if(orExpr != null)
+                {
+                    BinaryExpressionNode binExprNode = new BinaryExpressionNode(boolExpr, orExpr, BinaryOperator.OR);
+                    return binExprNode;
+                }
             }
             else
             {
                 throw new SyntacticalException(tokens.Peek());
             }
+
             return boolExpr;
         }
 
@@ -806,15 +820,17 @@ namespace ParserLib
             if (tokens.Peek().IsInPredictSet(TokenType.or_token))
             {
                 Match(TokenType.or_token);
-                ParseBoolExpr();
+                orExpr = ParseBoolExpr();
             }
             else if (tokens.Peek().IsInPredictSet(TokenType.rparen_token, TokenType.colon_token, TokenType.comma_token, TokenType.semicolon_token))
             {
+                // Epsilon
             }
             else
             {
                 throw new SyntacticalException(tokens.Peek());
             }
+
             return orExpr;
         }
 
@@ -824,14 +840,19 @@ namespace ParserLib
 
             if(tokens.Peek().IsInPredictSet(TokenType.not_token, TokenType.boolval_token, TokenType.minus_token, TokenType.lparen_token, TokenType.inum_token, TokenType.fnum_token, TokenType.id_token))
             {
-                // Samme fremgangsmåde som parseExpr :))
-                ParseCompExpr2();
-                ParseAndExpr();
+                compExpr1 = ParseCompExpr2();
+                ExpressionNode andExpr = ParseAndExpr();
+                if(andExpr != null)
+                {
+                    BinaryExpressionNode binExpressionNode = new BinaryExpressionNode(compExpr1, andExpr, BinaryOperator.AND);
+                    return binExpressionNode;
+                }
             }
             else
             {
                 throw new SyntacticalException(tokens.Peek());
             }
+
             return compExpr1;
         }
 
@@ -842,15 +863,17 @@ namespace ParserLib
             if (tokens.Peek().IsInPredictSet(TokenType.and_token))
             {
                 Match(TokenType.and_token);
-                ParseCompExpr1();
+                andExpr = ParseCompExpr1();
             }
             else if(tokens.Peek().IsInPredictSet(TokenType.or_token, TokenType.rparen_token, TokenType.colon_token, TokenType.comma_token, TokenType.semicolon_token))
             {
+                // Epsilon
             }
             else
             {
                 throw new SyntacticalException(tokens.Peek());
             }
+
             return andExpr;
         }
 
@@ -860,14 +883,28 @@ namespace ParserLib
 
             if(tokens.Peek().IsInPredictSet(TokenType.not_token, TokenType.boolval_token, TokenType.minus_token, TokenType.lparen_token, TokenType.inum_token, TokenType.fnum_token, TokenType.id_token))
             {
-                // Samme fremgangsmåde som parseExpr :))
-                ParseCompExpr3();
-                ParseEqualExpr();
+                compExpr2 = ParseCompExpr3();
+                Tuple<ExpressionNode, TokenType> equalExprNode = ParseEqualExpr();
+                if(equalExprNode != null)
+                {
+                    BinaryExpressionNode binExprNode;
+                    if (equalExprNode.Item2 == TokenType.equal_token)
+                    {
+                        binExprNode = new BinaryExpressionNode(compExpr2, equalExprNode.Item1, BinaryOperator.EQUALS);
+                        return binExprNode;
+                    }
+                    else if(equalExprNode.Item2 == TokenType.notequal_token)
+                    {
+                        binExprNode = new BinaryExpressionNode(compExpr2, equalExprNode.Item1, BinaryOperator.NOT_EQUALS);
+                        return binExprNode;
+                    }
+                }
             }
             else
             {
                 throw new SyntacticalException(tokens.Peek());
             }
+
             return compExpr2;
         }
 
@@ -878,20 +915,24 @@ namespace ParserLib
             if (tokens.Peek().IsInPredictSet(TokenType.equal_token))
             {
                 Match(TokenType.equal_token);
-                ParseCompExpr2();
+                ExpressionNode exprNode = ParseCompExpr2();
+                equalExpr = new Tuple<ExpressionNode, TokenType>(exprNode, TokenType.equal_token);
             }
             else if (tokens.Peek().IsInPredictSet(TokenType.notequal_token))
             {
                 Match(TokenType.notequal_token);
-                ParseCompExpr2();
+                ExpressionNode exprNode2 = ParseCompExpr2();
+                equalExpr = new Tuple<ExpressionNode, TokenType>(exprNode2, TokenType.notequal_token);
             }
             else if(tokens.Peek().IsInPredictSet(TokenType.and_token, TokenType.or_token, TokenType.rparen_token, TokenType.colon_token, TokenType.comma_token, TokenType.semicolon_token))
             {
+                // Epsilon
             }
             else
             {
                 throw new SyntacticalException(tokens.Peek());
             }
+
             return equalExpr;
         }
 
