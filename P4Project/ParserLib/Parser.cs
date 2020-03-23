@@ -420,6 +420,7 @@ namespace ParserLib
                 throw new SyntacticalException(tokens.Peek());
 
             }
+
             return dcl;
         }
 
@@ -441,8 +442,10 @@ namespace ParserLib
                 throw new SyntacticalException(tokens.Peek());
 
             }
+
             return assignOrCall;
         }
+
         private bool ParseBrackets()
         {
             bool isArray = false;
