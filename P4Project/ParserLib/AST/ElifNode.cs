@@ -14,5 +14,9 @@ namespace ParserLib.AST
             ControlExpr = controlExpr;
             ElifBody = elifBody;
         }
+        public void Accept(Visitor v)
+        {
+            v.visit(this);
+        }
     }
 }

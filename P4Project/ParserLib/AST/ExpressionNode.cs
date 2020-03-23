@@ -17,5 +17,6 @@ namespace ParserLib.AST
         {
             Type = type;
         }
+
     }
 }

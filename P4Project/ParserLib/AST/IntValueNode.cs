@@ -11,5 +11,9 @@ namespace ParserLib.AST
         {
             this.IntValue = IntValue;
         }
+        public void Accept(Visitor v)
+        {
+            v.visit(this);
+        }
     }
 }

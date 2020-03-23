@@ -18,5 +18,9 @@ namespace ParserLib.AST
             InitialValue = initialValue;
             IsArray = isArray;
         }
+        public void Accept(Visitor v)
+        {
+            v.visit(this);
+        }
     }
 }

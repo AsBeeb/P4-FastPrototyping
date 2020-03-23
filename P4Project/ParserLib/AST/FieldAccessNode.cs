@@ -12,5 +12,9 @@ namespace ParserLib.AST
         {
             Id = id;
         }
+        public void Accept(Visitor v)
+        {
+            v.visit(this);
+        }
     }
 }

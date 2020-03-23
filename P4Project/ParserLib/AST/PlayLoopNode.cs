@@ -20,5 +20,9 @@ namespace ParserLib.AST
             this.PlayLoopBody = playLoopBody;
             this.UntilCondition = untilCondition;
         }
+        public void Accept(Visitor v)
+        {
+            v.visit(this);
+        }
     }
 }

@@ -16,5 +16,9 @@ namespace ParserLib.AST
             InitialValue = initVal;
             Type = type;
         }
+        public void Accept(Visitor v)
+        {
+            v.visit(this);
+        }
     }
 }

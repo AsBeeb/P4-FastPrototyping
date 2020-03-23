@@ -12,5 +12,10 @@ namespace ParserLib.AST
         {
             IndexValue = indexValue;
         }
+
+        public void Accept(Visitor v)
+        {
+            v.visit(this);
+        }
     }
 }

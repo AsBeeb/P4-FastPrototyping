@@ -16,5 +16,9 @@ namespace ParserLib.AST
             FormalParamNodes = formalParamNodes;
             Block = block;
         }
+        public void Accept(Visitor v)
+        {
+            v.visit(this);
+        }
     }
 }

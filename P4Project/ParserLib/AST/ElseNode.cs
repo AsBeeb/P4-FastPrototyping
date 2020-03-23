@@ -12,5 +12,9 @@ namespace ParserLib.AST
         {
             ElseBody = elseBody;
         }
+        public void Accept(Visitor v)
+        {
+            v.visit(this);
+        }
     }
 }
