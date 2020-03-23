@@ -1,4 +1,6 @@
-﻿func void main()
+﻿global string hejStr = "Hej " : " med " : " dig!";
+
+func void main()
 {
 	if(true)
 	{
