@@ -6,7 +6,7 @@ namespace ParserLib.AST
 {
     public enum UnaryOperator
     {
-        NOT, UNARY_MINUS
+        DEFAULT, NOT, UNARY_MINUS
     }
     public class UnaryExpressionNode : ExpressionNode
     {

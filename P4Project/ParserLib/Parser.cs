@@ -1069,8 +1069,27 @@ namespace ParserLib
                                              TokenType.fnum_token,
                                              TokenType.id_token))
             {
-                ParseArithExpr2();
-                ParseArithOp2();
+                UnaryExpressionNode unary = null;
+                BinaryExpressionNode binary = null;
+                // find ud af om det er en unary operator
+                Tuple <ExpressionNode, TokenType> arithexpr2 = ParseArithExpr2();
+                arithExpr1 = arithexpr2.Item1;
+                
+                if (arithexpr2.Item2 != TokenType.default_token)
+                {
+                    UnaryOperator Operator = GetUnaryOperator(arithexpr2.Item2);
+                    unary = new UnaryExpressionNode(arithexpr2.Item1, Operator);
+                    arithExpr1 = unary;
+                }
+                
+                //find ud af om dette skal ende med at være en binaryexpression
+                Tuple<ExpressionNode, TokenType> arithop2 = ParseArithOp2();
+                if (arithop2 != null)
+                {
+                    BinaryOperator Operator = GetBinaryOperator(arithop2.Item2);
+                    binary = new BinaryExpressionNode(arithExpr1, arithop2.Item1, Operator);
+                    arithExpr1 = binary;
+                }
             }
             else
             {
@@ -1078,21 +1097,33 @@ namespace ParserLib
             }
             return arithExpr1;
         }
+
+
         private Tuple<ExpressionNode, TokenType> ParseArithOp2()
         {
             Tuple<ExpressionNode, TokenType> arithOp2 = null;
 
             if (tokens.Peek().IsInPredictSet(TokenType.multiply_token)) {
-                Match(TokenType.multiply_token);
-                ParseArithExpr1();
+
+                Token operatorToken = Match(TokenType.multiply_token);
+                TokenType operatorType = operatorToken.Type;
+                ExpressionNode ArithExpr1 = ParseArithExpr1();
+
+                arithOp2 = new Tuple<ExpressionNode, TokenType>(ArithExpr1, operatorType);
             }
             else if (tokens.Peek().IsInPredictSet(TokenType.divide_token)){
-                Match(TokenType.divide_token);
-                ParseArithExpr1();
+                Token operatorToken = Match(TokenType.divide_token);
+                TokenType operatorType = operatorToken.Type;
+                ExpressionNode ArithExpr1 = ParseArithExpr1();
+
+                arithOp2 = new Tuple<ExpressionNode, TokenType>(ArithExpr1, operatorType);
             }
             else if (tokens.Peek().IsInPredictSet(TokenType.modulo_token)) {
-                Match(TokenType.modulo_token);
-                ParseArithExpr1();
+                Token operatorToken = Match(TokenType.modulo_token);
+                TokenType operatorType = operatorToken.Type;
+                ExpressionNode ArithExpr1 = ParseArithExpr1();
+
+                arithOp2 = new Tuple<ExpressionNode, TokenType>(ArithExpr1, operatorType);
             }
             else if (tokens.Peek().IsInPredictSet(TokenType.plus_token, TokenType.minus_token, TokenType.rsbracket_token, TokenType.greaterorequal_token, TokenType.lessorequal_token, TokenType.lessthan_token, TokenType.greaterthan_token, TokenType.equal_token, TokenType.notequal_token, TokenType.and_token, TokenType.or_token, TokenType.rparen_token, TokenType.colon_token, TokenType.comma_token, TokenType.semicolon_token))
             {
@@ -1109,12 +1140,17 @@ namespace ParserLib
 
             if (tokens.Peek().IsInPredictSet(TokenType.minus_token))
             {
-                Match(TokenType.minus_token);
-                ParseArithExpr3();
+                Token Operator = Match(TokenType.minus_token);
+                TokenType OperatorType = Operator.Type;
+
+                ExpressionNode aritheexpr3 = ParseArithExpr3();
+
+                arithExpr2 = new Tuple<ExpressionNode, TokenType>(aritheexpr3, OperatorType);
             }
             else if (tokens.Peek().IsInPredictSet(TokenType.lparen_token, TokenType.inum_token, TokenType.fnum_token, TokenType.id_token))
             {
-                ParseArithExpr3();
+                ExpressionNode aritheexpr3 = ParseArithExpr3();
+                arithExpr2 = new Tuple<ExpressionNode, TokenType>(aritheexpr3, TokenType.default_token); 
             }
             else
             {
@@ -1128,8 +1164,15 @@ namespace ParserLib
 
             if (tokens.Peek().IsInPredictSet(TokenType.lparen_token, TokenType.inum_token, TokenType.fnum_token, TokenType.id_token))
             {
-                ParseArithExpr4();
-                ParseArithOp3();
+                ExpressionNode arithExpr4 = ParseArithExpr4();
+
+                arithExpr3 = arithExpr4;
+                Tuple<ExpressionNode, TokenType> ArithOp3Tuple = ParseArithOp3();
+                if (ArithOp3Tuple != null)
+                {
+                    BinaryOperator Operator = GetBinaryOperator(ArithOp3Tuple.Item2);
+                    arithExpr3 = new BinaryExpressionNode(arithExpr3, ArithOp3Tuple.Item1, Operator);
+                }
             }
             else
             {
@@ -1143,8 +1186,11 @@ namespace ParserLib
 
             if (tokens.Peek().IsInPredictSet(TokenType.power_token))
             {
-                Match(TokenType.power_token);
-                ParseArithExpr3();
+                Token token = Match(TokenType.power_token);
+                TokenType tokenType = token.Type;
+                ExpressionNode ArithExpr3 = ParseArithExpr3();
+
+                arithOp3 = new Tuple<ExpressionNode, TokenType>(ArithExpr3, tokenType);
             }
             else if (tokens.Peek().IsInPredictSet(TokenType.multiply_token, TokenType.divide_token, TokenType.modulo_token, TokenType.plus_token, TokenType.minus_token, TokenType.rsbracket_token, TokenType.greaterorequal_token, TokenType.lessorequal_token, TokenType.lessthan_token, TokenType.greaterthan_token, TokenType.equal_token, TokenType.notequal_token, TokenType.and_token, TokenType.or_token, TokenType.rparen_token, TokenType.colon_token, TokenType.comma_token, TokenType.semicolon_token)){
             }
@@ -1302,6 +1348,80 @@ namespace ParserLib
                 throw new SyntacticalException(tokens.Peek());
             }
             return idOperation;
+        }
+
+
+        private UnaryOperator GetUnaryOperator(TokenType tokenType)
+        {
+            UnaryOperator Operator = UnaryOperator.DEFAULT;
+            switch (tokenType){
+                case TokenType.not_token:
+                    Operator = UnaryOperator.NOT;
+                    break;
+                case TokenType.minus_token:
+                    Operator = UnaryOperator.UNARY_MINUS;
+                    break;
+            }
+            return Operator;
+        }
+
+        private BinaryOperator GetBinaryOperator(TokenType tokenType)
+        {
+            BinaryOperator Operator = BinaryOperator.DEFAULT;
+
+            switch (tokenType)
+            {
+                //Logic operators
+                case TokenType.greaterorequal_token:
+                    Operator = BinaryOperator.GREATER_OR_EQUALS;
+                    break;
+                case TokenType.greaterthan_token:
+                    Operator = BinaryOperator.GREATER_THAN;
+                    break;
+                case TokenType.lessorequal_token:
+                    Operator = BinaryOperator.LESS_OR_EQUALS;
+                    break;
+                case TokenType.lessthan_token:
+                    Operator = BinaryOperator.LESS_THAN;
+                    break;
+                case TokenType.and_token:
+                    Operator = BinaryOperator.AND;
+                    break;
+                case TokenType.or_token:
+                    Operator = BinaryOperator.OR;
+                    break;
+                case TokenType.notequal_token:
+                    Operator = BinaryOperator.NOT_EQUALS;
+                    break;
+                case TokenType.equal_token:
+                    Operator = BinaryOperator.EQUALS;
+                    break;
+                    //aritmetic operators
+                case TokenType.minus_token:
+                    Operator = BinaryOperator.MINUS;
+                    break;
+                case TokenType.plus_token:
+                    Operator = BinaryOperator.PLUS;
+                    break;
+                case TokenType.multiply_token:
+                    Operator = BinaryOperator.MULTIPLY;
+                    break;
+                case TokenType.divide_token:
+                    Operator = BinaryOperator.DIVIDE;
+                    break;
+                case TokenType.modulo_token:
+                    Operator = BinaryOperator.MODULO;
+                    break;
+                case TokenType.power_token:
+                    Operator = BinaryOperator.POWER;
+                    break;
+                    //String operator
+                case TokenType.colon_token:
+                    Operator = BinaryOperator.STRING_CONCAT;
+                    break;
+            }
+
+            return Operator;
         }
     }
 }

@@ -6,7 +6,7 @@ namespace ScannerLib
 {
     public enum TokenType
     {
-        plus_token, minus_token, multiply_token, divide_token, modulo_token, power_token, assign_token,
+        default_token, plus_token, minus_token, multiply_token, divide_token, modulo_token, power_token, assign_token,
         lessthan_token, greaterthan_token, lessorequal_token, greaterorequal_token, and_token, or_token,
         notequal_token, equal_token, not_token, if_token, elif_token, else_token, while_token, play_token,
         until_token, vs_token, in_token, semicolon_token, colon_token, return_token, intdcl_token, floatdcl_token,
