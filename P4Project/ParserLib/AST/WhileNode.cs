@@ -14,9 +14,10 @@ namespace ParserLib.AST
             this.ControlExpr = controlExpr;
             this.WhileLoopBody = whileLoopBody;
         }
-        public void Accept(Visitor v)
+
+        public override void Accept(Visitor v)
         {
-            v.visit(this);
+            v.Visit(this);
         }
     }
 }
