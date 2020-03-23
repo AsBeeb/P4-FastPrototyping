@@ -9,7 +9,7 @@ namespace ParserLib.AST
         public IdNode LeftValue;
         public ExpressionNode RightValue;
 
-        AssignmentNode(IdNode leftValue, ExpressionNode rightValue)
+        public AssignmentNode(IdNode leftValue, ExpressionNode rightValue)
         {
             LeftValue = leftValue;
             RightValue = rightValue;
