@@ -923,8 +923,23 @@ namespace ParserLib
                                             TokenType.fnum_token,
                                             TokenType.id_token))
             {
-                ParseCompExpr4();
-                ParseSizeComp();
+                Tuple<ExpressionNode, TokenType> compExpr4 = ParseCompExpr4();
+                compExpr3 = compExpr4.Item1;
+
+                if (compExpr4.Item2 != TokenType.default_token)
+                {
+                    UnaryOperator Operator = GetUnaryOperator(compExpr4.Item2); // Not operator
+                    compExpr3 = new UnaryExpressionNode(compExpr3, Operator);
+                }
+
+                Tuple<ExpressionNode, TokenType> sizeComp = ParseSizeComp();
+                ExpressionNode sizeCompExpr = sizeComp.Item1;
+
+                if (sizeComp.Item2 != TokenType.default_token)
+                {
+                    BinaryOperator Operator = GetBinaryOperator(sizeComp.Item2); // Not operator
+                    compExpr3 = new BinaryExpressionNode(compExpr3, sizeCompExpr, Operator);
+                }
             }
             else
             {
@@ -938,23 +953,55 @@ namespace ParserLib
 
             if (tokens.Peek().IsInPredictSet(TokenType.greaterorequal_token))
             {
-                Match(TokenType.greaterorequal_token);
-                ParseCompExpr4();
+                TokenType tokenType = Match(TokenType.greaterorequal_token).Type;
+                Tuple<ExpressionNode, TokenType> compExpr4 = ParseCompExpr4();
+                ExpressionNode compExpr4Expr = compExpr4.Item1;
+
+                if (compExpr4.Item2 != TokenType.default_token)
+                {
+                    UnaryOperator Operator = GetUnaryOperator(compExpr4.Item2); // Not operator
+                    compExpr4Expr = new UnaryExpressionNode(compExpr4Expr, Operator);
+                }
+                sizeComp = new Tuple<ExpressionNode, TokenType>(compExpr4Expr, tokenType);
             } 
             else if (tokens.Peek().IsInPredictSet(TokenType.lessorequal_token))
             {
-                Match(TokenType.lessorequal_token);
-                ParseCompExpr4();
+                TokenType tokenType = Match(TokenType.lessorequal_token).Type;
+                Tuple<ExpressionNode, TokenType> compExpr4 = ParseCompExpr4();
+                ExpressionNode compExpr4Expr = compExpr4.Item1;
+
+                if (compExpr4.Item2 != TokenType.default_token)
+                {
+                    UnaryOperator Operator = GetUnaryOperator(compExpr4.Item2); // Not operator
+                    compExpr4Expr = new UnaryExpressionNode(compExpr4Expr, Operator);
+                }
+                sizeComp = new Tuple<ExpressionNode, TokenType>(compExpr4Expr, tokenType);
             }
             else if (tokens.Peek().IsInPredictSet(TokenType.lessthan_token))
             {
-                Match(TokenType.lessthan_token);
-                ParseCompExpr4();
+                TokenType tokenType = Match(TokenType.lessthan_token).Type;
+                Tuple<ExpressionNode, TokenType> compExpr4 = ParseCompExpr4();
+                ExpressionNode compExpr4Expr = compExpr4.Item1;
+
+                if (compExpr4.Item2 != TokenType.default_token)
+                {
+                    UnaryOperator Operator = GetUnaryOperator(compExpr4.Item2); // Not operator
+                    compExpr4Expr = new UnaryExpressionNode(compExpr4Expr, Operator);
+                }
+                sizeComp = new Tuple<ExpressionNode, TokenType>(compExpr4Expr, tokenType);
             }
             else if (tokens.Peek().IsInPredictSet(TokenType.greaterthan_token))
             {
-                Match(TokenType.greaterthan_token);
-                ParseCompExpr4();
+                TokenType tokenType = Match(TokenType.greaterthan_token).Type;
+                Tuple<ExpressionNode, TokenType> compExpr4 = ParseCompExpr4();
+                ExpressionNode compExpr4Expr = compExpr4.Item1;
+
+                if (compExpr4.Item2 != TokenType.default_token)
+                {
+                    UnaryOperator Operator = GetUnaryOperator(compExpr4.Item2); // Not operator
+                    compExpr4Expr = new UnaryExpressionNode(compExpr4Expr, Operator);
+                }
+                sizeComp = new Tuple<ExpressionNode, TokenType>(compExpr4Expr, tokenType);
             }
             else if (tokens.Peek().IsInPredictSet(TokenType.equal_token,
                                                   TokenType.notequal_token, 
@@ -979,8 +1026,9 @@ namespace ParserLib
 
             if (tokens.Peek().IsInPredictSet(TokenType.not_token))
             {
-                Match(TokenType.not_token);
-                ParseBasicBool();
+                TokenType tokenType = Match(TokenType.not_token).Type;
+                ExpressionNode BasicBool = ParseBasicBool();
+                compExpr4 = new Tuple<ExpressionNode, TokenType>(BasicBool, tokenType);
             }
             else if (tokens.Peek().IsInPredictSet(TokenType.boolval_token,
                                                   TokenType.minus_token,
@@ -989,7 +1037,9 @@ namespace ParserLib
                                                   TokenType.fnum_token,
                                                   TokenType.id_token))
             {
-                ParseBasicBool();
+                ExpressionNode BasicBool = ParseBasicBool();
+                TokenType tokenType = TokenType.default_token;
+                compExpr4 = new Tuple<ExpressionNode, TokenType>(BasicBool, tokenType);
             }
             else
             {
@@ -1007,11 +1057,12 @@ namespace ParserLib
                                              TokenType.fnum_token,
                                              TokenType.id_token))
             {
-                ParseArithExpr();
+                basicBool = ParseArithExpr();
             }
             else if (tokens.Peek().IsInPredictSet(TokenType.boolval_token))
             {
-                Match(TokenType.boolval_token);
+                bool value = Boolean.Parse(Match(TokenType.boolval_token).Value);
+                basicBool = new BoolValueNode(value);
             }
             else
             {
@@ -1029,8 +1080,14 @@ namespace ParserLib
                                              TokenType.fnum_token,
                                              TokenType.id_token))
             {
-                ParseArithExpr1();
-                ParseArithOp1();
+                ExpressionNode ArithExpr1 = ParseArithExpr1();
+                arithExpr = ArithExpr1;
+                Tuple<ExpressionNode, TokenType> arithOp1 = ParseArithOp1();
+                if (arithOp1 != null)
+                {
+                    BinaryOperator Operator = GetBinaryOperator(arithOp1.Item2);
+                    arithExpr = new BinaryExpressionNode(arithExpr, arithOp1.Item1, Operator);
+                }
             }
             else
             {
@@ -1044,13 +1101,15 @@ namespace ParserLib
 
             if (tokens.Peek().IsInPredictSet(TokenType.plus_token))
             {
-                Match(TokenType.plus_token);
-                ParseArithExpr();
+                TokenType tokenType = Match(TokenType.plus_token).Type;
+                ExpressionNode ArithExpr = ParseArithExpr();
+                arithOp1 = new Tuple<ExpressionNode, TokenType>(ArithExpr, tokenType);
             }
             else if (tokens.Peek().IsInPredictSet(TokenType.minus_token))
             {
-                Match(TokenType.minus_token);
-                ParseArithExpr();
+                TokenType tokenType = Match(TokenType.minus_token).Type;
+                ExpressionNode ArithExpr = ParseArithExpr();
+                arithOp1 = new Tuple<ExpressionNode, TokenType>(ArithExpr, tokenType);
             }
             else if (tokens.Peek().IsInPredictSet(TokenType.rsbracket_token,
                                                   TokenType.greaterorequal_token,
