@@ -18,9 +18,9 @@ namespace ParserLib.AST
             FormalParamNodes = formalParams;
             FuncBody = body;
         }
-        public void Accept(Visitor v)
+        public override void Accept(Visitor v)
         {
-            v.visit(this);
+            v.Visit(this);
         }
     }
 }

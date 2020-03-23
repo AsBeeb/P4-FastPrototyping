@@ -15,9 +15,9 @@ namespace ParserLib.AST
             RightValue = rightValue;
         }
 
-        public void Accept(Visitor v)
+        public override void Accept(Visitor v)
         {
-            v.visit(this);
+            v.Visit(this);
         }
 
     }

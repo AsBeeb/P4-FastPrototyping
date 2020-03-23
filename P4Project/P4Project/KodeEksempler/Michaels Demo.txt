@@ -3,5 +3,5 @@ func void Main ()
 play(currentPlayer vs opponents in GetTurnArray()) 
     {
         currentPlayer
-    } until(true);
+    } until(true);;
 }
