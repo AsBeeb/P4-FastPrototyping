@@ -69,6 +69,7 @@ namespace ParserLib
             {
                 throw new SyntacticalException(tokens.Peek());
             }
+
             return topNodes;
         }
         
@@ -178,6 +179,7 @@ namespace ParserLib
             {
                 throw new SyntacticalException(tokens.Peek());
             }
+
             return ctorNode;
         }
         private List<DeclarationNode> ParseDcls()
@@ -198,6 +200,7 @@ namespace ParserLib
             {
                 throw new SyntacticalException(tokens.Peek());
             }
+
             return dclNodes;
         }
 
@@ -241,8 +244,10 @@ namespace ParserLib
             {
                 throw new SyntacticalException(tokens.Peek());
             }
+
             return formalParams;
         }
+
         private List<FormalParamNode> ParseRemainingParams()
         {
             List<FormalParamNode> remainingParams = new List<FormalParamNode>();
@@ -261,6 +266,7 @@ namespace ParserLib
             {
                 throw new SyntacticalException(tokens.Peek());
             }
+
             return remainingParams;
         }
 
@@ -278,6 +284,7 @@ namespace ParserLib
             {
                 throw new SyntacticalException(tokens.Peek());
             }
+
             return formalParamNode;
         }
 
@@ -320,8 +327,10 @@ namespace ParserLib
             {
                 throw new SyntacticalException(tokens.Peek());
             }
+
             return block;
         }
+
         private List<StmtNode> ParseStmts()
         {
             List<StmtNode> stmts = new List<StmtNode>();
