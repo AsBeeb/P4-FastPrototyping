@@ -16,5 +16,9 @@ namespace ParserLib.AST
             this.Declarations = Declarations;
             this.Constructor = Constructor;
         }
+        public void Accept(Visitor v)
+        {
+            v.visit(this);
+        }
     }
 }

@@ -17,5 +17,9 @@ namespace ParserLib.AST
             this.ExprNode = ExprNode;
             this.Operator = Operator;
         }
+        public void Accept(Visitor v)
+        {
+            v.visit(this);
+        }
     }
 }

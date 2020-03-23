@@ -12,5 +12,9 @@ namespace ParserLib.AST
         {
             this.TopDclNodes = TopDclNodes;   
         }
+        public void Accept(Visitor v)
+        {
+            v.visit(this);
+        }
     }
 }

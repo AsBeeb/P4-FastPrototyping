@@ -11,5 +11,10 @@ namespace ParserLib.AST
         {
             StmtNodes = stmtNodes;
         }
+        public void Accept(Visitor v)
+        {
+            v.visit(this);
+        }
+
     }
 }

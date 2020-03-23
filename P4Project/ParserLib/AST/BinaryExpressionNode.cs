@@ -21,5 +21,10 @@ namespace ParserLib.AST
             RightExpr = rightExpr;
             Operator = op;
         }
+
+        public void Accept(Visitor v)
+        {
+            v.visit(this);
+        }
     }
 }

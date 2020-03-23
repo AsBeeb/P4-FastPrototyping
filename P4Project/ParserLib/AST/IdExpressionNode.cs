@@ -14,5 +14,9 @@ namespace ParserLib.AST
             Id = id;
             IdOperations = operations;
         }
+        public void Accept(Visitor v)
+        {
+            v.visit(this);
+        }
     }
 }

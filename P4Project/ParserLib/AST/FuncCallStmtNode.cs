@@ -14,5 +14,9 @@ namespace ParserLib.AST
             Id = id;
             ActualParameters = actualParameters;
         }
+        public void Accept(Visitor v)
+        {
+            v.visit(this);
+        }
     }
 }

@@ -15,5 +15,10 @@ namespace ParserLib.AST
             RightValue = rightValue;
         }
 
+        public void Accept(Visitor v)
+        {
+            v.visit(this);
+        }
+
     }
 }

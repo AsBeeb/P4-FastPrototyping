@@ -18,5 +18,9 @@ namespace ParserLib.AST
             this.ElifNodes = ElifNodes;
             this.ElseNode = ElseNode;
         }
+        public void Accept(Visitor v)
+        {
+            v.visit(this);
+        }
     }
 }
