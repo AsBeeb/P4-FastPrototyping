@@ -21,7 +21,6 @@ namespace ParserLib
         internal abstract void Visit(DeclarationNode node);
         internal abstract void Visit(ElifNode node);
         internal abstract void Visit(ElseNode node);
-        internal abstract void Visit(ExpressionNode node);
         internal abstract void Visit(FieldAccessNode node);
         internal abstract void Visit(FloatValueNode node);
         internal abstract void Visit(FormalParamNode node);
@@ -31,7 +30,6 @@ namespace ParserLib
         internal abstract void Visit(GlobalDclNode node);
         internal abstract void Visit(IdExpressionNode node);
         internal abstract void Visit(IdNode node);
-        internal abstract void Visit(IdOperationNode node);
         internal abstract void Visit(IfNode node);
         internal abstract void Visit(IntValueNode node);
         internal abstract void Visit(PlayLoopNode node);
