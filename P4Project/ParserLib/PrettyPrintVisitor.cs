@@ -1,6 +1,7 @@
 ﻿using ParserLib.AST;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace ParserLib
@@ -16,56 +17,144 @@ namespace ParserLib
 
         internal override void Visit(ArrayAccessNode node)
         {
-            throw new NotImplementedException();
+            Console.Write("[");
+            node.IndexValue.Accept(this);
+            Console.Write("]");
         }
 
         internal override void Visit(AssignmentNode node)
         {
-            throw new NotImplementedException();
+            node.LeftValue.Accept(this);
+            Console.Write(" = ");
+            node.RightValue.Accept(this);
         }
 
         internal override void Visit(BinaryExpressionNode node)
         {
+            string binaryOperator = "";
+
             node.LeftExpr.Accept(this);
-            //Print rigtig operator evt. med switch/dic
+            
+            switch (node.Operator)
+            {
+                case BinaryOperator.GREATER_OR_EQUALS:
+                    binaryOperator = ">=";
+                    break;
+                case BinaryOperator.LESS_OR_EQUALS:
+                    binaryOperator = "<=";
+                    break;
+                case BinaryOperator.GREATER_THAN:
+                    binaryOperator = ">";
+                    break;
+                case BinaryOperator.LESS_THAN:
+                    binaryOperator = "<";
+                    break;
+                case BinaryOperator.EQUALS:
+                    binaryOperator = "==";
+                    break;
+                case BinaryOperator.NOT_EQUALS:
+                    binaryOperator = "!=";
+                    break;
+                case BinaryOperator.PLUS:
+                    binaryOperator = "+";
+                    break;
+                case BinaryOperator.MINUS:
+                    binaryOperator = "-";
+                    break;
+                case BinaryOperator.MULTIPLY:
+                    binaryOperator = "*";
+                    break;
+                case BinaryOperator.DIVIDE:
+                    binaryOperator = "/";
+                    break;
+                case BinaryOperator.MODULO:
+                    binaryOperator = "%";
+                    break;
+                case BinaryOperator.OR:
+                    binaryOperator = "||";
+                    break;
+                case BinaryOperator.AND:
+                    binaryOperator = "&&";
+                    break;
+                case BinaryOperator.STRING_CONCAT:
+                    binaryOperator = ":";
+                    break;
+                case BinaryOperator.POWER:
+                    binaryOperator = "^";
+                    break;
+            }
+            Console.Write(" " + binaryOperator + " ");
+            
             node.RightExpr.Accept(this);
         }
 
         internal override void Visit(BlockNode node)
         {
-            throw new NotImplementedException();
+            Console.Write("\n{\n");
+            foreach (StmtNode stmt in node.StmtNodes)
+            {
+                stmt.Accept(this);
+            }
+            Console.Write("}\n");
         }
+
 
         internal override void Visit(BoolValueNode node)
         {
-            PrettyPrint(node.BoolValue.ToString());
+            Console.Write(node.BoolValue);
         }
 
         internal override void Visit(ConstructorNode node)
         {
-            throw new NotImplementedException();
+            node.Id.Accept(this);
+            Console.Write(" (");
+
+            int end = node.FormalParamNodes.Count - 1;
+
+            for (int i = 0; i < end; i++)
+            { 
+                node.FormalParamNodes[i].Accept(this);
+                Console.Write(", ");
+            }
+
+            node.FormalParamNodes.Last().Accept(this);
+            Console.Write(")");
+
+            node.Block.Accept(this);
+
         }
 
         internal override void Visit(DeclarationNode node)
         {
-            throw new NotImplementedException();
+            Console.Write(node.Type + (node.IsArray ? "[] " : " "));
+            
+            node.Id.Accept(this);
+
+            if (node.InitialValue != null)
+            {
+                Console.Write(" = ");
+                node.InitialValue.Accept(this);
+            }
+
+            Console.WriteLine(";\n");
+                
         }
 
         internal override void Visit(ElifNode node)
         {
-            throw new NotImplementedException();
+            Console.Write("elif (");
+            node.ControlExpr.Accept(this);
+            Console.Write(")");
+            node.ElifBody.Accept(this);
         }
 
         internal override void Visit(ElseNode node)
         {
-            throw new NotImplementedException();
+            Console.Write("else");
+            node.ElseBody.Accept(this);
         }
 
-        internal override void Visit(ExpressionNode node)
-        {
-            throw new NotImplementedException();
-        }
-
+        // De to Andreaser
         internal override void Visit(FieldAccessNode node)
         {
             throw new NotImplementedException();
