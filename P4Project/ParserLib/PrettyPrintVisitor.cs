@@ -106,7 +106,7 @@ namespace ParserLib
 
         internal override void Visit(BoolValueNode node)
         {
-            Console.Write(node.BoolValue);
+            Console.Write(node.BoolValue.ToString());
         }
 
         internal override void Visit(ConstructorNode node)
