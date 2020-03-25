@@ -8,7 +8,7 @@ namespace ParserLib.AST
     {
         public float FloatValue;
 
-        public FloatValueNode(float floatValue) : base("Float")
+        public FloatValueNode(float floatValue) : base("float")
         {
             FloatValue = floatValue;
         }

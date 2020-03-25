@@ -8,7 +8,7 @@ namespace ParserLib.AST
     {
         public string StringValue;
 
-        public StringValueNode(string val) : base("String")
+        public StringValueNode(string val) : base("string")
         {
             StringValue = val;
         }

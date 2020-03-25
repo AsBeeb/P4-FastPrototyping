@@ -7,7 +7,7 @@ namespace ParserLib.AST
     public class IntValueNode : ExpressionNode
     {
         public int IntValue;
-        public IntValueNode(int IntValue) : base("Int")
+        public IntValueNode(int IntValue) : base("int")
         {
             this.IntValue = IntValue;
         }
