@@ -7,11 +7,12 @@ using System.IO;
 using ScannerLib;
 using ParserLib;
 using ParserLib.AST;
-
+using System.Security.Cryptography;
 namespace P4Project
 {
     class Program
     {
+        public static int PrevRandom = GetSeed();
         static void Main(string[] args)
         {
             Queue<Token> tokenQueue = new Queue<Token>();
@@ -24,8 +25,8 @@ namespace P4Project
             string fileToOpen = "Demo2";
             string fileExtension = ".txt";
             //string filePath = String.Format("{0}{1}{2}{3}", docPath, gitPath, fileToOpen, fileExtension);
-            //string filePath = @"C:\Users\Michael\Source\Repos\P4-FastPrototyping\P4Project\P4Project\KodeEksempler\Michaels Demo.txt";
-            string filePath = @"C:\Users\Michael\Source\Repos\P4-FastPrototyping\P4Project\P4Project\KodeEksempler\Demo1.txt";
+            string filePath = @"C:\Users\Michael\Source\Repos\P4-FastPrototyping\P4Project\P4Project\KodeEksempler\Michaels Demo.txt";
+
             using (StreamReaderExpanded reader = new StreamReaderExpanded(filePath))
             {
                 do
@@ -41,17 +42,39 @@ namespace P4Project
 
                 Console.WriteLine(tokenQueue.Count);
             }
+            GenerateRandomNumber2(20, 0);
+
             Console.WriteLine("Scan ended");
-            Console.ReadKey();
+            Console.ReadLine();
 
             Parser parser = new Parser(tokenQueue);
             ASTnode AST = parser.StartParse();
-            PrettyPrintVisitor vis = new PrettyPrintVisitor();
-            vis.Visit(AST);
-            Console.ReadKey();
 
-            Console.WriteLine("Sker der noget?");
+            Console.WriteLine("Færdig med at parse");
             Console.ReadKey();
+        }
+
+        public static int GenerateRandomNumber()
+        {
+
+            RandomNumberGenerator randomNumberGenerator = RandomNumberGenerator.Create();
+            byte[] bytearray = new byte[1];
+            randomNumberGenerator.GetBytes(bytearray);
+
+            foreach (byte bit in bytearray)
+            {
+                Console.WriteLine(bit.ToString());
+            }
+            return bytearray[0];
+        }
+        public static int GenerateRandomNumber2(int maxValue, int minValue)
+        {
+            PrevRandom = minValue + (PrevRandom*17 + 11) % maxValue;
+            return PrevRandom;
+        }
+        static int GetSeed()
+        {
+            return DateTime.Now.Millisecond;
         }
     }
 }
