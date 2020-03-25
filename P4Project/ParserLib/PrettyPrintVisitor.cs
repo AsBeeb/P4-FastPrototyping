@@ -14,6 +14,11 @@ namespace ParserLib
             Console.Write(new string(' ', 4 * IndentationLevel) + str);
         }
 
+        private void PrettyPrintNewLine()
+        {
+            Console.Write($"\n " + new string(' ', 4 * IndentationLevel));
+        }
+
         internal override void Visit(ArrayAccessNode node)
         {
             throw new NotImplementedException();
@@ -125,52 +130,80 @@ namespace ParserLib
 
         internal override void Visit(IntValueNode node)
         {
-            throw new NotImplementedException();
+            Console.Write($"{node.IntValue}");
         }
 
         internal override void Visit(PlayLoopNode node)
         {
-            throw new NotImplementedException();
+            node.Player.Accept(this);
+            Console.Write(" vs ");
+            node.Opponent.Accept(this);
+            Console.Write(" in ");
+            node.AllPlayers.Accept(this);
+            IndentationLevel++;
+            PrettyPrintNewLine();
+            node.PlayLoopBody.Accept(this);
+            IndentationLevel--;
+            PrettyPrintNewLine();
+            Console.Write(" until");
+            node.UntilCondition.Accept(this);
         }
 
         internal override void Visit(ProgNode node)
         {
-            throw new NotImplementedException();
+            foreach (TopDclNode DclNode in node.TopDclNodes)
+            {
+                DclNode.Accept(this);
+            }
         }
 
         internal override void Visit(ReturnNode node)
         {
-            throw new NotImplementedException();
-        }
-
-        internal override void Visit(StmtNode node)
-        {
-            throw new NotImplementedException();
+            node.ReturnValue.Accept(this);
         }
 
         internal override void Visit(StringValueNode node)
         {
-            throw new NotImplementedException();
+            Console.Write(node.StringValue);
         }
 
         internal override void Visit(StructDclNode node)
         {
-            throw new NotImplementedException();
-        }
-
-        internal override void Visit(TopDclNode node)
-        {
-            throw new NotImplementedException();
+            node.Id.Accept(this);
+            foreach (DeclarationNode DclNode in node.Declarations)
+            {
+                DclNode.Accept(this);
+            }
+            node.Constructor.Accept(this);
         }
 
         internal override void Visit(UnaryExpressionNode node)
         {
-            throw new NotImplementedException();
+            UnaryOperator Operator = node.Operator;
+
+            switch (Operator)
+            {
+                case UnaryOperator.DEFAULT:
+                    Console.Write("");
+                    break;
+                case UnaryOperator.NOT:
+                    Console.Write(" !");
+                    break;
+                case UnaryOperator.UNARY_MINUS:
+                    Console.Write(" -");
+                    break;
+                default:
+                    break;
+            }
+
+            node.ExprNode.Accept(this);
+            
         }
 
         internal override void Visit(WhileNode node)
         {
-            throw new NotImplementedException();
+            node.ControlExpr.Accept(this);
+            node.WhileLoopBody.Accept(this);
         }
     }
 }

@@ -37,10 +37,8 @@ namespace ParserLib
         internal abstract void Visit(PlayLoopNode node);
         internal abstract void Visit(ProgNode node);
         internal abstract void Visit(ReturnNode node);
-        internal abstract void Visit(StmtNode node);
         internal abstract void Visit(StringValueNode node);
         internal abstract void Visit(StructDclNode node);
-        internal abstract void Visit(TopDclNode node);
         internal abstract void Visit(UnaryExpressionNode node);
         internal abstract void Visit(WhileNode node);
     }
