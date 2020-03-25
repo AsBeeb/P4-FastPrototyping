@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using ScannerLib;
 using System.Linq;
 using ParserLib.AST;
+using System.Globalization;
 
 namespace ParserLib
 {
@@ -1307,8 +1308,9 @@ namespace ParserLib
             }
             else if (tokens.Peek().IsInPredictSet(TokenType.fnum_token))
             {
+                CultureInfo cultureInfo = new CultureInfo("en-US");
                 Token floatToken = Match(TokenType.fnum_token);
-                float floatValue = float.Parse(floatToken.Value);
+                float floatValue = float.Parse(floatToken.Value, cultureInfo);
                 arithValue = new FloatValueNode(floatValue);
             }
             else if (tokens.Peek().IsInPredictSet(TokenType.id_token))
@@ -1387,7 +1389,9 @@ namespace ParserLib
                 funcValues = new List<ExpressionNode>();
                 Match(TokenType.comma_token);
                 funcValues.Add(ParseExpr());
-                funcValues.AddRange(ParseFuncValue());
+                List<ExpressionNode> parseFuncValue = ParseFuncValue();
+                if (parseFuncValue != null)
+                    funcValues.AddRange(parseFuncValue);
             }
             else if (tokens.Peek().IsInPredictSet(TokenType.rparen_token))
             {

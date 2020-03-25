@@ -1,6 +1,7 @@
 ﻿using ParserLib.AST;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 
@@ -10,14 +11,10 @@ namespace ParserLib
     {
         private int IndentationLevel = 0;
 
-        private void PrettyPrint(string str)
-        {
-            Console.Write(new string(' ', 4 * IndentationLevel) + str);
-        }
 
         private void PrettyPrintNewLine()
         {
-            Console.Write($"\n " + new string(' ', 4 * IndentationLevel));
+            Console.Write($"\n" + new string(' ', 4 * IndentationLevel));
         }
 
         internal override void Visit(ArrayAccessNode node)
@@ -95,18 +92,24 @@ namespace ParserLib
 
         internal override void Visit(BlockNode node)
         {
-            Console.Write("\n{\n");
+            PrettyPrintNewLine();
+            Console.Write("{");
+            IndentationLevel++;
+            PrettyPrintNewLine();
             foreach (StmtNode stmt in node.StmtNodes)
             {
                 stmt.Accept(this);
             }
-            Console.Write("}\n");
+            IndentationLevel--;
+            PrettyPrintNewLine();
+            Console.Write("}");
+            PrettyPrintNewLine();
         }
 
 
         internal override void Visit(BoolValueNode node)
         {
-            Console.Write(node.BoolValue.ToString());
+            Console.Write(node.BoolValue.ToString().ToLower());
         }
 
         internal override void Visit(ConstructorNode node)
@@ -131,7 +134,8 @@ namespace ParserLib
 
         internal override void Visit(DeclarationNode node)
         {
-            Console.Write(node.Type + (node.IsArray ? "[] " : " "));
+            
+            Console.Write("local " + node.Type.ToLower() + (node.IsArray ? "[] " : " "));
             
             node.Id.Accept(this);
 
@@ -141,8 +145,8 @@ namespace ParserLib
                 node.InitialValue.Accept(this);
             }
 
-            Console.WriteLine(";\n");
-                
+            Console.Write(";");
+            PrettyPrintNewLine();
         }
 
         internal override void Visit(ElifNode node)
@@ -167,19 +171,25 @@ namespace ParserLib
 
         internal override void Visit(FloatValueNode node)
         {
-            PrettyPrint(node.FloatValue.ToString());
+            Console.Write(node.FloatValue.ToString().Replace(",", "."));
         }
 
         internal override void Visit(FormalParamNode node)
         {
+            Console.Write(node.Type + " "); 
             node.Id.Accept(this);
-            PrettyPrint(node.Type);
         }
 
         internal override void Visit(FuncCallExpressionNode node)
         {
             node.Id.Accept(this);
-            node.ActualParameters?.ForEach(x => x.Accept(this));
+            Console.Write("(");
+            node.ActualParameters?.ForEach(x => {
+                if (node.ActualParameters.IndexOf(x) != 0) 
+                    Console.Write(", ");
+                x.Accept(this);
+            } );
+            Console.Write(")");
         }
 
         internal override void Visit(FuncCallStmtNode node)
@@ -190,46 +200,55 @@ namespace ParserLib
 
         internal override void Visit(FunctionDclNode node)
         {
-            PrettyPrint("func " + node.ReturnType);
+            Console.Write("func " + node.ReturnType + " ");
             node.Id.Accept(this);
-            PrettyPrint(" (");
-            node.FormalParamNodes?.ForEach(x => x.Accept(this));
-            PrettyPrint(") \n");
+            Console.Write(" (");
+            node.FormalParamNodes?.ForEach(x => {
+                if (node.FormalParamNodes.IndexOf(x) != 0)
+                    Console.Write(", ");
+                x.Accept(this);
+            });
+            Console.Write(")");
             node.FuncBody.Accept(this);
         }
 
         internal override void Visit(GlobalDclNode node)
         {
-            PrettyPrint("global " + node.Type + " "); // global int 
+            Console.Write("global " + node.Type + " "); // global int 
             node.Id.Accept(this);
-            PrettyPrint(" = ");
+            Console.Write(" = ");
             node.InitialValue.Accept(this);
+            Console.Write(";");
+            PrettyPrintNewLine();
         }
 
         internal override void Visit(IdExpressionNode node)
         {
-            PrettyPrint(node.Id);
+            Console.Write(node.Id);
             node.IdOperations?.ForEach(x => {
-                PrettyPrint(".");
+                Console.Write(".");
                 x.Accept(this); 
             });
         }
 
         internal override void Visit(IdNode node)
         {
-            PrettyPrint(node.Id);
+            Console.Write(node.Id);
             node.IdOperations?.ForEach(x => {
-                PrettyPrint(".");
+                Console.Write(".");
                 x.Accept(this);
             });
         }
 
         internal override void Visit(IfNode node)
         {
-            PrettyPrint("if (" + node.ControlExpression + ") \n");
+            Console.Write("if (");
+            node.ControlExpression.Accept(this); 
+            Console.Write(") ");
             node.IfBody.Accept(this);
             node.ElifNodes?.ForEach(x => x.Accept(this));
             node.ElseNode.Accept(this);
+            Console.Write(";");
         }
 
         internal override void Visit(IntValueNode node)
@@ -254,17 +273,20 @@ namespace ParserLib
             foreach (TopDclNode DclNode in node.TopDclNodes)
             {
                 DclNode.Accept(this);
+                PrettyPrintNewLine();
             }
         }
 
         internal override void Visit(ReturnNode node)
         {
+            Console.Write("return ");
             node.ReturnValue.Accept(this);
+            Console.Write(";");
         }
 
         internal override void Visit(StringValueNode node)
         {
-            Console.Write(node.StringValue);
+            Console.Write($"\"{node.StringValue}\"" );
         }
 
         internal override void Visit(StructDclNode node)
@@ -272,6 +294,7 @@ namespace ParserLib
             node.Id.Accept(this);
             foreach (DeclarationNode DclNode in node.Declarations)
             {
+                Console.Write("local ");
                 DclNode.Accept(this);
             }
             node.Constructor.Accept(this);

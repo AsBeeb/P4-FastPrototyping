@@ -1,5 +1,6 @@
 ﻿global string hejStr = "Hej " : " med " : " dig!";
-
+global string hejStr = "Hej " : " med " : " dig!";
+global float fsa = 2.0;
 func void main()
 {
 	if(true)
@@ -9,11 +10,11 @@ func void main()
 	} 
 	else
 	{
-		local string minString = myFunc();
+		local string minString = myFunc(20.2 , 3);
 	};
 }
 
-func string myFunc()
+func string myFunc(string test, buster type)
 {
 	local string nyStr = "Hej Hej";
 	

@@ -23,9 +23,9 @@ namespace P4Project
             string gitPath = @"\GitHub\P4-FastPrototyping\P4Project\P4Project\KodeEksempler\";
             string fileToOpen = "Demo2";
             string fileExtension = ".txt";
-            string filePath = String.Format("{0}{1}{2}{3}", docPath, gitPath, fileToOpen, fileExtension);
+            //string filePath = String.Format("{0}{1}{2}{3}", docPath, gitPath, fileToOpen, fileExtension);
             //string filePath = @"C:\Users\Michael\Source\Repos\P4-FastPrototyping\P4Project\P4Project\KodeEksempler\Michaels Demo.txt";
-
+            string filePath = @"C:\Users\Michael\Source\Repos\P4-FastPrototyping\P4Project\P4Project\KodeEksempler\Demo1.txt";
             using (StreamReaderExpanded reader = new StreamReaderExpanded(filePath))
             {
                 do
@@ -35,9 +35,9 @@ namespace P4Project
                     {
                         tokenQueue.Enqueue(tempToken);
                     }
-                    Console.WriteLine("Value: " + tokenQueue.Last().Value + " Type: " + tokenQueue.Last().Type.ToString() + "\n");
+                    //Console.WriteLine("Value: " + tokenQueue.Last().Value + " Type: " + tokenQueue.Last().Type.ToString() + "\n");
 
-                } while (tokenQueue.Last().Type != TokenType.eof_token);
+                } while (tokenQueue.Count == 0 || tokenQueue.Last().Type != TokenType.eof_token);
 
                 Console.WriteLine(tokenQueue.Count);
             }

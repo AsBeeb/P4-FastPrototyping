@@ -12,7 +12,7 @@ struct spiller
     }
 }
 
-global spiller[] spillerere = Empty();
+global spiller spillerere = Empty();
 
 func void main()
 {
