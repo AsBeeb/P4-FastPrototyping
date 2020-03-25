@@ -46,6 +46,9 @@ namespace P4Project
 
             Parser parser = new Parser(tokenQueue);
             ASTnode AST = parser.StartParse();
+            PrettyPrintVisitor vis = new PrettyPrintVisitor();
+            vis.Visit(AST);
+            Console.ReadKey();
 
             Console.WriteLine("Sker der noget?");
             Console.ReadKey();
