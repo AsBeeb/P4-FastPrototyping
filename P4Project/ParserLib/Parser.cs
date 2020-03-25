@@ -1386,7 +1386,9 @@ namespace ParserLib
                 funcValues = new List<ExpressionNode>();
                 Match(TokenType.comma_token);
                 funcValues.Add(ParseExpr());
-                funcValues.AddRange(ParseFuncValue());
+                List<ExpressionNode> parseFuncValues = ParseFuncValue();
+                if (parseFuncValues != null )
+                    funcValues.AddRange(parseFuncValues);
             }
             else if (tokens.Peek().IsInPredictSet(TokenType.rparen_token))
             {

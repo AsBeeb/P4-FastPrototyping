@@ -1,7 +1,31 @@
+#SkadeTyper: 1 = naerkamp, 2 = rangeret, 3 = magi
+
+struct vaaben {
+	local string navn;
+	local int skade;
+	local int skadeType;
+	vaaben (string Navn, int Skade, int SkadeType){
+		navn = Navn;
+		skade = Skade;
+		skadeType = SkadeType;
+	}
+}
+
+struct karakter {
+	local string navn;
+	local int liv;
+	local vaaben udstyr;
+	karakter (string Navn, int Liv, Vaaben Udstyr){
+		navn = Navn;
+		liv = Liv;
+		udstyr = Udstyr;
+	}
+}
+
 func void Main ()
 {
-play(currentPlayer vs opponents in GetTurnArray()) 
-    {
-        currentPlayer
-    } until(true);;
+	local vaaben stridsOekse = vaaben ("Tordenskrald", 15, 1);
+	local vaaben trylleStav  = vaaben ("Nattens Vogtoer", 13, 3);
+	local karakter michael = karakter("Michael", 50, stridsOekse);
+	local karakter moerketsFyrste = karakter ("Moerkets Fyrste", 70, tryllestav);
 }

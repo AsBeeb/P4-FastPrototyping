@@ -35,9 +35,9 @@ namespace P4Project
                     {
                         tokenQueue.Enqueue(tempToken);
                     }
-                    Console.WriteLine("Value: " + tokenQueue.Last().Value + " Type: " + tokenQueue.Last().Type.ToString() + "\n");
+                    //Console.WriteLine("Value: " + tokenQueue.Last().Value + " Type: " + tokenQueue.Last().Type.ToString() + "\n");
 
-                } while (tokenQueue.Last().Type != TokenType.eof_token);
+                } while (tokenQueue.Count == 0 || tokenQueue.Last().Type != TokenType.eof_token);
 
                 Console.WriteLine(tokenQueue.Count);
             }
@@ -47,7 +47,7 @@ namespace P4Project
             Parser parser = new Parser(tokenQueue);
             ASTnode AST = parser.StartParse();
 
-            Console.WriteLine("Sker der noget?");
+            Console.WriteLine("Færdig med at parse");
             Console.ReadKey();
         }
     }
