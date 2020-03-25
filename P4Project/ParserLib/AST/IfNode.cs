@@ -7,9 +7,9 @@ namespace ParserLib.AST
     public class IfNode : StmtNode
     {
         public ExpressionNode ControlExpression;
+        public BlockNode IfBody;
         public List<ElifNode> ElifNodes;
         public ElseNode ElseNode;
-        public BlockNode IfBody;
 
         public IfNode(ExpressionNode ControlExpression, BlockNode IfBody, List<ElifNode> ElifNodes, ElseNode ElseNode)
         {
