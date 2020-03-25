@@ -244,11 +244,7 @@ namespace ParserLib
             node.Opponent.Accept(this);
             Console.Write(" in ");
             node.AllPlayers.Accept(this);
-            IndentationLevel++;
-            PrettyPrintNewLine();
             node.PlayLoopBody.Accept(this);
-            IndentationLevel--;
-            PrettyPrintNewLine();
             Console.Write(" until");
             node.UntilCondition.Accept(this);
         }
