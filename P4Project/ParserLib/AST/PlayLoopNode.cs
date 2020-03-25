@@ -20,6 +20,7 @@ namespace ParserLib.AST
             this.PlayLoopBody = playLoopBody;
             this.UntilCondition = untilCondition;
         }
+
         public override void Accept(Visitor v)
         {
             v.Visit(this);

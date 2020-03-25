@@ -157,59 +157,74 @@ namespace ParserLib
         // De to Andreaser
         internal override void Visit(FieldAccessNode node)
         {
-            throw new NotImplementedException();
+            node.Id.Accept(this);
         }
 
         internal override void Visit(FloatValueNode node)
         {
-            throw new NotImplementedException();
+            PrettyPrint(node.FloatValue.ToString());
         }
 
         internal override void Visit(FormalParamNode node)
         {
-            throw new NotImplementedException();
+            node.Id.Accept(this);
+            PrettyPrint(node.Type);
         }
 
         internal override void Visit(FuncCallExpressionNode node)
         {
-            throw new NotImplementedException();
+            node.Id.Accept(this);
+            node.ActualParameters.ForEach(x => x.Accept(this));
         }
 
         internal override void Visit(FuncCallStmtNode node)
         {
-            throw new NotImplementedException();
+            node.Id.Accept(this);
+            node.ActualParameters.ForEach(x => x.Accept(this));
         }
 
         internal override void Visit(FunctionDclNode node)
         {
-            throw new NotImplementedException();
+            PrettyPrint("func " + node.ReturnType);
+            node.Id.Accept(this);
+            PrettyPrint(" (");
+            node.FormalParamNodes.ForEach(x => x.Accept(this));
+            PrettyPrint(") \n");
+            node.FuncBody.Accept(this);
         }
 
         internal override void Visit(GlobalDclNode node)
         {
-            throw new NotImplementedException();
+            PrettyPrint("global " + node.Type + " "); // global int 
+            node.Id.Accept(this);
+            PrettyPrint(" = ");
+            node.InitialValue.Accept(this);
         }
 
         internal override void Visit(IdExpressionNode node)
         {
-            throw new NotImplementedException();
+            PrettyPrint(node.Id);
+            node.IdOperations.ForEach(x => {
+                PrettyPrint(".");
+                x.Accept(this); 
+            });
         }
 
         internal override void Visit(IdNode node)
         {
-            throw new NotImplementedException();
-        }
-
-        internal override void Visit(IdOperationNode node)
-        {
-            throw new NotImplementedException();
+            PrettyPrint(node.Id);
+            node.IdOperations.ForEach(x => {
+                PrettyPrint(".");
+                x.Accept(this);
+            });
         }
 
         internal override void Visit(IfNode node)
         {
-            IndentationLevel++;
+            PrettyPrint("if (" + node.ControlExpression + ") \n");
             node.IfBody.Accept(this);
-            IndentationLevel--;
+            node.ElifNodes.ForEach(x => x.Accept(this));
+            node.ElseNode.Accept(this);
         }
 
         internal override void Visit(IntValueNode node)

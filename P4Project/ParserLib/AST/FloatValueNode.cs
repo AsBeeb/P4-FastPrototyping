@@ -12,6 +12,7 @@ namespace ParserLib.AST
         {
             FloatValue = floatValue;
         }
+
         public override void Accept(Visitor v)
         {
             v.Visit(this);
