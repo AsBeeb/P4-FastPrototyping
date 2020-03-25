@@ -29,6 +29,8 @@ namespace ParserLib
             node.LeftValue.Accept(this);
             Console.Write(" = ");
             node.RightValue.Accept(this);
+            Console.Write(";");
+            PrettyPrintNewLine();
         }
 
         internal override void Visit(BinaryExpressionNode node)
@@ -114,6 +116,7 @@ namespace ParserLib
 
         internal override void Visit(ConstructorNode node)
         {
+            Console.Write(" ");
             node.Id.Accept(this);
             Console.Write(" (");
 
@@ -195,7 +198,13 @@ namespace ParserLib
         internal override void Visit(FuncCallStmtNode node)
         {
             node.Id.Accept(this);
-            node.ActualParameters?.ForEach(x => x.Accept(this));
+            Console.Write("(");
+            node.ActualParameters?.ForEach(x => {
+            if (node.ActualParameters.IndexOf(x) != 0)
+                Console.Write(", ");
+                x.Accept(this);
+            });
+            Console.Write(")");
         }
 
         internal override void Visit(FunctionDclNode node)
@@ -258,14 +267,17 @@ namespace ParserLib
 
         internal override void Visit(PlayLoopNode node)
         {
+            Console.Write("play (");
             node.Player.Accept(this);
             Console.Write(" vs ");
             node.Opponent.Accept(this);
             Console.Write(" in ");
             node.AllPlayers.Accept(this);
+            Console.Write(")");
             node.PlayLoopBody.Accept(this);
-            Console.Write(" until");
+            Console.Write(" until (");
             node.UntilCondition.Accept(this);
+            Console.Write(");");
         }
 
         internal override void Visit(ProgNode node)
@@ -291,13 +303,19 @@ namespace ParserLib
 
         internal override void Visit(StructDclNode node)
         {
+            Console.Write("struct ");
             node.Id.Accept(this);
+            Console.Write("{");
+            IndentationLevel++;
+            PrettyPrintNewLine();
             foreach (DeclarationNode DclNode in node.Declarations)
             {
-                Console.Write("local ");
                 DclNode.Accept(this);
             }
             node.Constructor.Accept(this);
+            IndentationLevel--;
+            PrettyPrintNewLine();
+            Console.Write("}");
         }
 
         internal override void Visit(UnaryExpressionNode node)

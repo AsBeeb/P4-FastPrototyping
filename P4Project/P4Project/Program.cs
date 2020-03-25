@@ -42,15 +42,16 @@ namespace P4Project
 
                 Console.WriteLine(tokenQueue.Count);
             }
-            GenerateRandomNumber2(20, 0);
-
             Console.WriteLine("Scan ended");
-            Console.ReadLine();
+            Console.ReadKey();
 
             Parser parser = new Parser(tokenQueue);
             ASTnode AST = parser.StartParse();
+            PrettyPrintVisitor vis = new PrettyPrintVisitor();
+            vis.Visit(AST);
+            Console.ReadKey();
 
-            Console.WriteLine("Færdig med at parse");
+            Console.WriteLine("Sker der noget?");
             Console.ReadKey();
         }
 
