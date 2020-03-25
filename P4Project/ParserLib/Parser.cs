@@ -1407,7 +1407,9 @@ namespace ParserLib
             {
                 idOperations = new List<IdOperationNode>();
                 idOperations.Add(ParseIdOperation());
-                idOperations.AddRange(ParseIdOperations());
+                List<IdOperationNode> parseIdOperations = ParseIdOperations();
+                if (parseIdOperations != null)
+                    idOperations.AddRange(parseIdOperations);
             }
             else if(tokens.Peek().IsInPredictSet(TokenType.assign_token, TokenType.rparen_token, TokenType.power_token, TokenType.multiply_token, TokenType.divide_token, TokenType.modulo_token, TokenType.plus_token, TokenType.minus_token, TokenType.rsbracket_token, TokenType.greaterorequal_token, TokenType.lessorequal_token, TokenType.lessthan_token, TokenType.greaterthan_token, TokenType.equal_token, TokenType.notequal_token, TokenType.and_token, TokenType.or_token, TokenType.colon_token, TokenType.comma_token, TokenType.semicolon_token))
             {
