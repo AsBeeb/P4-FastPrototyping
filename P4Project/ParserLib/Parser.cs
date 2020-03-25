@@ -300,7 +300,7 @@ namespace ParserLib
             else if (tokens.Peek().IsInPredictSet(TokenType.void_token))
             {
                 Match(TokenType.void_token);
-                returnType = "Void";
+                returnType = "void";
             }
             else
             {
@@ -520,7 +520,6 @@ namespace ParserLib
         {
             List<ElifNode> elifs = null;
 
-            // Elifs->elif(BoolExpr) Block Elifs | EPSILON
             if (tokens.Peek().IsInPredictSet(TokenType.elif_token))
             {
                 Match(TokenType.elif_token);
@@ -575,7 +574,6 @@ namespace ParserLib
         {
             WhileNode whileNode = null;
 
-            // WhileLoop -> while ( BoolExpr ) Block
             if (tokens.Peek().IsInPredictSet(TokenType.while_token))
             {
                 Match(TokenType.while_token);
@@ -599,7 +597,6 @@ namespace ParserLib
         {
             ReturnNode returnNode = null;
 
-            // Return -> return ReturnValue
             if (tokens.Peek().IsInPredictSet(TokenType.return_token))
             {
                 Match(TokenType.return_token);
@@ -674,26 +671,25 @@ namespace ParserLib
         {
             string parseType = null;
 
-            // Type -> intdcl | floatdcl | stringdcl | booldcl | id
             if (tokens.Peek().IsInPredictSet(TokenType.intdcl_token))
             {
                 Match(TokenType.intdcl_token);
-                parseType = "Int";
+                parseType = "int";
             }
             else if (tokens.Peek().IsInPredictSet(TokenType.floatdcl_token))
             {
                 Match(TokenType.floatdcl_token);
-                parseType = "Float";
+                parseType = "float";
             }
             else if (tokens.Peek().IsInPredictSet(TokenType.stringdcl_token))
             {
                 Match(TokenType.stringdcl_token);
-                parseType = "String";
+                parseType = "string";
             }
             else if (tokens.Peek().IsInPredictSet(TokenType.booldcl_token))
             {
                 Match(TokenType.booldcl_token);
-                parseType = "Bool";
+                parseType = "bool";
             }
             else if (tokens.Peek().IsInPredictSet(TokenType.id_token))
             {
@@ -926,7 +922,6 @@ namespace ParserLib
         {
             ExpressionNode compExpr3 = null;
 
-            // Samme fremgangsmåde som parseExpr :))
             if(tokens.Peek().IsInPredictSet(TokenType.not_token, 
                                             TokenType.boolval_token, 
                                             TokenType.minus_token,
@@ -1083,8 +1078,10 @@ namespace ParserLib
             {
                 throw new SyntacticalException(tokens.Peek());
             }
+
             return basicBool;
         }
+
         private ExpressionNode ParseArithExpr()
         {
             ExpressionNode arithExpr = null;
@@ -1110,6 +1107,7 @@ namespace ParserLib
             }
             return arithExpr;
         }
+
         private Tuple<ExpressionNode, TokenType> ParseArithOp1()
         {
             Tuple < ExpressionNode, TokenType > arithOp1 = null;
@@ -1216,6 +1214,7 @@ namespace ParserLib
             }
             else if (tokens.Peek().IsInPredictSet(TokenType.plus_token, TokenType.minus_token, TokenType.rsbracket_token, TokenType.greaterorequal_token, TokenType.lessorequal_token, TokenType.lessthan_token, TokenType.greaterthan_token, TokenType.equal_token, TokenType.notequal_token, TokenType.and_token, TokenType.or_token, TokenType.rparen_token, TokenType.colon_token, TokenType.comma_token, TokenType.semicolon_token))
             {
+                // EPSILON
             }
             else
             {
@@ -1223,6 +1222,7 @@ namespace ParserLib
             }
             return arithOp2;
         }
+
         private Tuple<ExpressionNode, TokenType> ParseArithExpr2()
         {
             Tuple<ExpressionNode, TokenType> arithExpr2 = null;
@@ -1342,7 +1342,6 @@ namespace ParserLib
             return callOrOperations;
         }
 
-
         private List<ExpressionNode> ParseCall()
         {
             List<ExpressionNode> call = null;
@@ -1370,6 +1369,7 @@ namespace ParserLib
             }
             else if (tokens.Peek().IsInPredictSet(TokenType.rparen_token))
             {
+                // EPSILON
             }
             else
             {
@@ -1377,6 +1377,7 @@ namespace ParserLib
             }
             return actualParams;
         }
+
         private List<ExpressionNode> ParseFuncValue()
         {
             List<ExpressionNode> funcValues = null;
@@ -1390,6 +1391,7 @@ namespace ParserLib
             }
             else if (tokens.Peek().IsInPredictSet(TokenType.rparen_token))
             {
+                // EPSILON
             }
             else
             {
@@ -1397,6 +1399,7 @@ namespace ParserLib
             }
             return funcValues;
         }
+
         private List<IdOperationNode> ParseIdOperations()
         {
             List<IdOperationNode> idOperations = null;
@@ -1409,6 +1412,7 @@ namespace ParserLib
             }
             else if(tokens.Peek().IsInPredictSet(TokenType.assign_token, TokenType.rparen_token, TokenType.power_token, TokenType.multiply_token, TokenType.divide_token, TokenType.modulo_token, TokenType.plus_token, TokenType.minus_token, TokenType.rsbracket_token, TokenType.greaterorequal_token, TokenType.lessorequal_token, TokenType.lessthan_token, TokenType.greaterthan_token, TokenType.equal_token, TokenType.notequal_token, TokenType.and_token, TokenType.or_token, TokenType.colon_token, TokenType.comma_token, TokenType.semicolon_token))
             {
+                // EPSILON
             }
             else
             {
@@ -1416,6 +1420,7 @@ namespace ParserLib
             }
             return idOperations;
         }
+
         private IdOperationNode ParseIdOperation()
         {
             IdOperationNode idOperation = null;
@@ -1438,7 +1443,6 @@ namespace ParserLib
             }
             return idOperation;
         }
-
 
         private UnaryOperator GetUnaryOperator(TokenType tokenType)
         {
