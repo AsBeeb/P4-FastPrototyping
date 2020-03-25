@@ -106,7 +106,7 @@ namespace ParserLib
 
         internal override void Visit(BoolValueNode node)
         {
-            Console.Write(node.BoolValue);
+            Console.Write(node.BoolValue.ToString());
         }
 
         internal override void Visit(ConstructorNode node)
@@ -179,13 +179,13 @@ namespace ParserLib
         internal override void Visit(FuncCallExpressionNode node)
         {
             node.Id.Accept(this);
-            node.ActualParameters.ForEach(x => x.Accept(this));
+            node.ActualParameters?.ForEach(x => x.Accept(this));
         }
 
         internal override void Visit(FuncCallStmtNode node)
         {
             node.Id.Accept(this);
-            node.ActualParameters.ForEach(x => x.Accept(this));
+            node.ActualParameters?.ForEach(x => x.Accept(this));
         }
 
         internal override void Visit(FunctionDclNode node)
@@ -193,7 +193,7 @@ namespace ParserLib
             PrettyPrint("func " + node.ReturnType);
             node.Id.Accept(this);
             PrettyPrint(" (");
-            node.FormalParamNodes.ForEach(x => x.Accept(this));
+            node.FormalParamNodes?.ForEach(x => x.Accept(this));
             PrettyPrint(") \n");
             node.FuncBody.Accept(this);
         }
@@ -209,7 +209,7 @@ namespace ParserLib
         internal override void Visit(IdExpressionNode node)
         {
             PrettyPrint(node.Id);
-            node.IdOperations.ForEach(x => {
+            node.IdOperations?.ForEach(x => {
                 PrettyPrint(".");
                 x.Accept(this); 
             });
@@ -218,7 +218,7 @@ namespace ParserLib
         internal override void Visit(IdNode node)
         {
             PrettyPrint(node.Id);
-            node.IdOperations.ForEach(x => {
+            node.IdOperations?.ForEach(x => {
                 PrettyPrint(".");
                 x.Accept(this);
             });
@@ -228,7 +228,7 @@ namespace ParserLib
         {
             PrettyPrint("if (" + node.ControlExpression + ") \n");
             node.IfBody.Accept(this);
-            node.ElifNodes.ForEach(x => x.Accept(this));
+            node.ElifNodes?.ForEach(x => x.Accept(this));
             node.ElseNode.Accept(this);
         }
 
