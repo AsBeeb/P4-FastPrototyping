@@ -119,20 +119,15 @@ namespace ParserLib
             Console.Write(" ");
             node.Id.Accept(this);
             Console.Write(" (");
-
-            int end = node.FormalParamNodes.Count - 1;
-
-            for (int i = 0; i < end; i++)
-            { 
-                node.FormalParamNodes[i].Accept(this);
-                Console.Write(", ");
-            }
-
-            node.FormalParamNodes.Last().Accept(this);
+            node.FormalParamNodes?.ForEach(x => {
+                if (node.FormalParamNodes.IndexOf(x) != 0)
+                {
+                    Console.Write(", ");
+                }
+                x.Accept(this);
+            });
             Console.Write(")");
-
             node.Block.Accept(this);
-
         }
 
         internal override void Visit(DeclarationNode node)
@@ -188,8 +183,10 @@ namespace ParserLib
             node.Id.Accept(this);
             Console.Write("(");
             node.ActualParameters?.ForEach(x => {
-                if (node.ActualParameters.IndexOf(x) != 0) 
+                if (node.ActualParameters.IndexOf(x) != 0)
+                {
                     Console.Write(", ");
+                }                   
                 x.Accept(this);
             } );
             Console.Write(")");
@@ -200,8 +197,10 @@ namespace ParserLib
             node.Id.Accept(this);
             Console.Write("(");
             node.ActualParameters?.ForEach(x => {
-            if (node.ActualParameters.IndexOf(x) != 0)
-                Console.Write(", ");
+                if (node.ActualParameters.IndexOf(x) != 0)
+                {
+                    Console.Write(", ");
+                }               
                 x.Accept(this);
             });
             Console.Write(")");
@@ -214,7 +213,9 @@ namespace ParserLib
             Console.Write(" (");
             node.FormalParamNodes?.ForEach(x => {
                 if (node.FormalParamNodes.IndexOf(x) != 0)
+                {
                     Console.Write(", ");
+                }                    
                 x.Accept(this);
             });
             Console.Write(")");
