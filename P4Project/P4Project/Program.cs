@@ -54,20 +54,20 @@ namespace P4Project
             Console.WriteLine("Sker der noget?");
             Console.ReadKey();
         }
+        //Random number generator using true random numbers. (not fun to use)
+        //public static int GenerateRandomNumber()
+        //{
 
-        public static int GenerateRandomNumber()
-        {
+        //    RandomNumberGenerator randomNumberGenerator = RandomNumberGenerator.Create();
+        //    byte[] bytearray = new byte[1];
+        //    randomNumberGenerator.GetBytes(bytearray);
 
-            RandomNumberGenerator randomNumberGenerator = RandomNumberGenerator.Create();
-            byte[] bytearray = new byte[1];
-            randomNumberGenerator.GetBytes(bytearray);
-
-            foreach (byte bit in bytearray)
-            {
-                Console.WriteLine(bit.ToString());
-            }
-            return bytearray[0];
-        }
+        //    foreach (byte bit in bytearray)
+        //    {
+        //        Console.WriteLine(bit.ToString());
+        //    }
+        //    return bytearray[0];
+        //}
         public static int GenerateRandomNumber2(int maxValue, int minValue)
         {
             PrevRandom = minValue + (PrevRandom*17 + 11) % maxValue;
@@ -76,6 +76,11 @@ namespace P4Project
         static int GetSeed()
         {
             return DateTime.Now.Millisecond;
+        }
+        //removes the randomness from the random number generator by setting the seed
+        public static void SetRandomNumberSeed(int value)
+        {
+            PrevRandom = value;
         }
     }
 }
