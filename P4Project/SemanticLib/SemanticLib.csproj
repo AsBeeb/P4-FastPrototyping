@@ -4,17 +4,16 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{A8D83DC6-7101-4D89-A583-483343BB3E64}</ProjectGuid>
-    <OutputType>Exe</OutputType>
-    <RootNamespace>P4Project</RootNamespace>
-    <AssemblyName>P4Project</AssemblyName>
-    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <ProjectGuid>{D2FFD734-2AC2-418E-9617-85D80C52F8E9}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>SemanticLib</RootNamespace>
+    <AssemblyName>SemanticLib</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -24,7 +23,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -43,19 +41,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Program.cs" />
+    <Compile Include="DeclarationVisitor.cs" />
+    <Compile Include="Scope.cs" />
+    <Compile Include="SymbolTable.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="KodeEksempler\Demo1.txt" />
-    <Content Include="KodeEksempler\Demo2.txt" />
-    <Content Include="KodeEksempler\Demo4.txt" />
-    <Content Include="KodeEksempler\Demo6.txt" />
-    <Content Include="KodeEksempler\Michaels Demo.txt" />
-    <Content Include="KodeEksempler\Numbers.txt" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ParserLib\ParserLib.csproj">
@@ -65,10 +54,6 @@
     <ProjectReference Include="..\Scanner\ScannerLib.csproj">
       <Project>{c54be4bc-8fd4-43ab-8bcf-ab5986351c48}</Project>
       <Name>ScannerLib</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\SemanticLib\SemanticLib.csproj">
-      <Project>{d2ffd734-2ac2-418e-9617-85d80c52f8e9}</Project>
-      <Name>SemanticLib</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

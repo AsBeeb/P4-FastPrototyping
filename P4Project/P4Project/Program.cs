@@ -8,6 +8,7 @@ using ScannerLib;
 using ParserLib;
 using ParserLib.AST;
 using System.Security.Cryptography;
+using SemanticLib;
 namespace P4Project
 {
     class Program
@@ -49,11 +50,34 @@ namespace P4Project
             ASTnode AST = parser.StartParse();
             PrettyPrintVisitor vis = new PrettyPrintVisitor();
             vis.Visit(AST);
+            Console.WriteLine("Parser done");
             Console.ReadKey();
 
-            Console.WriteLine("Sker der noget?");
+            SymbolTable symbolTable = new SymbolTable();
+
+
+            Console.WriteLine("Færdig");
             Console.ReadKey();
         }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         //Random number generator using true random numbers. (not fun to use)
         //public static int GenerateRandomNumber()
         //{
