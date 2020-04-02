@@ -7,13 +7,11 @@ using System.IO;
 using ScannerLib;
 using ParserLib;
 using ParserLib.AST;
-using System.Security.Cryptography;
 using SemanticLib;
 namespace P4Project
 {
     class Program
     {
-        public static int PrevRandom = GetSeed();
         static void Main(string[] args)
         {
             Queue<Token> tokenQueue = new Queue<Token>();
@@ -60,51 +58,5 @@ namespace P4Project
             Console.ReadKey();
         }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        //Random number generator using true random numbers. (not fun to use)
-        //public static int GenerateRandomNumber()
-        //{
-
-        //    RandomNumberGenerator randomNumberGenerator = RandomNumberGenerator.Create();
-        //    byte[] bytearray = new byte[1];
-        //    randomNumberGenerator.GetBytes(bytearray);
-
-        //    foreach (byte bit in bytearray)
-        //    {
-        //        Console.WriteLine(bit.ToString());
-        //    }
-        //    return bytearray[0];
-        //}
-        public static int GenerateRandomNumber2(int maxValue, int minValue)
-        {
-            PrevRandom = minValue + (PrevRandom*17 + 11) % maxValue;
-            return PrevRandom;
-        }
-        static int GetSeed()
-        {
-            return DateTime.Now.Millisecond;
-        }
-        //removes the randomness from the random number generator by setting the seed
-        public static void SetRandomNumberSeed(int value)
-        {
-            PrevRandom = value;
-        }
     }
 }
