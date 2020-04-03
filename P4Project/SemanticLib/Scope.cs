@@ -10,14 +10,12 @@ namespace SemanticLib
 {
     public class Scope
     {
-        public char Name;
         public Scope Parent;
         public List<Scope> Children = new List<Scope>();
         public Dictionary<string, ASTnode> Symbols = new Dictionary<string, ASTnode>();
 
-        public Scope(char name, Scope parent = null)
+        public Scope(Scope parent = null)
         {
-            Name = name;
             Parent = parent;
         }
     }

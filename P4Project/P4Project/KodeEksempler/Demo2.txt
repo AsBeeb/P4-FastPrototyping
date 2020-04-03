@@ -3,7 +3,8 @@ global float fsa = 2.0;
 
 func void main()
 {
-	local int hihi = 2;
+	local int[] k;
+	local int hihi.hej = k[2][3];
 
 	if(true)
 	{

@@ -68,7 +68,7 @@ namespace SemanticLib
             }
 
             symbolTable.EnterSymbol(node.Id.Id, node);
-            node.InitialValue.Accept(this);
+            node.InitialValue?.Accept(this);
         }
 
         public override void Visit(ElifNode node)
@@ -278,8 +278,7 @@ namespace SemanticLib
                         {
                             if (tempIsArray && dclNode.GetIsArray)
                             {
-                                // Error
-                                return;
+                                throw new Exception("no no5");
                             }
 
                             ASTnode tempNode = symbolTable.RetrieveSymbol(dclNode.GetDclType);
@@ -294,8 +293,7 @@ namespace SemanticLib
                             }
                             else
                             {
-                                // Error
-                                return;
+                                throw new Exception("no no4");
                             }
                         }
                     }
@@ -309,8 +307,7 @@ namespace SemanticLib
                             IdOperationNode previousIdOp = node.GetIdOperations[idOpIndex - 1];
                             if (previousIdOp is ArrayAccessNode)
                             {
-                                // Error
-                                return;
+                                throw new Exception("no no");
                             }
                         }
 
@@ -320,15 +317,10 @@ namespace SemanticLib
                             {
                                 tempIsArray = false;
                             }
-                            {
-                                // Error
-                                return;
-                            }
                         }
                         else
                         {
-                            // Error
-                            return;
+                            throw new Exception("no no3");
                         }
                     }
                 }

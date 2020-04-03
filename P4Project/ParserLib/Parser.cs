@@ -452,6 +452,7 @@ namespace ParserLib
             }
             return isArray;
         }
+
         private ExpressionNode ParseInit()
         {
             ExpressionNode init = null;

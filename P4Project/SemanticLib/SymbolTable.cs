@@ -12,17 +12,15 @@ namespace SemanticLib
         public Scope CurrentScope;
         public Scope GlobalScope;
 
-        private char scopeName = 'a';
-
         public SymbolTable()
         {
-            GlobalScope = new Scope(scopeName);
+            GlobalScope = new Scope();
             CurrentScope = GlobalScope;
             
         }
         public void OpenScope ()
         {
-            Scope newScope = new Scope(++scopeName, CurrentScope);
+            Scope newScope = new Scope(CurrentScope);
             CurrentScope.Children.Add(newScope);
             CurrentScope = newScope;
         }
@@ -75,7 +73,7 @@ namespace SemanticLib
             foreach(KeyValuePair<string, ASTnode> kp in header.Symbols)
             {
                 // Print
-                Console.WriteLine("ScopeName " + header.Name + " - Level: " + level + " - Name: " + kp.Key + " - Type: " + kp.Value.GetType());
+                Console.WriteLine("Level: " + level + " - Name: " + kp.Key + " - Type: " + kp.Value.GetType());
             }
         }
     }
