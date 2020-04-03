@@ -13,7 +13,7 @@ namespace P4Project
 {
     public class Program
     {
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
             Queue<Token> tokenQueue = new Queue<Token>();
             //Console.WriteLine("Indskriv sti til mappe:");
@@ -45,13 +45,17 @@ namespace P4Project
             Console.WriteLine("Scan ended");
             Console.ReadKey();
 
+            // Parser
             Parser parser = new Parser(tokenQueue);
             ProgNode AST = parser.StartParse();
-            PrettyPrintVisitor vis = new PrettyPrintVisitor();
-            vis.Visit(AST);
             Console.WriteLine("Parser done");
             Console.ReadKey();
 
+            // Pretty printer
+            PrettyPrintVisitor vis = new PrettyPrintVisitor();
+            vis.Visit(AST);
+
+            // Semantics
             SymbolTable symbolTable = new SymbolTable();
             DeclarationVisitor dclVisitor = new DeclarationVisitor(symbolTable);
             dclVisitor.Visit(AST);

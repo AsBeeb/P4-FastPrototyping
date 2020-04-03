@@ -26,7 +26,6 @@ namespace ParserLib
             if (tokens.Peek().Type == tokenType)
             {
                 // Advance
-                Console.WriteLine("Advancing..");
                 return tokens.Dequeue();
             }
             else
