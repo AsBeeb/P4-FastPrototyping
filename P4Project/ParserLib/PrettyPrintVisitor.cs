@@ -17,14 +17,14 @@ namespace ParserLib
             Console.Write($"\n" + new string(' ', 4 * IndentationLevel));
         }
 
-        protected override void Visit(ArrayAccessNode node)
+        public override void Visit(ArrayAccessNode node)
         {
             Console.Write("[");
             node.IndexValue.Accept(this);
             Console.Write("]");
         }
 
-        protected override void Visit(AssignmentNode node)
+        public override void Visit(AssignmentNode node)
         {
             node.LeftValue.Accept(this);
             Console.Write(" = ");
@@ -33,7 +33,7 @@ namespace ParserLib
             PrettyPrintNewLine();
         }
 
-        protected override void Visit(BinaryExpressionNode node)
+        public override void Visit(BinaryExpressionNode node)
         {
             string binaryOperator = "";
 
@@ -92,7 +92,7 @@ namespace ParserLib
             node.RightExpr.Accept(this);
         }
 
-        protected override void Visit(BlockNode node)
+        public override void Visit(BlockNode node)
         {
             PrettyPrintNewLine();
             Console.Write("{");
@@ -109,12 +109,12 @@ namespace ParserLib
         }
 
 
-        protected override void Visit(BoolValueNode node)
+        public override void Visit(BoolValueNode node)
         {
             Console.Write(node.BoolValue.ToString().ToLower());
         }
 
-        protected override void Visit(ConstructorNode node)
+        public override void Visit(ConstructorNode node)
         {
             Console.Write(" ");
             node.Id.Accept(this);
@@ -130,7 +130,7 @@ namespace ParserLib
             node.Block.Accept(this);
         }
 
-        protected override void Visit(DeclarationNode node)
+        public override void Visit(DeclarationNode node)
         {
             
             Console.Write("local " + node.Type.ToLower() + (node.IsArray ? "[] " : " "));
@@ -147,7 +147,7 @@ namespace ParserLib
             PrettyPrintNewLine();
         }
 
-        protected override void Visit(ElifNode node)
+        public override void Visit(ElifNode node)
         {
             Console.Write("elif (");
             node.ControlExpr.Accept(this);
@@ -155,30 +155,30 @@ namespace ParserLib
             node.ElifBody.Accept(this);
         }
 
-        protected override void Visit(ElseNode node)
+        public override void Visit(ElseNode node)
         {
             Console.Write("else");
             node.ElseBody.Accept(this);
         }
 
         // De to Andreaser
-        protected override void Visit(FieldAccessNode node)
+        public override void Visit(FieldAccessNode node)
         {
             node.Id.Accept(this);
         }
 
-        protected override void Visit(FloatValueNode node)
+        public override void Visit(FloatValueNode node)
         {
             Console.Write(node.FloatValue.ToString().Replace(",", "."));
         }
 
-        protected override void Visit(FormalParamNode node)
+        public override void Visit(FormalParamNode node)
         {
             Console.Write(node.Type + " "); 
             node.Id.Accept(this);
         }
 
-        protected override void Visit(FuncCallExpressionNode node)
+        public override void Visit(FuncCallExpressionNode node)
         {
             node.Id.Accept(this);
             Console.Write("(");
@@ -192,7 +192,7 @@ namespace ParserLib
             Console.Write(")");
         }
 
-        protected override void Visit(FuncCallStmtNode node)
+        public override void Visit(FuncCallStmtNode node)
         {
             node.Id.Accept(this);
             Console.Write("(");
@@ -206,7 +206,7 @@ namespace ParserLib
             Console.Write(")");
         }
 
-        protected override void Visit(FunctionDclNode node)
+        public override void Visit(FunctionDclNode node)
         {
             Console.Write("func " + node.ReturnType + " ");
             node.Id.Accept(this);
@@ -222,7 +222,7 @@ namespace ParserLib
             node.FuncBody.Accept(this);
         }
 
-        protected override void Visit(GlobalDclNode node)
+        public override void Visit(GlobalDclNode node)
         {
             Console.Write("global " + node.Type + " "); // global int 
             node.Id.Accept(this);
@@ -232,7 +232,7 @@ namespace ParserLib
             PrettyPrintNewLine();
         }
 
-        protected override void Visit(IdExpressionNode node)
+        public override void Visit(IdExpressionNode node)
         {
             Console.Write(node.Id);
             node.IdOperations?.ForEach(x => {
@@ -241,7 +241,7 @@ namespace ParserLib
             });
         }
 
-        protected override void Visit(IdNode node)
+        public override void Visit(IdNode node)
         {
             Console.Write(node.Id);
             node.IdOperations?.ForEach(x => {
@@ -250,7 +250,7 @@ namespace ParserLib
             });
         }
 
-        protected override void Visit(IfNode node)
+        public override void Visit(IfNode node)
         {
             Console.Write("if (");
             node.ControlExpression.Accept(this); 
@@ -261,12 +261,12 @@ namespace ParserLib
             Console.Write(";");
         }
 
-        protected override void Visit(IntValueNode node)
+        public override void Visit(IntValueNode node)
         {
             Console.Write($"{node.IntValue}");
         }
 
-        protected override void Visit(PlayLoopNode node)
+        public override void Visit(PlayLoopNode node)
         {
             Console.Write("play (");
             node.Player.Accept(this);
@@ -281,7 +281,7 @@ namespace ParserLib
             Console.Write(");");
         }
 
-        protected override void Visit(ProgNode node)
+        public override void Visit(ProgNode node)
         {
             foreach (TopDclNode DclNode in node.TopDclNodes)
             {
@@ -290,19 +290,19 @@ namespace ParserLib
             }
         }
 
-        protected override void Visit(ReturnNode node)
+        public override void Visit(ReturnNode node)
         {
             Console.Write("return ");
             node.ReturnValue.Accept(this);
             Console.Write(";");
         }
 
-        protected override void Visit(StringValueNode node)
+        public override void Visit(StringValueNode node)
         {
             Console.Write($"\"{node.StringValue}\"" );
         }
 
-        protected override void Visit(StructDclNode node)
+        public override void Visit(StructDclNode node)
         {
             Console.Write("struct ");
             node.Id.Accept(this);
@@ -319,7 +319,7 @@ namespace ParserLib
             Console.Write("}");
         }
 
-        protected override void Visit(UnaryExpressionNode node)
+        public override void Visit(UnaryExpressionNode node)
         {
             UnaryOperator Operator = node.Operator;
 
@@ -342,7 +342,7 @@ namespace ParserLib
             
         }
 
-        protected override void Visit(WhileNode node)
+        public override void Visit(WhileNode node)
         {
             node.ControlExpr.Accept(this);
             node.WhileLoopBody.Accept(this);

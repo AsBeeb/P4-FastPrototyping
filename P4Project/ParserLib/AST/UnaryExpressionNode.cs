@@ -8,10 +8,12 @@ namespace ParserLib.AST
     {
         DEFAULT, NOT, UNARY_MINUS
     }
+
     public class UnaryExpressionNode : ExpressionNode
     {
         public ExpressionNode ExprNode;
         public UnaryOperator Operator;
+
         public UnaryExpressionNode(ExpressionNode ExprNode, UnaryOperator Operator)
         {
             this.ExprNode = ExprNode;

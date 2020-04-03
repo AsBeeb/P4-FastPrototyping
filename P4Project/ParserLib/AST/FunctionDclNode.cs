@@ -18,6 +18,7 @@ namespace ParserLib.AST
             FormalParamNodes = formalParams;
             FuncBody = body;
         }
+
         public override void Accept(Visitor v)
         {
             v.Visit(this);

@@ -1,13 +1,17 @@
-﻿using System;
+﻿using ParserLib.AST.DataStructures;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace ParserLib.AST
 {
-    public class IdNode : ASTnode
+    public class IdNode : ASTnode, INode
     {
         public string Id;
         public List<IdOperationNode> IdOperations;
+
+        public string GetId => Id;
+        public List<IdOperationNode> GetIdOperations => IdOperations;
 
         public IdNode(string id, List<IdOperationNode> idOperations)
         {

@@ -18,24 +18,24 @@ namespace SemanticLib
             symbolTable = table;
         }
 
-        protected override void Visit(ArrayAccessNode node)
+        public override void Visit(ArrayAccessNode node)
         {
             node.IndexValue.Accept(this);
         }
 
-        protected override void Visit(AssignmentNode node)
+        public override void Visit(AssignmentNode node)
         {
             node.LeftValue.Accept(this);
             node.RightValue.Accept(this);
         }
 
-        protected override void Visit(BinaryExpressionNode node)
+        public override void Visit(BinaryExpressionNode node)
         {
             node.LeftExpr.Accept(this);
             node.RightExpr.Accept(this);
         }
 
-        protected override void Visit(BlockNode node)
+        public override void Visit(BlockNode node)
         {
             foreach (StmtNode stmtNode in node.StmtNodes)
             {
@@ -43,12 +43,12 @@ namespace SemanticLib
             }
         }
 
-        protected override void Visit(BoolValueNode node)
+        public override void Visit(BoolValueNode node)
         {
             //skal være tom (true false)
         }
 
-        protected override void Visit(ConstructorNode node)
+        public override void Visit(ConstructorNode node)
         {
             symbolTable.OpenScope();
             foreach (FormalParamNode formalParam in node.FormalParamNodes)
@@ -59,13 +59,19 @@ namespace SemanticLib
             symbolTable.CloseScope();
         }
 
-        protected override void Visit(DeclarationNode node)
+        public override void Visit(DeclarationNode node)
         {
+            if (node.Id.IdOperations?.Count > 0)
+            {
+                // Error
+                return;
+            }
+
             symbolTable.EnterSymbol(node.Id.Id, node);
             node.InitialValue.Accept(this);
         }
 
-        protected override void Visit(ElifNode node)
+        public override void Visit(ElifNode node)
         {
             symbolTable.OpenScope();
             node.ControlExpr.Accept(this);
@@ -73,29 +79,35 @@ namespace SemanticLib
             symbolTable.CloseScope();
         }
 
-        protected override void Visit(ElseNode node)
+        public override void Visit(ElseNode node)
         {
             symbolTable.OpenScope();
             node.ElseBody.Accept(this);
             symbolTable.CloseScope();
         }
 
-        protected override void Visit(FieldAccessNode node)
+        public override void Visit(FieldAccessNode node)
         {
             node.Id.Accept(this);
         }
 
-        protected override void Visit(FloatValueNode node)
+        public override void Visit(FloatValueNode node)
         {
             // skal være tom (float værdi)
         }
 
-        protected override void Visit(FormalParamNode node)
+        public override void Visit(FormalParamNode node)
         {
+            if (node.Id.IdOperations?.Count > 0)
+            {
+                // Error
+                return;
+            }
+
             symbolTable.EnterSymbol(node.Id.Id, node);
         }
 
-        protected override void Visit(FuncCallExpressionNode node)
+        public override void Visit(FuncCallExpressionNode node)
         {
             foreach (ExpressionNode parameter in node.ActualParameters)
             {
@@ -104,7 +116,7 @@ namespace SemanticLib
             node.Id.Accept(this);
         }
 
-        protected override void Visit(FuncCallStmtNode node)
+        public override void Visit(FuncCallStmtNode node)
         {
             foreach (ExpressionNode parameter in node.ActualParameters)
             {
@@ -113,8 +125,14 @@ namespace SemanticLib
             node.Id.Accept(this);
         }
 
-        protected override void Visit(FunctionDclNode node)
+        public override void Visit(FunctionDclNode node)
         {
+            if (node.Id.IdOperations?.Count > 0)
+            {
+                // Error
+                return;
+            }
+
             if (!(symbolTable.GlobalScope.Symbols.ContainsKey(node.ReturnType) || node.ReturnType == "int" || node.ReturnType == "float" || node.ReturnType == "bool" || node.ReturnType == "string" || node.ReturnType == "void"))
             {
                 throw new Exception("Type doesn't exist");
@@ -130,26 +148,133 @@ namespace SemanticLib
             symbolTable.CloseScope();
         }
 
-        protected override void Visit(GlobalDclNode node)
+        public override void Visit(GlobalDclNode node)
         {
+            if(node.Id.IdOperations?.Count > 0)
+            {
+                // Error
+                return;
+            }
+
             node.InitialValue?.Accept(this);
         }
 
-        protected override void Visit(IdExpressionNode node)
+        public override void Visit(IdExpressionNode node)
         {
-            ASTnode rootNode = symbolTable.RetrieveSymbol(node.Id);
+            VisitIdNode(node);
+        }
+
+        public override void Visit(IdNode node)
+        {
+            VisitIdNode(node);
+        }
+
+        public override void Visit(IfNode node)
+        {
+            symbolTable.OpenScope();
+            node.ControlExpression.Accept(this);
+            node.IfBody.Accept(this);
+            symbolTable.CloseScope();
+            node.ElifNodes?.ForEach(x => x.Accept(this));
+            node.ElseNode?.Accept(this);
+        }
+
+        public override void Visit(IntValueNode node)
+        {
+            // Nothing
+        }
+
+        public override void Visit(PlayLoopNode node)
+        {
+            if (node.Player.IdOperations?.Count > 0 || node.Opponent.IdOperations?.Count > 0)
+            {
+                // Error
+                return;
+            }
+
+            symbolTable.OpenScope();
+            symbolTable.EnterSymbol(node.Player.Id, node.Player);
+            symbolTable.EnterSymbol(node.Opponent.Id, node.Opponent);
+            node.AllPlayers.Accept(this);
+            node.PlayLoopBody.Accept(this);
+            node.UntilCondition.Accept(this);
+            symbolTable.CloseScope();
+        }
+
+        public override void Visit(ProgNode node)
+        {
+            foreach (TopDclNode topDclNode in node.TopDclNodes)
+            {
+                switch (topDclNode)
+                {
+                    case StructDclNode structDcl:
+                        symbolTable.EnterSymbol(structDcl.Id.Id, structDcl);
+                        break;
+                    case FunctionDclNode funcDcl:
+                        symbolTable.EnterSymbol(funcDcl.Id.Id, funcDcl);
+                        break;
+                    case GlobalDclNode globalDcl:
+                        symbolTable.EnterSymbol(globalDcl.Id.Id, globalDcl);
+                        break;
+                }
+            }
+            node.TopDclNodes.ForEach(x => x.Accept(this));
+        }
+
+        public override void Visit(ReturnNode node)
+        {
+            node.ReturnValue?.Accept(this);
+        }
+
+        public override void Visit(StringValueNode node)
+        {
+            // Nothing
+        }
+
+        public override void Visit(StructDclNode node)
+        {
+            if (node.Id.IdOperations?.Count > 0)
+            {
+                // Error
+                return;
+            }
+
+            symbolTable.OpenScope();
+            node.Declarations?.ForEach(x => x.Accept(this));
+            node.Constructor?.Accept(this);
+            symbolTable.CloseScope();
+        }
+
+        public override void Visit(UnaryExpressionNode node)
+        {
+            node.ExprNode.Accept(this);
+        }
+
+        public override void Visit(WhileNode node)
+        {
+            symbolTable.OpenScope();
+            node.ControlExpr.Accept(this);
+            node.WhileLoopBody.Accept(this);
+            symbolTable.CloseScope();
+        }
+
+        private void VisitIdNode(INode node)
+        {
+            ASTnode rootNode = symbolTable.RetrieveSymbol(node.GetId);
             if (rootNode != null)
             {
                 ASTnode previousNode = rootNode;
                 bool tempIsArray = true;
+                if (node.GetIdOperations == null)
+                    return;
 
-                foreach (IdOperationNode idOp in node.IdOperations)
+                foreach (IdOperationNode idOp in node.GetIdOperations)
                 {
                     // FieldOperation
                     if (idOp is FieldAccessNode field)
                     {
                         // DeclaratioNode and GlobalDclNode
-                        if(previousNode is IDeclaration dclNode)
+                        if (previousNode is IDeclaration dclNode)
                         {
                             if (tempIsArray && dclNode.GetIsArray)
                             {
@@ -158,10 +283,10 @@ namespace SemanticLib
                             }
 
                             ASTnode tempNode = symbolTable.RetrieveSymbol(dclNode.GetDclType);
-                            if(tempNode is StructDclNode structDcl)
+                            if (tempNode is StructDclNode structDcl)
                             {
                                 DeclarationNode tempDclNode = structDcl.Declarations.FirstOrDefault(x => x.Id.Id == field.Id.Id);
-                                if(tempDclNode != null)
+                                if (tempDclNode != null)
                                 {
                                     previousNode = tempDclNode;
                                     tempIsArray = tempDclNode.GetIsArray;
@@ -178,11 +303,11 @@ namespace SemanticLib
                     else if (idOp is ArrayAccessNode array)
                     {
                         // Prevent two-dimensional arrays
-                        int idOpIndex = node.IdOperations.IndexOf(idOp);
-                        if(idOpIndex > 0)
+                        int idOpIndex = node.GetIdOperations.IndexOf(idOp);
+                        if (idOpIndex > 0)
                         {
-                            IdOperationNode previousIdOp = node.IdOperations[idOpIndex - 1];
-                            if(previousIdOp is ArrayAccessNode)
+                            IdOperationNode previousIdOp = node.GetIdOperations[idOpIndex - 1];
+                            if (previousIdOp is ArrayAccessNode)
                             {
                                 // Error
                                 return;
@@ -208,71 +333,6 @@ namespace SemanticLib
                     }
                 }
             }
-        }
-
-        protected override void Visit(IdNode node)
-        {
-            throw new NotImplementedException();
-        }
-
-        protected override void Visit(IfNode node)
-        {
-            throw new NotImplementedException();
-        }
-
-        protected override void Visit(IntValueNode node)
-        {
-            throw new NotImplementedException();
-        }
-
-        protected override void Visit(PlayLoopNode node)
-        {
-            throw new NotImplementedException();
-        }
-
-        protected override void Visit(ProgNode node)
-        {
-            foreach (TopDclNode topDclNode in node.TopDclNodes)
-            {
-                switch (topDclNode)
-                {
-                    case StructDclNode structDcl:
-                        symbolTable.EnterSymbol(structDcl.Id.Id, structDcl);
-                        break;
-                    case FunctionDclNode funcDcl:
-                        symbolTable.EnterSymbol(funcDcl.Id.Id, funcDcl);
-                        break;
-                    case GlobalDclNode globalDcl:
-                        symbolTable.EnterSymbol(globalDcl.Id.Id, globalDcl);
-                        break;
-                }
-            }
-            node.TopDclNodes.ForEach(x => x.Accept(this));
-        }
-
-        protected override void Visit(ReturnNode node)
-        {
-            throw new NotImplementedException();
-        }
-
-        protected override void Visit(StringValueNode node)
-        {
-            throw new NotImplementedException();
-        }
-
-        protected override void Visit(StructDclNode node)
-        {
-            throw new NotImplementedException();
-        }
-
-        protected override void Visit(UnaryExpressionNode node)
-        {
-            throw new NotImplementedException();
-        }
-
-        protected override void Visit(WhileNode node)
-        {
-            throw new NotImplementedException();
         }
     }
 }

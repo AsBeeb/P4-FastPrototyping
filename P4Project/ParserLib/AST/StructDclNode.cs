@@ -10,7 +10,7 @@ namespace ParserLib.AST
         public List<DeclarationNode> Declarations;
         public ConstructorNode Constructor;
 
-        public StructDclNode(IdNode Id, List<DeclarationNode> Declarations,ConstructorNode Constructor)
+        public StructDclNode(IdNode Id, List<DeclarationNode> Declarations, ConstructorNode Constructor)
         {
             this.Id = Id;
             this.Declarations = Declarations;

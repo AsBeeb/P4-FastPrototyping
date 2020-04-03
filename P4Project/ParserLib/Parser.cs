@@ -16,7 +16,7 @@ namespace ParserLib
             tokens = tokenStream;
         }
 
-        public ASTnode StartParse()
+        public ProgNode StartParse()
         {
             return ParseProg();
         }

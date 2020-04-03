@@ -8,9 +8,10 @@ using ScannerLib;
 using ParserLib;
 using ParserLib.AST;
 using SemanticLib;
+
 namespace P4Project
 {
-    class Program
+    public class Program
     {
         static void Main(string[] args)
         {
@@ -23,8 +24,8 @@ namespace P4Project
             string gitPath = @"\GitHub\P4-FastPrototyping\P4Project\P4Project\KodeEksempler\";
             string fileToOpen = "Demo2";
             string fileExtension = ".txt";
-            //string filePath = String.Format("{0}{1}{2}{3}", docPath, gitPath, fileToOpen, fileExtension);
-            string filePath = @"C:\Users\Michael\Source\Repos\P4-FastPrototyping\P4Project\P4Project\KodeEksempler\Michaels Demo.txt";
+            string filePath = String.Format("{0}{1}{2}{3}", docPath, gitPath, fileToOpen, fileExtension);
+            //string filePath = @"C:\Users\Michael\Source\Repos\P4-FastPrototyping\P4Project\P4Project\KodeEksempler\Michaels Demo.txt";
 
             using (StreamReaderExpanded reader = new StreamReaderExpanded(filePath))
             {
@@ -45,14 +46,16 @@ namespace P4Project
             Console.ReadKey();
 
             Parser parser = new Parser(tokenQueue);
-            ASTnode AST = parser.StartParse();
+            ProgNode AST = parser.StartParse();
             PrettyPrintVisitor vis = new PrettyPrintVisitor();
             vis.Visit(AST);
             Console.WriteLine("Parser done");
             Console.ReadKey();
 
             SymbolTable symbolTable = new SymbolTable();
-
+            DeclarationVisitor dclVisitor = new DeclarationVisitor(symbolTable);
+            dclVisitor.Visit(AST);
+            symbolTable.PrintTable(symbolTable.GlobalScope, 1);
 
             Console.WriteLine("Færdig");
             Console.ReadKey();

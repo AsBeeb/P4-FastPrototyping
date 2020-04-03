@@ -12,15 +12,17 @@ namespace SemanticLib
         public Scope CurrentScope;
         public Scope GlobalScope;
 
+        private char scopeName = 'a';
+
         public SymbolTable()
         {
-            GlobalScope = new Scope();
+            GlobalScope = new Scope(scopeName);
             CurrentScope = GlobalScope;
             
         }
         public void OpenScope ()
         {
-            Scope newScope = new Scope(CurrentScope);
+            Scope newScope = new Scope(++scopeName, CurrentScope);
             CurrentScope.Children.Add(newScope);
             CurrentScope = newScope;
         }
@@ -61,6 +63,20 @@ namespace SemanticLib
         public bool IsDeclaredLocally(string symbolToFind)
         {
             return CurrentScope.Symbols.ContainsKey(symbolToFind);
+        }
+
+        public void PrintTable(Scope header, int level)
+        {
+            foreach(Scope scope in header.Children)
+            {
+                PrintTable(scope, level + 1);
+            }
+
+            foreach(KeyValuePair<string, ASTnode> kp in header.Symbols)
+            {
+                // Print
+                Console.WriteLine("ScopeName " + header.Name + " - Level: " + level + " - Name: " + kp.Key + " - Type: " + kp.Value.GetType());
+            }
         }
     }
 }
