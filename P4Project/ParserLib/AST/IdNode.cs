@@ -14,6 +14,7 @@ namespace ParserLib.AST
             Id = id;
             IdOperations = idOperations;
         }
+
         public override void Accept(Visitor v)
         {
             v.Visit(this);

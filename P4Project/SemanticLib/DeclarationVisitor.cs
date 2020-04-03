@@ -5,16 +5,19 @@ using System.Text;
 using System.Threading.Tasks;
 using ParserLib;
 using ParserLib.AST;
+using ParserLib.AST.DataStructures;
 
 namespace SemanticLib
 {
     public class DeclarationVisitor : Visitor
     {
         private SymbolTable symbolTable;
+
         public DeclarationVisitor(SymbolTable table)
         {
             symbolTable = table;
         }
+
         protected override void Visit(ArrayAccessNode node)
         {
             node.IndexValue.Accept(this);
@@ -112,7 +115,6 @@ namespace SemanticLib
 
         protected override void Visit(FunctionDclNode node)
         {
-            symbolTable.EnterSymbol(node.Id.Id, node);
             if (!(symbolTable.GlobalScope.Symbols.ContainsKey(node.ReturnType) || node.ReturnType == "int" || node.ReturnType == "float" || node.ReturnType == "bool" || node.ReturnType == "string" || node.ReturnType == "void"))
             {
                 throw new Exception("Type doesn't exist");
@@ -131,65 +133,80 @@ namespace SemanticLib
         protected override void Visit(GlobalDclNode node)
         {
             node.InitialValue?.Accept(this);
-            symbolTable.EnterSymbol(node.Id.Id, node);
-            
         }
 
         protected override void Visit(IdExpressionNode node)
         {
-            ASTnode symbolnode = symbolTable.RetrieveSymbol(node.Id);
-            if (symbolnode == null)
+            ASTnode rootNode = symbolTable.RetrieveSymbol(node.Id);
+            if (rootNode != null)
             {
-                throw new Exception("Variable name not declared");
-            }
-            if (node.IdOperations != null)
-            {
-                bool isFieldReferenceLegalFlag = true;
-                ASTnode AccessNode = symbolnode;
+                ASTnode previousNode = rootNode;
+                bool tempIsArray = true;
 
                 foreach (IdOperationNode idOp in node.IdOperations)
                 {
-                    if (idOp is ArrayAccessNode arrayAccess)
+                    // FieldOperation
+                    if (idOp is FieldAccessNode field)
                     {
-                        if (AccessNode is DeclarationNode DCLNode)
+                        // DeclaratioNode and GlobalDclNode
+                        if(previousNode is IDeclaration dclNode)
                         {
-                            if (DCLNode.IsArray)
+                            if (tempIsArray && dclNode.GetIsArray)
                             {
-                                bool isPrimitive = (DCLNode.Type == "int" || DCLNode.Type == "float" || DCLNode.Type == "bool" || DCLNode.Type == "string");
-                                if (isPrimitive)
-                                {
-                                    isFieldReferenceLegalFlag = false;
-                                }
-                                else
-                                {
-                                    AccessNode = symbolTable.RetrieveSymbol(node.Type);
-                                }
+                                // Error
+                                return;
                             }
 
+                            ASTnode tempNode = symbolTable.RetrieveSymbol(dclNode.GetDclType);
+                            if(tempNode is StructDclNode structDcl)
+                            {
+                                DeclarationNode tempDclNode = structDcl.Declarations.FirstOrDefault(x => x.Id.Id == field.Id.Id);
+                                if(tempDclNode != null)
+                                {
+                                    previousNode = tempDclNode;
+                                    tempIsArray = tempDclNode.GetIsArray;
+                                }
+                            }
+                            else
+                            {
+                                // Error
+                                return;
+                            }
                         }
                     }
-                    //else if (idOp is FieldAccessNode fieldaccess)
-                    //{
-                    //    if (!isFieldReferenceLegalFlag)
-                    //    {
-                    //        throw new Exception("Illegal field acces on a primitive type");
-                    //    }
-                    //    bool isPrimitive = (node.Type == "int" || node.Type == "float" || node.Type == "bool" || node.Type == "string");
-                    //    if (isPrimitive)
-                    //    {
-                    //        isFieldReferenceLegalFlag = false;
-                    //    }
-                    //    else
-                    //    {
-                    //        AccessNode = symbolTable.RetrieveSymbol(node.Type);
-                    //    }
-                    //}
-                    else
+                    // ArrayOperation
+                    else if (idOp is ArrayAccessNode array)
                     {
-                        throw new Exception("This is a problem");
+                        // Prevent two-dimensional arrays
+                        int idOpIndex = node.IdOperations.IndexOf(idOp);
+                        if(idOpIndex > 0)
+                        {
+                            IdOperationNode previousIdOp = node.IdOperations[idOpIndex - 1];
+                            if(previousIdOp is ArrayAccessNode)
+                            {
+                                // Error
+                                return;
+                            }
+                        }
+
+                        if (previousNode is IDeclaration dcl)
+                        {
+                            if (dcl.GetIsArray)
+                            {
+                                tempIsArray = false;
+                            }
+                            {
+                                // Error
+                                return;
+                            }
+                        }
+                        else
+                        {
+                            // Error
+                            return;
+                        }
                     }
                 }
-
             }
         }
 
@@ -215,7 +232,22 @@ namespace SemanticLib
 
         protected override void Visit(ProgNode node)
         {
-            throw new NotImplementedException();
+            foreach (TopDclNode topDclNode in node.TopDclNodes)
+            {
+                switch (topDclNode)
+                {
+                    case StructDclNode structDcl:
+                        symbolTable.EnterSymbol(structDcl.Id.Id, structDcl);
+                        break;
+                    case FunctionDclNode funcDcl:
+                        symbolTable.EnterSymbol(funcDcl.Id.Id, funcDcl);
+                        break;
+                    case GlobalDclNode globalDcl:
+                        symbolTable.EnterSymbol(globalDcl.Id.Id, globalDcl);
+                        break;
+                }
+            }
+            node.TopDclNodes.ForEach(x => x.Accept(this));
         }
 
         protected override void Visit(ReturnNode node)

@@ -110,7 +110,7 @@ namespace ParserLib
                 Match(TokenType.assign_token);
                 ExpressionNode initVal = ParseExpr();
                 Match(TokenType.semicolon_token);
-                globalNode = new GlobalDclNode(id, initVal, type);
+                globalNode = new GlobalDclNode(id, initVal, type, false);
             }
             else
             {             
