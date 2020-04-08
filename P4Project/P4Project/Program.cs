@@ -6,11 +6,14 @@ using System.Threading.Tasks;
 using System.IO;
 using ScannerLib;
 using ParserLib;
+using ParserLib.AST;
+using SemanticLib;
+
 namespace P4Project
 {
-    class Program
+    public class Program
     {
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
             Queue<Token> tokenQueue = new Queue<Token>();
             //Console.WriteLine("Indskriv sti til mappe:");
@@ -19,10 +22,10 @@ namespace P4Project
             //string filnavn = "\\" + Console.ReadLine() + ".txt";
             string docPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
             string gitPath = @"\GitHub\P4-FastPrototyping\P4Project\P4Project\KodeEksempler\";
-            string fileToOpen = "Numbers";
+            string fileToOpen = "Demo2";
             string fileExtension = ".txt";
             //string filePath = String.Format("{0}{1}{2}{3}", docPath, gitPath, fileToOpen, fileExtension);
-            string filePath = @"C:\Users\Michael\Source\Repos\P4-FastPrototyping\P4Project\P4Project\KodeEksempler\Michaels Demo.txt";
+            string filePath = @"C:\Users\Michael\Source\Repos\P4-FastPrototyping\P4Project\P4Project\KodeEksempler\Demo2.txt";
 
             using (StreamReaderExpanded reader = new StreamReaderExpanded(filePath))
             {
@@ -33,19 +36,36 @@ namespace P4Project
                     {
                         tokenQueue.Enqueue(tempToken);
                     }
-                    Console.WriteLine("Value: " + tokenQueue.Last().Value + " Type: " + tokenQueue.Last().Type.ToString() + "\n");
+                    //Console.WriteLine("Value: " + tokenQueue.Last().Value + " Type: " + tokenQueue.Last().Type.ToString() + "\n");
 
-                } while (tokenQueue.Last().Type != TokenType.eof_token);
+                } while (tokenQueue.Count == 0 || tokenQueue.Last().Type != TokenType.eof_token);
 
                 Console.WriteLine(tokenQueue.Count);
             }
             Console.WriteLine("Scan ended");
             Console.ReadKey();
 
+            // Parser
             Parser parser = new Parser(tokenQueue);
-            parser.StartParse();
-            Console.WriteLine("Sker der noget?");
+            ProgNode AST = parser.StartParse();
+            Console.WriteLine("Parser done");
+            Console.ReadKey();
+
+            // Pretty printer
+            PrettyPrintVisitor vis = new PrettyPrintVisitor();
+            vis.Visit(AST);
+
+            // Semantics
+            SymbolTable symbolTable = new SymbolTable();
+            DeclarationVisitor dclVisitor = new DeclarationVisitor(symbolTable);
+            dclVisitor.Visit(AST);
+            symbolTable.PrintTable(symbolTable.GlobalScope, 1);
+
+
+
+            Console.WriteLine("Færdig");
             Console.ReadKey();
         }
+
     }
 }

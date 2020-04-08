@@ -1,7 +1,11 @@
 ﻿global string hejStr = "Hej " : " med " : " dig!";
+global float fsa = 2.0;
 
 func void main()
 {
+	local int[] k;
+	local int hihi.hej = k[2][3];
+
 	if(true)
 	{
 		local int newValue = 2222;
@@ -9,13 +13,14 @@ func void main()
 	} 
 	else
 	{
-		local string minString = myFunc();
-	}
+		local string minString = myFunc(20.2 , 3);
+	};
 }
 
-func string myFunc()
+func string myFunc(string test, buster type)
 {
 	local string nyStr = "Hej Hej";
 	
 	return nyStr;
 }
+
