@@ -289,6 +289,10 @@ namespace SemanticLib
                                 throw new Exception("Undeclared struct access.");
                             }
                         }
+                        else
+                        {
+                            throw new Exception("Previousnode wasn't IDeclaration type");
+                        }
                     }
                     // ArrayOperation
                     else if (idOp is ArrayAccessNode array)
