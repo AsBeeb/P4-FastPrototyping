@@ -30,7 +30,7 @@ namespace ParserLib.AST
 
         public void SetType(string type)
         {
-            Console.WriteLine("Set" + Id + "type to: " + type);
+            Console.WriteLine("Set " + Id + " type to: " + type);
             Type = type;
         }
     }

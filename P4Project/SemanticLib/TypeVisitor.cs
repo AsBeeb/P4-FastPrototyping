@@ -439,13 +439,13 @@ namespace SemanticLib
         private void VisitIdNode(INode node)
         {
             ASTnode rootNode = symbolTable.RetrieveSymbol(node.GetId);
-            bool tempIsArray = true;  //OBS Flyttet, så den er .
             if (rootNode != null)
             {
                 ASTnode previousNode = rootNode;
+                bool tempIsArray = true;
                 if (node.GetIdOperations == null)
                 {
-                    if (rootNode is IDeclaration iDcl) //NYT.
+                    if (rootNode is IDeclaration iDcl) // 448-455 NYT.
                     {
                         node.SetType(iDcl.GetDclType + (iDcl.GetIsArray? "[]" : ""));
                     }
@@ -523,7 +523,7 @@ namespace SemanticLib
 
                 }
 
-                if (previousNode is IDeclaration iDecl) //NYT.
+                if (previousNode is IDeclaration iDecl) // 526-533 NYT.
                 {
                     node.SetType(iDecl.GetDclType + (iDecl.GetIsArray && tempIsArray ? "[]" : ""));
                 }

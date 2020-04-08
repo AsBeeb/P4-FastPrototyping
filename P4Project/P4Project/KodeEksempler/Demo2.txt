@@ -14,6 +14,11 @@ func void main()
 	{
 		local string minString = myFunc(20.2 , 3);
 	};
+
+	play (player vs opponents in k)
+	{
+		player = opponents;
+	} until (true);
 }
 
 func string myFunc(float test, int type)
