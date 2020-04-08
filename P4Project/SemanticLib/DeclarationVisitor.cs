@@ -275,7 +275,7 @@ namespace SemanticLib
                         {
                             if (tempIsArray && dclNode.GetIsArray)
                             {
-                                throw new Exception("no no5");
+                                throw new Exception("Illegal two-dimensional array");
                             }
 
                             ASTnode tempNode = symbolTable.RetrieveSymbol(dclNode.GetDclType);
@@ -290,7 +290,7 @@ namespace SemanticLib
                             }
                             else
                             {
-                                throw new Exception("no no4");
+                                throw new Exception("Undeclared struct access");
                             }
                         }
                     }
@@ -304,7 +304,7 @@ namespace SemanticLib
                             IdOperationNode previousIdOp = node.GetIdOperations[idOpIndex - 1];
                             if (previousIdOp is ArrayAccessNode)
                             {
-                                throw new Exception("no no");
+                                throw new Exception("Illegal two-dimensional array");
                             }
                         }
 
@@ -317,7 +317,7 @@ namespace SemanticLib
                         }
                         else
                         {
-                            throw new Exception("no no3");
+                            throw new Exception("ID was not an declared as array");
                         }
                     }
                 }
