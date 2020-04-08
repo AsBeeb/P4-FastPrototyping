@@ -24,8 +24,8 @@ namespace P4Project
             string gitPath = @"\GitHub\P4-FastPrototyping\P4Project\P4Project\KodeEksempler\";
             string fileToOpen = "Demo2";
             string fileExtension = ".txt";
-            string filePath = String.Format("{0}{1}{2}{3}", docPath, gitPath, fileToOpen, fileExtension);
-            //string filePath = @"C:\Users\Michael\Source\Repos\P4-FastPrototyping\P4Project\P4Project\KodeEksempler\Michaels Demo.txt";
+            //string filePath = String.Format("{0}{1}{2}{3}", docPath, gitPath, fileToOpen, fileExtension);
+            string filePath = @"C:\Users\Michael\Source\Repos\P4-FastPrototyping\P4Project\P4Project\KodeEksempler\Demo2.txt";
 
             using (StreamReaderExpanded reader = new StreamReaderExpanded(filePath))
             {
@@ -60,6 +60,8 @@ namespace P4Project
             DeclarationVisitor dclVisitor = new DeclarationVisitor(symbolTable);
             dclVisitor.Visit(AST);
             symbolTable.PrintTable(symbolTable.GlobalScope, 1);
+
+
 
             Console.WriteLine("Færdig");
             Console.ReadKey();
