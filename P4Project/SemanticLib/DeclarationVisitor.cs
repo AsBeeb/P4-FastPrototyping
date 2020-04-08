@@ -105,10 +105,7 @@ namespace SemanticLib
 
         public override void Visit(FuncCallExpressionNode node)
         {
-            foreach (ExpressionNode parameter in node.ActualParameters)
-            {
-                parameter.Accept(this);
-            }
+            node.ActualParameters?.ForEach(x => x.Accept(this));
             node.Id.Accept(this);
         }
 
