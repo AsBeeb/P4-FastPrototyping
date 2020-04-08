@@ -36,11 +36,8 @@ namespace SemanticLib
         }
 
         public override void Visit(BlockNode node)
-        {
-            foreach (StmtNode stmtNode in node.StmtNodes)
-            {
-                stmtNode.Accept(this);
-            }
+        { 
+            node.StmtNodes?.ForEach(x => x.Accept(this));
         }
 
         public override void Visit(BoolValueNode node)

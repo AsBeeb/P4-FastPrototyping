@@ -11,10 +11,10 @@ namespace SemanticLib
 {
     public class TypeVisitor : Visitor
     {
-        SymbolTable SymbolTable;
+        SymbolTable symbolTable;
         public TypeVisitor(SymbolTable symbolTable)
         {
-            SymbolTable = symbolTable;
+            this.symbolTable = symbolTable;
         }
         public override void Visit(ArrayAccessNode node)
         {
@@ -29,32 +29,7 @@ namespace SemanticLib
         {
             node.LeftValue.Accept(this);
             node.RightValue.Accept(this);
-            if(node.LeftValue.Type != node.RightValue.Type)
-            {
-                switch (node.LeftValue.Type)
-                {
-                    case "int":
-                        if (node.RightValue.Type != "float")
-                        {
-                            throw new Exception($"Invalid assignment (can't convert {node.RightValue.Type} to type int)");
-                        }
-                        break;
-                    case "float":
-                        if (node.RightValue.Type != "int")
-                        {
-                            throw new Exception($"Invalid assignment (can't convert {node.RightValue.Type} to type float)");
-                        }
-                        break;
-                    case "string":
-                        if (node.RightValue.Type != "float" && node.RightValue.Type != "int" && node.RightValue.Type != "bool")
-                        {
-                            throw new Exception($"Invalid assignment (can't convert {node.RightValue.Type} to type string)");
-                        }
-                        break;
-                    default:
-                        throw new Exception($"Invalid assignment (can't convert {node.RightValue.Type} to type {node.LeftValue.Type})");
-                }
-            }
+            CompatibleTypes(node.LeftValue.Type, node.RightValue.Type, "assignment");
         }
 
         public override void Visit(BinaryExpressionNode node)
@@ -64,180 +39,137 @@ namespace SemanticLib
             CompareBinaryTypes(node);
         }
 
-        private void CompareBinaryTypes(BinaryExpressionNode node)
-        {
-            switch (node.Operator)
-            {
-                case BinaryOperator.PLUS:
-                case BinaryOperator.MINUS:
-                case BinaryOperator.MULTIPLY:
-                case BinaryOperator.POWER:
-                    if (node.LeftExpr.Type == "int")
-                    {
-                        if (node.RightExpr.Type == "int")
-                        {
-                            node.Type = "int";
-                        }
-                        else if (node.RightExpr.Type == "float")
-                        {
-                            node.Type = "float";
-                        }
-                        else
-                        {
-                            throw new Exception($"Invalid binary operation (int plus {node.RightExpr.Type} isn't legal)");
-                        }
-                    }
-                    else if (node.LeftExpr.Type == "float")
-                    {
-                        if (node.RightExpr.Type == "int" || node.RightExpr.Type == "float")
-                        {
-                            node.Type = "float";
-                        }
-                        else
-                        {
-                            throw new Exception($"Invalid binary operation (int plus {node.RightExpr.Type} isn't legal)");
-                        }
-                    }
-                    break;
-                case BinaryOperator.DIVIDE:
-                    if (node.LeftExpr.Type == "int" ||node.LeftExpr.Type == "float")
-                    {
-                        if (node.RightExpr.Type == "int" || node.RightExpr.Type == "float")
-                        {
-                            node.Type = "float";
-                        }
-                        else
-                        {
-                            throw new Exception($"Invalid binary operation (division with type {node.RightExpr.Type} isn't legal)");
-                        }
-                    }
-                    else
-                    {
-                        throw new Exception($"Invalid binary operation (division with type {node.LeftExpr.Type} isn't legal)");
-                    }
-                    break;
-                case BinaryOperator.MODULO:
-                    if (node.LeftExpr.Type == "int"|| node.LeftExpr.Type == "float")
-                    {
-                        if (node.RightExpr.Type == "int")
-                        {
-                            node.Type = node.LeftExpr.Type;
-                        }
-                        else
-                        {
-                            throw new Exception($"Invalid binary operation (modulo with type {node.RightExpr.Type} isn't legal)");
-                        }
-                    }
-                    else
-                    {
-                        throw new Exception($"Invalid binary operation (modulo with type {node.LeftExpr.Type} isn't legal)");
-                    }
-                    break;
-                case BinaryOperator.GREATER_OR_EQUALS:
-                case BinaryOperator.GREATER_THAN:
-                case BinaryOperator.LESS_OR_EQUALS:
-                case BinaryOperator.LESS_THAN:
-                case BinaryOperator.NOT_EQUALS:
-                case BinaryOperator.EQUALS:
-                    if (node.LeftExpr.Type == "int" || node.LeftExpr.Type == "float")
-                    {
-                        if (node.RightExpr.Type == "int" || node.RightExpr.Type == "float")
-                        {
-                            node.Type = "bool";
-                        }
-                        else
-                        {
-                            throw new Exception($"Invalid binary operation (comparison with  {node.RightExpr.Type} isn't legal)");
-                        }
-                    }
-                    break;
-                case BinaryOperator.AND:
-                case BinaryOperator.OR:
-                    if (node.LeftExpr.Type == "bool" && node.RightExpr.Type == "bool")
-                    {
-                        node.Type = "bool";
-                    }
-                    break;
-                case BinaryOperator.STRING_CONCAT:
-                    if (node.LeftExpr.Type == "bool" || node.LeftExpr.Type == "int" || node.LeftExpr.Type == "float" || node.LeftExpr.Type == "string")
-                    {
-                        if (node.RightExpr.Type == "bool" || node.RightExpr.Type == "int" || node.RightExpr.Type == "float" || node.RightExpr.Type == "string")
-                        {
-                            node.Type = "string";
-                        }
-                        else
-                        {
-                            throw new Exception($"Invalid binary operation (string concatenation with {node.RightExpr.Type} isn't legal)");
-                        }
-                    }
-                    else
-                    {
-                        throw new Exception($"Invalid binary operation (string concatenation with {node.LeftExpr.Type} isn't legal)");
-                    }
-                    break;
-                default:
-                    throw new Exception($"Invalid binary operator");
-            }
-        }
 
         public override void Visit(BlockNode node)
         {
-            throw new NotImplementedException();
+            node.StmtNodes?.ForEach(x => x.Accept(this));
         }
 
         public override void Visit(BoolValueNode node)
         {
-            throw new NotImplementedException();
+            node.Type = "bool";
         }
 
         public override void Visit(ConstructorNode node)
         {
-            throw new NotImplementedException();
+            symbolTable.EnterScope();
+            node.FormalParamNodes?.ForEach(x => x.Accept(this));
+            node.Block.Accept(this);
+            symbolTable.CloseScope();
         }
 
         public override void Visit(DeclarationNode node)
         {
-            throw new NotImplementedException();
+            node.InitialValue?.Accept(this);
+            string declarationType = node.Type + (node.IsArray ? "[]" : "");
+            if (node.InitialValue != null)
+            {
+                CompatibleTypes(declarationType, node.InitialValue.Type, "initializer");
+            }
         }
 
         public override void Visit(ElifNode node)
         {
-            throw new NotImplementedException();
+            symbolTable.EnterScope();
+            node.ControlExpr.Accept(this);
+
+            if (node.ControlExpr.Type != "bool")
+            {
+                throw new Exception($"Elif control expression expected type bool, was {node.ControlExpr.Type}");
+            }
+
+            node.ElifBody.Accept(this);
+            symbolTable.CloseScope();
         }
 
         public override void Visit(ElseNode node)
         {
-            throw new NotImplementedException();
+            symbolTable.EnterScope();
+            node.ElseBody.Accept(this);
+            symbolTable.CloseScope();
         }
 
         public override void Visit(FieldAccessNode node)
         {
-            throw new NotImplementedException();
+            return;
         }
 
         public override void Visit(FloatValueNode node)
         {
-            throw new NotImplementedException();
+            node.Type = "float";
         }
 
         public override void Visit(FormalParamNode node)
         {
-            throw new NotImplementedException();
+            return;
         }
 
         public override void Visit(FuncCallExpressionNode node)
         {
-            throw new NotImplementedException();
+            node.ActualParameters?.ForEach(x => x.Accept(this));
+            var astNode = symbolTable.RetrieveSymbol(node.Id.Id);
+            if (astNode is FunctionDclNode funcDcl)
+            {
+                if (node.ActualParameters.Count == funcDcl.FormalParamNodes.Count)
+                {
+                    for (int i = 0; i < node.ActualParameters.Count; i++)
+                    {
+                        CompatibleTypes(node.ActualParameters[i].Type, funcDcl.FormalParamNodes[i].Type, "parameter type");
+                    }
+                }
+                else
+                {
+                    throw new Exception($"No function of name {node.Id.Id} with {node.ActualParameters.Count} found");
+                }
+
+                node.Type = funcDcl.ReturnType;
+            }
+            else
+            {
+                throw new Exception($"Function with id: {node.Id.Id} not found");
+            }
         }
 
         public override void Visit(FuncCallStmtNode node)
         {
-            throw new NotImplementedException();
+            node.ActualParameters?.ForEach(x => x.Accept(this));
+            var astNode = symbolTable.RetrieveSymbol(node.Id.Id);
+            if (astNode is FunctionDclNode funcDcl)
+            {
+                if (node.ActualParameters.Count == funcDcl.FormalParamNodes.Count)
+                {
+                    for (int i = 0; i < node.ActualParameters.Count; i++)
+                    {
+                        CompatibleTypes(node.ActualParameters[i].Type, funcDcl.FormalParamNodes[i].Type, "parameter type");
+                    }
+                }
+                else
+                {
+                    throw new Exception($"No function of name {node.Id.Id} with {node.ActualParameters.Count} found");
+                }
+            }
+            else
+            {
+                throw new Exception($"Function with id: {node.Id.Id} not found");
+            }
         }
 
         public override void Visit(FunctionDclNode node)
         {
-            throw new NotImplementedException();
+            string returnNodeType;
+            symbolTable.EnterScope();
+            node.FuncBody.Accept(this);
+            List<ReturnNode> returnNodes = node.FuncBody.StmtNodes.Where(x => x is ReturnNode).Select(x => (ReturnNode)x).ToList();
+            foreach (ReturnNode rNode in returnNodes)
+            {
+                returnNodeType = (rNode.ReturnValue != null) ? rNode.ReturnValue.Type : "void";
+                if (returnNodeType != node.ReturnType)
+                {
+                    throw new Exception($"Return type invalid. Expected {node.ReturnType}, found {returnNodeType}");
+                }
+            }
+
+            symbolTable.CloseScope();
         }
 
         public override void Visit(GlobalDclNode node)
@@ -324,5 +256,152 @@ namespace SemanticLib
         {
             throw new NotImplementedException();
         }
+
+        private void CompareBinaryTypes(BinaryExpressionNode node)
+        {
+            switch (node.Operator)
+            {
+                case BinaryOperator.PLUS:
+                case BinaryOperator.MINUS:
+                case BinaryOperator.MULTIPLY:
+                case BinaryOperator.POWER:
+                    if (node.LeftExpr.Type == "int")
+                    {
+                        if (node.RightExpr.Type == "int")
+                        {
+                            node.Type = "int";
+                        }
+                        else if (node.RightExpr.Type == "float")
+                        {
+                            node.Type = "float";
+                        }
+                        else
+                        {
+                            throw new Exception($"Invalid binary operation (int plus {node.RightExpr.Type} isn't legal)");
+                        }
+                    }
+                    else if (node.LeftExpr.Type == "float")
+                    {
+                        if (node.RightExpr.Type == "int" || node.RightExpr.Type == "float")
+                        {
+                            node.Type = "float";
+                        }
+                        else
+                        {
+                            throw new Exception($"Invalid binary operation (int plus {node.RightExpr.Type} isn't legal)");
+                        }
+                    }
+                    break;
+                case BinaryOperator.DIVIDE:
+                    if (node.LeftExpr.Type == "int" || node.LeftExpr.Type == "float")
+                    {
+                        if (node.RightExpr.Type == "int" || node.RightExpr.Type == "float")
+                        {
+                            node.Type = "float";
+                        }
+                        else
+                        {
+                            throw new Exception($"Invalid binary operation (division with type {node.RightExpr.Type} isn't legal)");
+                        }
+                    }
+                    else
+                    {
+                        throw new Exception($"Invalid binary operation (division with type {node.LeftExpr.Type} isn't legal)");
+                    }
+                    break;
+                case BinaryOperator.MODULO:
+                    if (node.LeftExpr.Type == "int" || node.LeftExpr.Type == "float")
+                    {
+                        if (node.RightExpr.Type == "int")
+                        {
+                            node.Type = node.LeftExpr.Type;
+                        }
+                        else
+                        {
+                            throw new Exception($"Invalid binary operation (modulo with type {node.RightExpr.Type} isn't legal)");
+                        }
+                    }
+                    else
+                    {
+                        throw new Exception($"Invalid binary operation (modulo with type {node.LeftExpr.Type} isn't legal)");
+                    }
+                    break;
+                case BinaryOperator.GREATER_OR_EQUALS:
+                case BinaryOperator.GREATER_THAN:
+                case BinaryOperator.LESS_OR_EQUALS:
+                case BinaryOperator.LESS_THAN:
+                case BinaryOperator.NOT_EQUALS:
+                case BinaryOperator.EQUALS:
+                    if (node.LeftExpr.Type == "int" || node.LeftExpr.Type == "float")
+                    {
+                        if (node.RightExpr.Type == "int" || node.RightExpr.Type == "float")
+                        {
+                            node.Type = "bool";
+                        }
+                        else
+                        {
+                            throw new Exception($"Invalid binary operation (comparison with  {node.RightExpr.Type} isn't legal)");
+                        }
+                    }
+                    break;
+                case BinaryOperator.AND:
+                case BinaryOperator.OR:
+                    if (node.LeftExpr.Type == "bool" && node.RightExpr.Type == "bool")
+                    {
+                        node.Type = "bool";
+                    }
+                    break;
+                case BinaryOperator.STRING_CONCAT:
+                    if (node.LeftExpr.Type == "bool" || node.LeftExpr.Type == "int" || node.LeftExpr.Type == "float" || node.LeftExpr.Type == "string")
+                    {
+                        if (node.RightExpr.Type == "bool" || node.RightExpr.Type == "int" || node.RightExpr.Type == "float" || node.RightExpr.Type == "string")
+                        {
+                            node.Type = "string";
+                        }
+                        else
+                        {
+                            throw new Exception($"Invalid binary operation (string concatenation with {node.RightExpr.Type} isn't legal)");
+                        }
+                    }
+                    else
+                    {
+                        throw new Exception($"Invalid binary operation (string concatenation with {node.LeftExpr.Type} isn't legal)");
+                    }
+                    break;
+                default:
+                    throw new Exception($"Invalid binary operator");
+            }
+        }
+
+        public void CompatibleTypes(string firstType, string secondType, string exceptionString)
+        {
+            if (firstType != secondType)
+            {
+                switch (firstType)
+                {
+                    case "int":
+                        if (secondType != "float")
+                        {
+                            throw new Exception($"Invalid {exceptionString} (can't convert {secondType} to type int)");
+                        }
+                        break;
+                    case "float":
+                        if (secondType != "int")
+                        {
+                            throw new Exception($"Invalid {exceptionString} (can't convert {secondType} to type float)");
+                        }
+                        break;
+                    case "string":
+                        if (secondType != "float" && secondType != "int" && secondType != "bool")
+                        {
+                            throw new Exception($"Invalid {exceptionString} (can't convert {secondType} to type string)");
+                        }
+                        break;
+                    default:
+                        throw new Exception($"Invalid {exceptionString} (can't convert {secondType} to type {firstType})");
+                }
+            }
+        }
+
     }
 }
