@@ -497,6 +497,8 @@ namespace SemanticLib
                     // ArrayOperation
                     else if (idOp is ArrayAccessNode array)
                     {
+                        array.Accept(this); // NYT, typetjek på indeks.
+
                         // Prevent two-dimensional arrays
                         int idOpIndex = node.GetIdOperations.IndexOf(idOp);
                         if (idOpIndex > 0)
