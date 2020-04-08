@@ -7,7 +7,7 @@ namespace ParserLib.AST
     public class PlayLoopNode : StmtNode
     {
         public IdNode Player;
-        public IdNode Opponent;
+        public IdNode Opponents;
         public ExpressionNode AllPlayers;
         public BlockNode PlayLoopBody;
         public ExpressionNode UntilCondition;
@@ -15,7 +15,7 @@ namespace ParserLib.AST
         public PlayLoopNode(IdNode player, IdNode opponent, ExpressionNode allPlayers, BlockNode playLoopBody, ExpressionNode untilCondition)
         {
             this.Player = player;
-            this.Opponent = opponent;
+            this.Opponents = opponent;
             this.AllPlayers = allPlayers;
             this.PlayLoopBody = playLoopBody;
             this.UntilCondition = untilCondition;

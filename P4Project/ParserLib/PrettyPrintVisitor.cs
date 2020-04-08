@@ -271,7 +271,7 @@ namespace ParserLib
             Console.Write("play (");
             node.Player.Accept(this);
             Console.Write(" vs ");
-            node.Opponent.Accept(this);
+            node.Opponents.Accept(this);
             Console.Write(" in ");
             node.AllPlayers.Accept(this);
             Console.Write(")");

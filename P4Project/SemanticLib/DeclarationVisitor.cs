@@ -60,8 +60,8 @@ namespace SemanticLib
         {
             if (node.Id.IdOperations?.Count > 0)
             {
-                // Error
-                return;
+                throw new Exception("Invalid identifier declaration");
+
             }
 
             symbolTable.EnterSymbol(node.Id.Id, node);
@@ -97,8 +97,7 @@ namespace SemanticLib
         {
             if (node.Id.IdOperations?.Count > 0)
             {
-                // Error
-                return;
+                throw new Exception("Invalid parameter declaration");
             }
 
             symbolTable.EnterSymbol(node.Id.Id, node);
@@ -126,8 +125,7 @@ namespace SemanticLib
         {
             if (node.Id.IdOperations?.Count > 0)
             {
-                // Error
-                return;
+                throw new Exception("Invalid identifier declaration");
             }
 
             if (!(symbolTable.GlobalScope.Symbols.ContainsKey(node.ReturnType) || node.ReturnType == "int" || node.ReturnType == "float" || node.ReturnType == "bool" || node.ReturnType == "string" || node.ReturnType == "void"))
@@ -149,8 +147,7 @@ namespace SemanticLib
         {
             if(node.Id.IdOperations?.Count > 0)
             {
-                // Error
-                return;
+                throw new Exception("Invalid identifier declaration");
             }
 
             node.InitialValue?.Accept(this);
@@ -183,15 +180,14 @@ namespace SemanticLib
 
         public override void Visit(PlayLoopNode node)
         {
-            if (node.Player.IdOperations?.Count > 0 || node.Opponent.IdOperations?.Count > 0)
+            if (node.Player.IdOperations?.Count > 0 || node.Opponents.IdOperations?.Count > 0)
             {
-                // Error
-                return;
+                throw new Exception("Invalid identifier declaration");
             }
 
             symbolTable.NewScope();
             symbolTable.EnterSymbol(node.Player.Id, node.Player);
-            symbolTable.EnterSymbol(node.Opponent.Id, node.Opponent);
+            symbolTable.EnterSymbol(node.Opponents.Id, node.Opponents);
             node.AllPlayers.Accept(this);
             node.PlayLoopBody.Accept(this);
             node.UntilCondition.Accept(this);
@@ -232,8 +228,7 @@ namespace SemanticLib
         {
             if (node.Id.IdOperations?.Count > 0)
             {
-                // Error
-                return;
+                throw new Exception("Invalid identifier declaration");
             }
 
             symbolTable.NewScope();

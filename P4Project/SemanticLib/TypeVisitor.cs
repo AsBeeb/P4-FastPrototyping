@@ -39,7 +39,6 @@ namespace SemanticLib
             CompareBinaryTypes(node);
         }
 
-
         public override void Visit(BlockNode node)
         {
             node.StmtNodes?.ForEach(x => x.Accept(this));
@@ -174,12 +173,14 @@ namespace SemanticLib
 
         public override void Visit(GlobalDclNode node)
         {
-            throw new NotImplementedException();
+            node.InitialValue.Accept(this);
+            string declarationType = node.Type + (node.IsArray ? "[]" : "");
+            CompatibleTypes(declarationType, node.InitialValue.Type, "initializer");
         }
 
         public override void Visit(IdExpressionNode node)
         {
-            throw new NotImplementedException();
+            // Lav det om morgenen :))
         }
 
         public override void Visit(IdNode node)
@@ -189,37 +190,62 @@ namespace SemanticLib
 
         public override void Visit(IfNode node)
         {
-            throw new NotImplementedException();
+            symbolTable.EnterScope();
+            node.ControlExpression.Accept(this);
+            if (node.ControlExpression.Type != "bool")
+            {
+                throw new Exception($"If control expression expected type bool, was {node.ControlExpression.Type}");
+            }
+            node.IfBody.Accept(this);
+            symbolTable.CloseScope();
+            node.ElifNodes?.ForEach(x => x.Accept(this));
+            node.ElseNode?.Accept(this);
         }
 
         public override void Visit(IntValueNode node)
         {
-            throw new NotImplementedException();
+            node.Type = "int";
         }
 
         public override void Visit(PlayLoopNode node)
         {
-            throw new NotImplementedException();
+            symbolTable.EnterScope();
+            node.AllPlayers.Accept(this);
+            node.UntilCondition.Accept(this);
+            if (!node.AllPlayers.Type.Contains("[]")){
+                throw new Exception("PlayLoop expected array");
+            }
+            if (node.UntilCondition.Type != "bool")
+            {
+                throw new Exception("Expected boolean expression in the until condition.");
+            }
+            node.Player.Type = node.AllPlayers.Type.Replace("[]", "");
+            node.Opponents.Type = node.AllPlayers.Type;
+            node.PlayLoopBody.Accept(this);
+            symbolTable.CloseScope();
         }
 
         public override void Visit(ProgNode node)
         {
-            throw new NotImplementedException();
+            node.TopDclNodes.ForEach(x => x.Accept(this));
         }
 
         public override void Visit(ReturnNode node)
         {
-            throw new NotImplementedException();
+            node.ReturnValue.Accept(this);
         }
 
         public override void Visit(StringValueNode node)
         {
-            throw new NotImplementedException();
+            node.Type = "string";
         }
 
         public override void Visit(StructDclNode node)
         {
-            throw new NotImplementedException();
+            symbolTable.EnterScope();
+            node.Declarations?.ForEach(x => x.Accept(this));
+            node.Constructor?.Accept(this);
+            symbolTable.CloseScope();
         }
 
         public override void Visit(UnaryExpressionNode node)
@@ -254,7 +280,14 @@ namespace SemanticLib
 
         public override void Visit(WhileNode node)
         {
-            throw new NotImplementedException();
+            symbolTable.EnterScope();
+            node.ControlExpr.Accept(this);
+            if (node.ControlExpr.Type != "bool")
+            {
+                throw new Exception($"Expected boolean expression, found {node.ControlExpr.Type}.");
+            }
+            node.WhileLoopBody.Accept(this);
+            symbolTable.CloseScope();
         }
 
         private void CompareBinaryTypes(BinaryExpressionNode node)
@@ -274,10 +307,10 @@ namespace SemanticLib
                         else if (node.RightExpr.Type == "float")
                         {
                             node.Type = "float";
-                        }
+                        }   
                         else
                         {
-                            throw new Exception($"Invalid binary operation (int plus {node.RightExpr.Type} isn't legal)");
+                            throw new Exception($"Invalid binary operation (int plus {node.RightExpr.Type} isn't legal).");
                         }
                     }
                     else if (node.LeftExpr.Type == "float")
