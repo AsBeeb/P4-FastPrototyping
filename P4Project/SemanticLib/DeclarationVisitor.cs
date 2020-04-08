@@ -285,7 +285,7 @@ namespace SemanticLib
                                 }
                                 else
                                 {
-                                    throw new Exception($"{structDcl.Id.Id} is missing the field {field.Id.Id}.");
+                                    throw new Exception($"Struct: {structDcl.Id.Id} is missing the field: {field.Id.Id}.");
                                 }
                             }
                             else
