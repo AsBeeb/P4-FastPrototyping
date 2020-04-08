@@ -7,7 +7,7 @@ namespace ParserLib
 {
     class SyntacticalException : Exception
     {
-        public SyntacticalException(Token problemToken): base($"Unexpected {problemToken.Type} at line {problemToken.Line}")
+        public SyntacticalException(Token problemToken): base($"Unexpected {problemToken.Type} at line {problemToken.Line}.")
         {
         }
     }

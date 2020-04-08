@@ -60,7 +60,7 @@ namespace SemanticLib
         {
             if (node.Id.IdOperations?.Count > 0)
             {
-                throw new Exception("Invalid identifier declaration");
+                throw new Exception("Invalid identifier declaration.");
 
             }
 
@@ -97,7 +97,7 @@ namespace SemanticLib
         {
             if (node.Id.IdOperations?.Count > 0)
             {
-                throw new Exception("Invalid parameter declaration");
+                throw new Exception("Invalid parameter declaration.");
             }
 
             symbolTable.EnterSymbol(node.Id.Id, node);
@@ -125,12 +125,12 @@ namespace SemanticLib
         {
             if (node.Id.IdOperations?.Count > 0)
             {
-                throw new Exception("Invalid identifier declaration");
+                throw new Exception("Invalid identifier declaration.");
             }
 
             if (!(symbolTable.GlobalScope.Symbols.ContainsKey(node.ReturnType) || node.ReturnType == "int" || node.ReturnType == "float" || node.ReturnType == "bool" || node.ReturnType == "string" || node.ReturnType == "void"))
             {
-                throw new Exception("Type doesn't exist");
+                throw new Exception("Type doesn't exist.");
             }
 
             symbolTable.NewScope();
@@ -147,7 +147,7 @@ namespace SemanticLib
         {
             if(node.Id.IdOperations?.Count > 0)
             {
-                throw new Exception("Invalid identifier declaration");
+                throw new Exception("Invalid identifier declaration.");
             }
 
             node.InitialValue?.Accept(this);
@@ -182,7 +182,7 @@ namespace SemanticLib
         {
             if (node.Player.IdOperations?.Count > 0 || node.Opponents.IdOperations?.Count > 0)
             {
-                throw new Exception("Invalid identifier declaration");
+                throw new Exception("Invalid identifier declaration.");
             }
 
             symbolTable.NewScope();
@@ -211,6 +211,10 @@ namespace SemanticLib
                         break;
                 }
             }
+            if (!(symbolTable.RetrieveSymbol("main") is FunctionDclNode))
+            {
+                throw new Exception("No entry point found (Missing main func).");
+            }
             node.TopDclNodes.ForEach(x => x.Accept(this));
         }
 
@@ -228,7 +232,7 @@ namespace SemanticLib
         {
             if (node.Id.IdOperations?.Count > 0)
             {
-                throw new Exception("Invalid identifier declaration");
+                throw new Exception("Invalid identifier declaration.");
             }
 
             symbolTable.NewScope();
@@ -270,7 +274,7 @@ namespace SemanticLib
                         {
                             if (tempIsArray && dclNode.GetIsArray)
                             {
-                                throw new Exception("Illegal field reference on array");
+                                throw new Exception("Illegal field reference on array.");
                             }
 
                             ASTnode tempNode = symbolTable.RetrieveSymbol(dclNode.GetDclType);
@@ -285,7 +289,7 @@ namespace SemanticLib
                             }
                             else
                             {
-                                throw new Exception("Undeclared struct access");
+                                throw new Exception("Undeclared struct access.");
                             }
                         }
                     }
@@ -299,7 +303,7 @@ namespace SemanticLib
                             IdOperationNode previousIdOp = node.GetIdOperations[idOpIndex - 1];
                             if (previousIdOp is ArrayAccessNode)
                             {
-                                throw new Exception("Illegal two-dimensional array");
+                                throw new Exception("Illegal two-dimensional array.");
                             }
                         }
 
@@ -312,7 +316,7 @@ namespace SemanticLib
                         }
                         else
                         {
-                            throw new Exception("ID was not an declared as array");
+                            throw new Exception("ID was not an declared as array.");
                         }
                     }
                 }

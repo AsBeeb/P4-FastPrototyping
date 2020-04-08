@@ -31,7 +31,7 @@ namespace ParserLib
             else
             {
                 // Throw exception...
-                throw new Exception($"Line: {tokens.Peek().Line}. Expected type was {tokenType}, but the token was {tokens.Peek().Type}");
+                throw new Exception($"Line: {tokens.Peek().Line}. Expected type was {tokenType}, but the token was {tokens.Peek().Type}.");
             }
         }
 

@@ -33,7 +33,7 @@ namespace SemanticLib
             }
             else
             {
-                throw new Exception("Ran out of scopes");
+                throw new Exception("Ran out of scopes.");
             }
         }
         public void CloseScope()
@@ -50,7 +50,7 @@ namespace SemanticLib
             }
             else
             {
-                throw new Exception("Symbol already declared");
+                throw new Exception("Symbol already declared.");
             }
         }
 
@@ -67,7 +67,7 @@ namespace SemanticLib
                 viewingScope = viewingScope.Parent;
             }
             while (viewingScope != null);
-            throw new Exception("Symbol not found");
+            throw new Exception("Symbol not found.");
         }
 
         public bool IsDeclaredLocally(string symbolToFind)
@@ -85,7 +85,7 @@ namespace SemanticLib
             foreach(KeyValuePair<string, ASTnode> kp in header.Symbols)
             {
                 // Print
-                Console.WriteLine("Level: " + level + " - Name: " + kp.Key + " - Type: " + kp.Value.GetType());
+                Console.WriteLine("Level: " + level + " - Name: " + kp.Key + " - Type: " + kp.Value.GetType() + ".");
             }
         }
     }

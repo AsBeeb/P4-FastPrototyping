@@ -21,7 +21,7 @@ namespace SemanticLib
             node.IndexValue.Accept(this);
             if (node.IndexValue.Type != "int")
             {
-                throw new Exception("ArrayIndex is not of type integer (not cool)");
+                throw new Exception("ArrayIndex is not of type integer (not cool).");
             }
         }
 
@@ -74,7 +74,7 @@ namespace SemanticLib
 
             if (node.ControlExpr.Type != "bool")
             {
-                throw new Exception($"Elif control expression expected type bool, was {node.ControlExpr.Type}");
+                throw new Exception($"Elif control expression expected type bool, was {node.ControlExpr.Type}.");
             }
 
             node.ElifBody.Accept(this);
@@ -118,14 +118,14 @@ namespace SemanticLib
                 }
                 else
                 {
-                    throw new Exception($"No function of name {node.Id.Id} with {node.ActualParameters.Count} found");
+                    throw new Exception($"No function of name {node.Id.Id} with {node.ActualParameters.Count} found.");
                 }
 
                 node.Type = funcDcl.ReturnType;
             }
             else
             {
-                throw new Exception($"Function with id: {node.Id.Id} not found");
+                throw new Exception($"Function with id: {node.Id.Id} not found.");
             }
         }
 
@@ -144,12 +144,12 @@ namespace SemanticLib
                 }
                 else
                 {
-                    throw new Exception($"No function of name {node.Id.Id} with {node.ActualParameters.Count} found");
+                    throw new Exception($"No function of name {node.Id.Id} with {node.ActualParameters.Count} found.");
                 }
             }
             else
             {
-                throw new Exception($"Function with id: {node.Id.Id} not found");
+                throw new Exception($"Function with id: {node.Id.Id} not found.");
             }
         }
 
@@ -164,7 +164,7 @@ namespace SemanticLib
                 returnNodeType = (rNode.ReturnValue != null) ? rNode.ReturnValue.Type : "void";
                 if (returnNodeType != node.ReturnType)
                 {
-                    throw new Exception($"Return type invalid. Expected {node.ReturnType}, found {returnNodeType}");
+                    throw new Exception($"Return type invalid. Expected {node.ReturnType}, found {returnNodeType}.");
                 }
             }
 
@@ -194,7 +194,7 @@ namespace SemanticLib
             node.ControlExpression.Accept(this);
             if (node.ControlExpression.Type != "bool")
             {
-                throw new Exception($"If control expression expected type bool, was {node.ControlExpression.Type}");
+                throw new Exception($"If control expression expected type bool, was {node.ControlExpression.Type}.");
             }
             node.IfBody.Accept(this);
             symbolTable.CloseScope();
@@ -213,7 +213,7 @@ namespace SemanticLib
             node.AllPlayers.Accept(this);
             node.UntilCondition.Accept(this);
             if (!node.AllPlayers.Type.Contains("[]")){
-                throw new Exception("PlayLoop expected array");
+                throw new Exception("PlayLoop expected array.");
             }
             if (node.UntilCondition.Type != "bool")
             {
@@ -260,7 +260,7 @@ namespace SemanticLib
                     }
                     else
                     {
-                        throw new Exception($"Invalid type: {node.ExprNode.Type}. Expected type bool");
+                        throw new Exception($"Invalid type: {node.ExprNode.Type}. Expected type bool.");
                     }
                         break;
                 case UnaryOperator.UNARY_MINUS:
@@ -270,11 +270,11 @@ namespace SemanticLib
                     }
                     else
                     {
-                        throw new Exception($"Invalid type {node.ExprNode.Type}. Expected int or float");
+                        throw new Exception($"Invalid type {node.ExprNode.Type}. Expected int or float.");
                     }
                     break;
                 default:
-                    throw new Exception($"Invalid unary operator");
+                    throw new Exception($"Invalid unary operator.");
             }
         }
 
@@ -321,7 +321,7 @@ namespace SemanticLib
                         }
                         else
                         {
-                            throw new Exception($"Invalid binary operation (int plus {node.RightExpr.Type} isn't legal)");
+                            throw new Exception($"Invalid binary operation (int plus {node.RightExpr.Type} isn't legal).");
                         }
                     }
                     break;
@@ -334,12 +334,12 @@ namespace SemanticLib
                         }
                         else
                         {
-                            throw new Exception($"Invalid binary operation (division with type {node.RightExpr.Type} isn't legal)");
+                            throw new Exception($"Invalid binary operation (division with type {node.RightExpr.Type} isn't legal).");
                         }
                     }
                     else
                     {
-                        throw new Exception($"Invalid binary operation (division with type {node.LeftExpr.Type} isn't legal)");
+                        throw new Exception($"Invalid binary operation (division with type {node.LeftExpr.Type} isn't legal).");
                     }
                     break;
                 case BinaryOperator.MODULO:
@@ -351,12 +351,12 @@ namespace SemanticLib
                         }
                         else
                         {
-                            throw new Exception($"Invalid binary operation (modulo with type {node.RightExpr.Type} isn't legal)");
+                            throw new Exception($"Invalid binary operation (modulo with type {node.RightExpr.Type} isn't legal).");
                         }
                     }
                     else
                     {
-                        throw new Exception($"Invalid binary operation (modulo with type {node.LeftExpr.Type} isn't legal)");
+                        throw new Exception($"Invalid binary operation (modulo with type {node.LeftExpr.Type} isn't legal).");
                     }
                     break;
                 case BinaryOperator.GREATER_OR_EQUALS:
@@ -373,7 +373,7 @@ namespace SemanticLib
                         }
                         else
                         {
-                            throw new Exception($"Invalid binary operation (comparison with  {node.RightExpr.Type} isn't legal)");
+                            throw new Exception($"Invalid binary operation (comparison with  {node.RightExpr.Type} isn't legal).");
                         }
                     }
                     break;
@@ -393,16 +393,16 @@ namespace SemanticLib
                         }
                         else
                         {
-                            throw new Exception($"Invalid binary operation (string concatenation with {node.RightExpr.Type} isn't legal)");
+                            throw new Exception($"Invalid binary operation (string concatenation with {node.RightExpr.Type} isn't legal).");
                         }
                     }
                     else
                     {
-                        throw new Exception($"Invalid binary operation (string concatenation with {node.LeftExpr.Type} isn't legal)");
+                        throw new Exception($"Invalid binary operation (string concatenation with {node.LeftExpr.Type} isn't legal).");
                     }
                     break;
                 default:
-                    throw new Exception($"Invalid binary operator");
+                    throw new Exception($"Invalid binary operator.");
             }
         }
 
@@ -415,23 +415,23 @@ namespace SemanticLib
                     case "int":
                         if (secondType != "float")
                         {
-                            throw new Exception($"Invalid {exceptionString} (can't convert {secondType} to type int)");
+                            throw new Exception($"Invalid {exceptionString} (can't convert {secondType} to type int).");
                         }
                         break;
                     case "float":
                         if (secondType != "int")
                         {
-                            throw new Exception($"Invalid {exceptionString} (can't convert {secondType} to type float)");
+                            throw new Exception($"Invalid {exceptionString} (can't convert {secondType} to type float).");
                         }
                         break;
                     case "string":
                         if (secondType != "float" && secondType != "int" && secondType != "bool")
                         {
-                            throw new Exception($"Invalid {exceptionString} (can't convert {secondType} to type string)");
+                            throw new Exception($"Invalid {exceptionString} (can't convert {secondType} to type string).");
                         }
                         break;
                     default:
-                        throw new Exception($"Invalid {exceptionString} (can't convert {secondType} to type {firstType})");
+                        throw new Exception($"Invalid {exceptionString} (can't convert {secondType} to type {firstType}).");
                 }
             }
         }
