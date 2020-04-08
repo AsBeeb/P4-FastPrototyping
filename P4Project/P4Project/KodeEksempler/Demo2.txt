@@ -4,12 +4,11 @@ global float fsa = 2.0;
 func void main()
 {
 	local int[] k;
-	local int hihi.hej = k[2][3];
 
 	if(true)
 	{
 		local int newValue = 2222;
-		local int anotherVal = (newValue + 20);
+		local int anotherVal = k[2];
 	} 
 	else
 	{
@@ -17,10 +16,10 @@ func void main()
 	};
 }
 
-func string myFunc(string test, buster type)
+func string myFunc(float test, int type)
 {
 	local string nyStr = "Hej Hej";
-	
+	local int a = test + 2;
 	return nyStr;
 }
 

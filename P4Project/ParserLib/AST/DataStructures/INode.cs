@@ -6,5 +6,7 @@ namespace ParserLib.AST.DataStructures
     {
         string GetId { get; }
         List<IdOperationNode> GetIdOperations { get; }
+
+        void SetType(string type);
     }
 }

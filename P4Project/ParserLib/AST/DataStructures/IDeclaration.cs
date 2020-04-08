@@ -2,7 +2,7 @@
 {
     public interface IDeclaration
     {
-        IdNode GetId { get; }
+        //IdNode GetId { get; }
         bool GetIsArray { get; }
         string GetDclType { get; }
     }

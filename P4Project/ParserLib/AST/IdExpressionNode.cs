@@ -5,13 +5,17 @@ using System.Text;
 
 namespace ParserLib.AST
 {
-    public class IdExpressionNode : ExpressionNode, INode
+    public class IdExpressionNode : ExpressionNode, INode, IDeclaration
     {
         public string Id;
         public List<IdOperationNode> IdOperations;
 
         public string GetId => Id;
         public List<IdOperationNode> GetIdOperations => IdOperations;
+
+        public bool GetIsArray => Type.Contains("[]");
+
+        public string GetDclType => Type.Replace("[]", "");
 
         public IdExpressionNode(string id, List<IdOperationNode> operations)
         {
@@ -22,6 +26,12 @@ namespace ParserLib.AST
         public override void Accept(Visitor v)
         {
             v.Visit(this);
+        }
+
+        public void SetType(string type)
+        {
+            Console.WriteLine("Set" + Id + "type to: " + type);
+            Type = type;
         }
     }
 }

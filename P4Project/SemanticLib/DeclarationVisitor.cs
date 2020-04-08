@@ -152,12 +152,12 @@ namespace SemanticLib
 
         public override void Visit(IdExpressionNode node)
         {
-            VisitIdNode(node);
+            //VisitIdNode(node);
         }
 
         public override void Visit(IdNode node)
         {
-            VisitIdNode(node);
+            //VisitIdNode(node);
         }
 
         public override void Visit(IfNode node)
@@ -251,81 +251,81 @@ namespace SemanticLib
             symbolTable.CloseScope();
         }
 
-        private void VisitIdNode(INode node)
-        {
-            ASTnode rootNode = symbolTable.RetrieveSymbol(node.GetId);
-            if (rootNode != null)
-            {
-                ASTnode previousNode = rootNode;
-                bool tempIsArray = true;
-                if (node.GetIdOperations == null)
-                    return;
+        //private void VisitIdNode(INode node)
+        //{
+        //    ASTnode rootNode = symbolTable.RetrieveSymbol(node.GetId);
+        //    if (rootNode != null)
+        //    {
+        //        ASTnode previousNode = rootNode;
+        //        bool tempIsArray = true;
+        //        if (node.GetIdOperations == null)
+        //            return;
 
-                foreach (IdOperationNode idOp in node.GetIdOperations)
-                {
-                    // FieldOperation
-                    if (idOp is FieldAccessNode field)
-                    {
-                        // DeclaratioNode and GlobalDclNode
-                        if (previousNode is IDeclaration dclNode)
-                        {
-                            if (tempIsArray && dclNode.GetIsArray)
-                            {
-                                throw new Exception("Illegal field reference on array.");
-                            }
+        //        foreach (IdOperationNode idOp in node.GetIdOperations)
+        //        {
+        //            // FieldOperation
+        //            if (idOp is FieldAccessNode field)
+        //            {
+        //                // DeclaratioNode and GlobalDclNode
+        //                if (previousNode is IDeclaration dclNode)
+        //                {
+        //                    if (tempIsArray && dclNode.GetIsArray)
+        //                    {
+        //                        throw new Exception("Illegal field reference on array.");
+        //                    }
 
-                            ASTnode tempNode = symbolTable.RetrieveSymbol(dclNode.GetDclType);
-                            if (tempNode is StructDclNode structDcl)
-                            {
-                                DeclarationNode tempDclNode = structDcl.Declarations.FirstOrDefault(x => x.Id.Id == field.Id.Id);
-                                if (tempDclNode != null)
-                                {
-                                    previousNode = tempDclNode;
-                                    tempIsArray = tempDclNode.GetIsArray;
-                                }
-                                else
-                                {
-                                    throw new Exception($"Struct: {structDcl.Id.Id} is missing the field: {field.Id.Id}.");
-                                }
-                            }
-                            else
-                            {
-                                throw new Exception("Undeclared struct access.");
-                            }
-                        }
-                        else
-                        {
-                            throw new Exception("Previousnode wasn't IDeclaration type");
-                        }
-                    }
-                    // ArrayOperation
-                    else if (idOp is ArrayAccessNode array)
-                    {
-                        // Prevent two-dimensional arrays
-                        int idOpIndex = node.GetIdOperations.IndexOf(idOp);
-                        if (idOpIndex > 0)
-                        {
-                            IdOperationNode previousIdOp = node.GetIdOperations[idOpIndex - 1];
-                            if (previousIdOp is ArrayAccessNode)
-                            {
-                                throw new Exception("Illegal two-dimensional array.");
-                            }
-                        }
+        //                    ASTnode tempNode = symbolTable.RetrieveSymbol(dclNode.GetDclType);
+        //                    if (tempNode is StructDclNode structDcl)
+        //                    {
+        //                        DeclarationNode tempDclNode = structDcl.Declarations.FirstOrDefault(x => x.Id.Id == field.Id.Id);
+        //                        if (tempDclNode != null)
+        //                        {
+        //                            previousNode = tempDclNode;
+        //                            tempIsArray = tempDclNode.GetIsArray;
+        //                        }
+        //                        else
+        //                        {
+        //                            throw new Exception($"Struct: {structDcl.Id.Id} is missing the field: {field.Id.Id}.");
+        //                        }
+        //                    }
+        //                    else
+        //                    {
+        //                        throw new Exception("Undeclared struct access.");
+        //                    }
+        //                }
+        //                else
+        //                {
+        //                    throw new Exception("Previousnode wasn't IDeclaration type");
+        //                }
+        //            }
+        //            // ArrayOperation
+        //            else if (idOp is ArrayAccessNode array)
+        //            {
+        //                // Prevent two-dimensional arrays
+        //                int idOpIndex = node.GetIdOperations.IndexOf(idOp);
+        //                if (idOpIndex > 0)
+        //                {
+        //                    IdOperationNode previousIdOp = node.GetIdOperations[idOpIndex - 1];
+        //                    if (previousIdOp is ArrayAccessNode)
+        //                    {
+        //                        throw new Exception("Illegal two-dimensional array.");
+        //                    }
+        //                }
 
-                        if (previousNode is IDeclaration dcl)
-                        {
-                            if (dcl.GetIsArray)
-                            {
-                                tempIsArray = false;
-                            }
-                        }
-                        else
-                        {
-                            throw new Exception("ID was not an declared as array.");
-                        }
-                    }
-                }
-            }
-        }
+        //                if (previousNode is IDeclaration dcl)
+        //                {
+        //                    if (dcl.GetIsArray)
+        //                    {
+        //                        tempIsArray = false;
+        //                    }
+        //                }
+        //                else
+        //                {
+        //                    throw new Exception("ID was not an declared as array.");
+        //                }
+        //            }
+        //        }
+        //    }
+        //}
     }
 }

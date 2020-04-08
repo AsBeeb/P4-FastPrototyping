@@ -25,7 +25,7 @@ namespace P4Project
             string fileToOpen = "Demo2";
             string fileExtension = ".txt";
             //string filePath = String.Format("{0}{1}{2}{3}", docPath, gitPath, fileToOpen, fileExtension);
-            string filePath = @"C:\Users\Michael\Source\Repos\P4-FastPrototyping\P4Project\P4Project\KodeEksempler\Demo2.txt";
+            string filePath = @"C:\Users\M_Moesmann\Desktop\P4-FastPrototyping\P4Project\P4Project\KodeEksempler\Demo2.txt";
 
             using (StreamReaderExpanded reader = new StreamReaderExpanded(filePath))
             {
@@ -43,17 +43,17 @@ namespace P4Project
                 Console.WriteLine(tokenQueue.Count);
             }
             Console.WriteLine("Scan ended");
-            Console.ReadKey();
+            //Console.ReadKey();
 
             // Parser
             Parser parser = new Parser(tokenQueue);
             ProgNode AST = parser.StartParse();
             Console.WriteLine("Parser done");
-            Console.ReadKey();
+            //Console.ReadKey();
 
             // Pretty printer
-            PrettyPrintVisitor vis = new PrettyPrintVisitor();
-            vis.Visit(AST);
+            //PrettyPrintVisitor vis = new PrettyPrintVisitor();
+            //vis.Visit(AST);
 
             // Semantics
             SymbolTable symbolTable = new SymbolTable();
@@ -61,7 +61,8 @@ namespace P4Project
             dclVisitor.Visit(AST);
             symbolTable.PrintTable(symbolTable.GlobalScope, 1);
 
-
+            var typeVisitor = new TypeVisitor(symbolTable);
+            typeVisitor.Visit(AST);
 
             Console.WriteLine("Færdig");
             Console.ReadKey();
