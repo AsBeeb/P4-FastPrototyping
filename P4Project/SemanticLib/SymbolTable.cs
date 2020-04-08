@@ -18,15 +18,27 @@ namespace SemanticLib
             CurrentScope = GlobalScope;
             
         }
-        public void OpenScope ()
+        public void NewScope ()
         {
             Scope newScope = new Scope(CurrentScope);
             CurrentScope.Children.Add(newScope);
             CurrentScope = newScope;
         }
 
+        public void EnterScope()
+        {
+            if (CurrentScope.Children.Count > 0 && CurrentScope.Children[CurrentScope.NextVisitedChild] != null)
+            {
+                CurrentScope = CurrentScope.Children[CurrentScope.NextVisitedChild++];
+            }
+            else
+            {
+                throw new Exception("Ran out of scopes");
+            }
+        }
         public void CloseScope()
         {
+            CurrentScope.NextVisitedChild = 0;
             CurrentScope = CurrentScope.Parent;
         }
 

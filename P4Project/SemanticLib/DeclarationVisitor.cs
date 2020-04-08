@@ -50,7 +50,7 @@ namespace SemanticLib
 
         public override void Visit(ConstructorNode node)
         {
-            symbolTable.OpenScope();
+            symbolTable.NewScope();
             foreach (FormalParamNode formalParam in node.FormalParamNodes)
             {
                 formalParam.Accept(this);
@@ -73,7 +73,7 @@ namespace SemanticLib
 
         public override void Visit(ElifNode node)
         {
-            symbolTable.OpenScope();
+            symbolTable.NewScope();
             node.ControlExpr.Accept(this);
             node.ElifBody.Accept(this);
             symbolTable.CloseScope();
@@ -81,7 +81,7 @@ namespace SemanticLib
 
         public override void Visit(ElseNode node)
         {
-            symbolTable.OpenScope();
+            symbolTable.NewScope();
             node.ElseBody.Accept(this);
             symbolTable.CloseScope();
         }
@@ -138,7 +138,7 @@ namespace SemanticLib
                 throw new Exception("Type doesn't exist");
             }
 
-            symbolTable.OpenScope();
+            symbolTable.NewScope();
             foreach (FormalParamNode param in node.FormalParamNodes)
             {
                 param.Accept(this);
@@ -171,7 +171,7 @@ namespace SemanticLib
 
         public override void Visit(IfNode node)
         {
-            symbolTable.OpenScope();
+            symbolTable.NewScope();
             node.ControlExpression.Accept(this);
             node.IfBody.Accept(this);
             symbolTable.CloseScope();
@@ -192,7 +192,7 @@ namespace SemanticLib
                 return;
             }
 
-            symbolTable.OpenScope();
+            symbolTable.NewScope();
             symbolTable.EnterSymbol(node.Player.Id, node.Player);
             symbolTable.EnterSymbol(node.Opponent.Id, node.Opponent);
             node.AllPlayers.Accept(this);
@@ -239,7 +239,7 @@ namespace SemanticLib
                 return;
             }
 
-            symbolTable.OpenScope();
+            symbolTable.NewScope();
             node.Declarations?.ForEach(x => x.Accept(this));
             node.Constructor?.Accept(this);
             symbolTable.CloseScope();
@@ -252,7 +252,7 @@ namespace SemanticLib
 
         public override void Visit(WhileNode node)
         {
-            symbolTable.OpenScope();
+            symbolTable.NewScope();
             node.ControlExpr.Accept(this);
             node.WhileLoopBody.Accept(this);
             symbolTable.CloseScope();

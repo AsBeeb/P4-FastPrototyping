@@ -14,9 +14,12 @@ namespace SemanticLib
         public List<Scope> Children = new List<Scope>();
         public Dictionary<string, ASTnode> Symbols = new Dictionary<string, ASTnode>();
 
+        public int NextVisitedChild = 0;
+
         public Scope(Scope parent = null)
         {
             Parent = parent;
         }
+
     }
 }

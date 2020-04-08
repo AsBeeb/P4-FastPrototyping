@@ -9,6 +9,7 @@ namespace ParserLib.AST
     {
         public string Id;
         public List<IdOperationNode> IdOperations;
+        public string Type;
 
         public string GetId => Id;
         public List<IdOperationNode> GetIdOperations => IdOperations;
