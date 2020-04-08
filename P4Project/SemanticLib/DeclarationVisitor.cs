@@ -270,7 +270,7 @@ namespace SemanticLib
                         {
                             if (tempIsArray && dclNode.GetIsArray)
                             {
-                                throw new Exception("Illegal two-dimensional array");
+                                throw new Exception("Illegal field reference on array");
                             }
 
                             ASTnode tempNode = symbolTable.RetrieveSymbol(dclNode.GetDclType);
