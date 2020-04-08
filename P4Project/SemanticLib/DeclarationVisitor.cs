@@ -283,6 +283,10 @@ namespace SemanticLib
                                     previousNode = tempDclNode;
                                     tempIsArray = tempDclNode.GetIsArray;
                                 }
+                                else
+                                {
+                                    throw new Exception($"{structDcl.Id.Id} is missing the field {field.Id.Id}.");
+                                }
                             }
                             else
                             {
