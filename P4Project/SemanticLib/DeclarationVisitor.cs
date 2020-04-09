@@ -60,7 +60,7 @@ namespace SemanticLib
         {
             if (node.Id.IdOperations?.Count > 0)
             {
-                throw new Exception("Invalid identifier declaration.");
+                throw new SemanticException("Invalid identifier declaration.");
 
             }
 
@@ -97,7 +97,7 @@ namespace SemanticLib
         {
             if (node.Id.IdOperations?.Count > 0)
             {
-                throw new Exception("Invalid parameter declaration.");
+                throw new SemanticException("Invalid parameter declaration.");
             }
 
             symbolTable.EnterSymbol(node.Id.Id, node);
@@ -122,12 +122,12 @@ namespace SemanticLib
         {
             if (node.Id.IdOperations?.Count > 0)
             {
-                throw new Exception("Invalid identifier declaration.");
+                throw new SemanticException("Invalid identifier declaration.");
             }
 
             if (!(symbolTable.GlobalScope.Symbols.ContainsKey(node.ReturnType) || node.ReturnType == "int" || node.ReturnType == "float" || node.ReturnType == "bool" || node.ReturnType == "string" || node.ReturnType == "void"))
             {
-                throw new Exception("Type doesn't exist.");
+                throw new SemanticException("Type doesn't exist.");
             }
 
             symbolTable.NewScope();
@@ -144,7 +144,7 @@ namespace SemanticLib
         {
             if(node.Id.IdOperations?.Count > 0)
             {
-                throw new Exception("Invalid identifier declaration.");
+                throw new SemanticException("Invalid identifier declaration.");
             }
 
             node.InitialValue?.Accept(this);
@@ -179,7 +179,7 @@ namespace SemanticLib
         {
             if (node.Player.IdOperations?.Count > 0 || node.Opponents.IdOperations?.Count > 0)
             {
-                throw new Exception("Invalid identifier declaration.");
+                throw new SemanticException("Invalid identifier declaration.");
             }
 
             symbolTable.NewScope();
@@ -210,7 +210,7 @@ namespace SemanticLib
             }
             if (!(symbolTable.RetrieveSymbol("main") is FunctionDclNode))
             {
-                throw new Exception("No entry point found (Missing main func).");
+                throw new SemanticException("No entry point found (Missing main func).");
             }
             node.TopDclNodes.ForEach(x => x.Accept(this));
         }
@@ -229,7 +229,7 @@ namespace SemanticLib
         {
             if (node.Id.IdOperations?.Count > 0)
             {
-                throw new Exception("Invalid identifier declaration.");
+                throw new SemanticException("Invalid identifier declaration.");
             }
 
             symbolTable.NewScope();

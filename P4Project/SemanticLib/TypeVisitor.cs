@@ -23,7 +23,7 @@ namespace SemanticLib
             node.IndexValue.Accept(this);
             if (node.IndexValue.Type != "int")
             {
-                throw new Exception("ArrayIndex is not of type integer.");
+                throw new SemanticException("ArrayIndex is not of type integer.");
             }
         }
 
@@ -76,7 +76,7 @@ namespace SemanticLib
 
             if (node.ControlExpr.Type != "bool")
             {
-                throw new Exception($"Elif control expression expected type bool, was {node.ControlExpr.Type}.");
+                throw new SemanticException($"Elif control expression expected type bool, was {node.ControlExpr.Type}.");
             }
 
             node.ElifBody.Accept(this);
@@ -120,14 +120,14 @@ namespace SemanticLib
                 }
                 else
                 {
-                    throw new Exception($"No function of name {node.Id.Id} with {node.ActualParameters.Count} found.");
+                    throw new SemanticException($"No function of name {node.Id.Id} with {node.ActualParameters.Count} found.");
                 }
 
                 node.Type = funcDcl.ReturnType;
             }
             else
             {
-                throw new Exception($"Function with id: {node.Id.Id} not found.");
+                throw new SemanticException($"Function with id: {node.Id.Id} not found.");
             }
         }
 
@@ -146,12 +146,12 @@ namespace SemanticLib
                 }
                 else
                 {
-                    throw new Exception($"No function of name {node.Id.Id} with {node.ActualParameters.Count} found.");
+                    throw new SemanticException($"No function of name {node.Id.Id} with {node.ActualParameters.Count} found.");
                 }
             }
             else
             {
-                throw new Exception($"Function with id: {node.Id.Id} not found.");
+                throw new SemanticException($"Function with id: {node.Id.Id} not found.");
             }
         }
 
@@ -166,7 +166,7 @@ namespace SemanticLib
                 returnNodeType = (rNode.ReturnValue != null) ? rNode.ReturnValue.Type : "void";
                 if (returnNodeType != node.ReturnType)
                 {
-                    throw new Exception($"Return type invalid. Expected {node.ReturnType}, found {returnNodeType}.");
+                    throw new SemanticException($"Return type invalid. Expected {node.ReturnType}, found {returnNodeType}.");
                 }
             }
 
@@ -196,7 +196,7 @@ namespace SemanticLib
             node.ControlExpression.Accept(this);
             if (node.ControlExpression.Type != "bool")
             {
-                throw new Exception($"If control expression expected type bool, was {node.ControlExpression.Type}.");
+                throw new SemanticException($"If control expression expected type bool, was {node.ControlExpression.Type}.");
             }
             node.IfBody.Accept(this);
             symbolTable.CloseScope();
@@ -214,12 +214,13 @@ namespace SemanticLib
             symbolTable.EnterScope();
             node.AllPlayers.Accept(this);
             node.UntilCondition.Accept(this);
-            if (!node.AllPlayers.Type.Contains("[]")){
-                throw new Exception("PlayLoop expected array.");
+            if (!node.AllPlayers.Type.Contains("[]"))
+            {
+                throw new SemanticException($"PlayLoop expected array expression in loopheader, found {node.AllPlayers.Type}.");
             }
             if (node.UntilCondition.Type != "bool")
             {
-                throw new Exception("Expected boolean expression in the until condition.");
+                throw new SemanticException($"Expected boolean expression in the until condition, was {node.UntilCondition.Type}.");
             }
             node.Player.Type = node.AllPlayers.Type.Replace("[]", "");
             node.Opponents.Type = node.AllPlayers.Type;
@@ -262,21 +263,21 @@ namespace SemanticLib
                     }
                     else
                     {
-                        throw new Exception($"Invalid type: {node.ExprNode.Type}. Expected type bool.");
+                        throw new SemanticException($"Invalid type: {node.ExprNode.Type}. Expected type bool.");
                     }
-                        break;
+                    break;
                 case UnaryOperator.UNARY_MINUS:
-                    if (node.ExprNode.Type == "int"|| node.ExprNode.Type == "float")
+                    if (node.ExprNode.Type == "int" || node.ExprNode.Type == "float")
                     {
                         node.Type = node.ExprNode.Type;
                     }
                     else
                     {
-                        throw new Exception($"Invalid type {node.ExprNode.Type}. Expected int or float.");
+                        throw new SemanticException($"Invalid type {node.ExprNode.Type}. Expected int or float.");
                     }
                     break;
                 default:
-                    throw new Exception($"Invalid unary operator.");
+                    throw new SemanticException($"Invalid unary operator.");
             }
         }
 
@@ -286,7 +287,7 @@ namespace SemanticLib
             node.ControlExpr.Accept(this);
             if (node.ControlExpr.Type != "bool")
             {
-                throw new Exception($"Expected boolean expression, found {node.ControlExpr.Type}.");
+                throw new SemanticException($"Expected boolean expression, found {node.ControlExpr.Type}.");
             }
             node.WhileLoopBody.Accept(this);
             symbolTable.CloseScope();
@@ -309,10 +310,10 @@ namespace SemanticLib
                         else if (node.RightExpr.Type == "float")
                         {
                             node.Type = "float";
-                        }   
+                        }
                         else
                         {
-                            throw new Exception($"Invalid binary operation (int plus {node.RightExpr.Type} isn't legal).");
+                            throw new SemanticException($"Invalid binary operation: \"int + {node.RightExpr.Type}\".");
                         }
                     }
                     else if (node.LeftExpr.Type == "float")
@@ -323,7 +324,7 @@ namespace SemanticLib
                         }
                         else
                         {
-                            throw new Exception($"Invalid binary operation (int plus {node.RightExpr.Type} isn't legal).");
+                            throw new SemanticException($"Invalid binary operation: \"float + {node.RightExpr.Type}\".");
                         }
                     }
                     break;
@@ -336,12 +337,12 @@ namespace SemanticLib
                         }
                         else
                         {
-                            throw new Exception($"Invalid binary operation (division with type {node.RightExpr.Type} isn't legal).");
+                            throw new SemanticException($"Invalid binary operation: \"{node.LeftExpr.Type} / {node.RightExpr.Type}\".");
                         }
                     }
                     else
                     {
-                        throw new Exception($"Invalid binary operation (division with type {node.LeftExpr.Type} isn't legal).");
+                        throw new SemanticException($"Invalid binary operation: \"{node.LeftExpr.Type} / {node.RightExpr.Type}\".");
                     }
                     break;
                 case BinaryOperator.MODULO:
@@ -353,12 +354,12 @@ namespace SemanticLib
                         }
                         else
                         {
-                            throw new Exception($"Invalid binary operation (modulo with type {node.RightExpr.Type} isn't legal).");
+                            throw new SemanticException($"Invalid binary operation: \"{node.LeftExpr.Type} % {node.RightExpr.Type}\".");
                         }
                     }
                     else
                     {
-                        throw new Exception($"Invalid binary operation (modulo with type {node.LeftExpr.Type} isn't legal).");
+                        throw new SemanticException($"Invalid binary operation: \"{node.LeftExpr.Type} % {node.RightExpr.Type}\".");
                     }
                     break;
                 case BinaryOperator.GREATER_OR_EQUALS:
@@ -375,7 +376,7 @@ namespace SemanticLib
                         }
                         else
                         {
-                            throw new Exception($"Invalid binary operation (comparison with  {node.RightExpr.Type} isn't legal).");
+                            throw new SemanticException($"Invalid binary operation: \"{node.LeftExpr.Type} {node.Operator} {node.RightExpr.Type}\".");
                         }
                     }
                     break;
@@ -384,6 +385,10 @@ namespace SemanticLib
                     if (node.LeftExpr.Type == "bool" && node.RightExpr.Type == "bool")
                     {
                         node.Type = "bool";
+                    }
+                    else
+                    {
+                        throw new SemanticException($"Invalid binary operation: \"{node.LeftExpr.Type} {node.Operator} {node.RightExpr.Type}\".");
                     }
                     break;
                 case BinaryOperator.STRING_CONCAT:
@@ -395,16 +400,16 @@ namespace SemanticLib
                         }
                         else
                         {
-                            throw new Exception($"Invalid binary operation (string concatenation with {node.RightExpr.Type} isn't legal).");
+                            throw new SemanticException($"Invalid binary operation: \"{node.LeftExpr.Type} : {node.RightExpr.Type}\".");
                         }
                     }
                     else
                     {
-                        throw new Exception($"Invalid binary operation (string concatenation with {node.LeftExpr.Type} isn't legal).");
+                        throw new SemanticException($"Invalid binary operation: \"{node.LeftExpr.Type} : {node.RightExpr.Type}\".");
                     }
                     break;
                 default:
-                    throw new Exception($"Invalid binary operator.");
+                    throw new SemanticException($"Invalid binary operator.");
             }
         }
 
@@ -417,23 +422,23 @@ namespace SemanticLib
                     case "int":
                         if (secondType != "float")
                         {
-                            throw new Exception($"Invalid {exceptionString} (can't convert {secondType} to type int).");
+                            throw new SemanticException($"Invalid {exceptionString}: can't convert {secondType} to type int.");
                         }
                         break;
                     case "float":
                         if (secondType != "int")
                         {
-                            throw new Exception($"Invalid {exceptionString} (can't convert {secondType} to type float).");
+                            throw new SemanticException($"Invalid {exceptionString}: can't convert {secondType} to type float.");
                         }
                         break;
                     case "string":
                         if (secondType != "float" && secondType != "int" && secondType != "bool")
                         {
-                            throw new Exception($"Invalid {exceptionString} (can't convert {secondType} to type string).");
+                            throw new SemanticException($"Invalid {exceptionString}: can't convert {secondType} to type string.");
                         }
                         break;
                     default:
-                        throw new Exception($"Invalid {exceptionString} (can't convert {secondType} to type {firstType}).");
+                        throw new SemanticException($"Invalid {exceptionString}: can't convert {secondType} to type {firstType}.");
                 }
             }
         }
@@ -447,17 +452,18 @@ namespace SemanticLib
                 bool tempIsArray = true;
                 if (node.GetIdOperations == null)
                 {
-                    if (rootNode is IVariableBinding iDcl) // 448-455 NYT.
+                    if (rootNode is IVariableBinding iDcl)
                     {
-                        node.SetType(iDcl.GetVarType + (iDcl.GetIsArray? "[]" : ""));
+                        node.SetType(iDcl.GetVarType + (iDcl.GetIsArray ? "[]" : ""));
                     }
                     else
                     {
-                        throw new Exception("EEEEH");
+                        string funcOrStruct = (rootNode is FunctionDclNode) ? "function" : "struct";
+                        throw new SemanticException($"Expected variable identifier for {node.GetId}, was a {funcOrStruct} declaration.");
                     }
                     return;
                 }
-                    
+
 
                 foreach (IdOperationNode idOp in node.GetIdOperations)
                 {
@@ -469,7 +475,7 @@ namespace SemanticLib
                         {
                             if (tempIsArray && dclNode.GetIsArray)
                             {
-                                throw new Exception("Illegal field reference on array.");
+                                throw new SemanticException($"Unexpected field reference in operations emanating from identifer {node.GetId}.");
                             }
 
                             ASTnode tempNode = symbolTable.RetrieveSymbol(dclNode.GetVarType);
@@ -483,23 +489,24 @@ namespace SemanticLib
                                 }
                                 else
                                 {
-                                    throw new Exception($"Struct: {structDcl.Id.Id} is missing the field: {field.Id.Id}.");
+                                    throw new SemanticException($"Unexpected reference to field: {field.Id.Id} in struct: {structDcl.Id.Id}.");
                                 }
                             }
                             else
                             {
-                                throw new Exception("Undeclared struct access.");
+                                throw new SemanticException($"Accessing undeclared struct: {dclNode.GetVarType}.");
                             }
                         }
                         else
                         {
-                            throw new Exception("Previousnode wasn't IDeclaration type");
+                            throw new SemanticException($"Unexpected reference to non-variable identifier in operations emanating from {node.GetId}.");
                         }
                     }
                     // ArrayOperation
                     else if (idOp is ArrayAccessNode array)
                     {
-                        array.Accept(this); // NYT, typetjek på indeks.
+                        // Type check for index expression in ArrayAccessNode.
+                        array.Accept(this);
 
                         // Prevent two-dimensional arrays
                         int idOpIndex = node.GetIdOperations.IndexOf(idOp);
@@ -508,7 +515,7 @@ namespace SemanticLib
                             IdOperationNode previousIdOp = node.GetIdOperations[idOpIndex - 1];
                             if (previousIdOp is ArrayAccessNode)
                             {
-                                throw new Exception("Illegal two-dimensional array.");
+                                throw new SemanticException($"Illegal reference to two-dimensional array in operations emanating from {node.GetId}.");
                             }
                         }
 
@@ -521,24 +528,26 @@ namespace SemanticLib
                         }
                         else
                         {
-                            throw new Exception("ID was not an declared as array.");
+                            throw new SemanticException($"Unexpected reference to non-variable identifier in id operations emanating from {node.GetId}.");
                         }
                     }
 
                 }
 
-                if (previousNode is IVariableBinding iDecl) // 528-535 NYT.
+                if (previousNode is IVariableBinding iDecl)
                 {
                     node.SetType(iDecl.GetVarType + (iDecl.GetIsArray && tempIsArray ? "[]" : ""));
                 }
                 else
                 {
-                    throw new Exception("EEEEH2");
+                    string funcOrStruct = (rootNode is FunctionDclNode) ? "function" : "struct";
+                    throw new SemanticException($"Unexpected reference to a {funcOrStruct} declaration in operations emanating from identifer {node.GetId}.");
                 }
 
             }
 
         }
+        // Kommentar abc.
 
     }
 }
