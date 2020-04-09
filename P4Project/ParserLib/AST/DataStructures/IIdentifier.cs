@@ -2,7 +2,7 @@
 
 namespace ParserLib.AST.DataStructures
 {
-    public interface INode
+    public interface IIdentifier
     {
         string GetId { get; }
         List<IdOperationNode> GetIdOperations { get; }

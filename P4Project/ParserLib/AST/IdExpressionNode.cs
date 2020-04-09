@@ -5,7 +5,7 @@ using System.Text;
 
 namespace ParserLib.AST
 {
-    public class IdExpressionNode : ExpressionNode, INode
+    public class IdExpressionNode : ExpressionNode, IIdentifier
     {
         public string Id;
         public List<IdOperationNode> IdOperations;
@@ -27,7 +27,6 @@ namespace ParserLib.AST
 
         public void SetType(string type)
         {
-            Console.WriteLine("Set " + Id + " type to: " + type);
             Type = type;
         }
     }

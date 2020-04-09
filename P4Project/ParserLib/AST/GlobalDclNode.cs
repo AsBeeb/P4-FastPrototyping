@@ -5,7 +5,7 @@ using System.Text;
 
 namespace ParserLib.AST
 {
-    public class GlobalDclNode : TopDclNode, IDeclaration
+    public class GlobalDclNode : TopDclNode, IVariableBinding
     {
         public IdNode Id;
         public ExpressionNode InitialValue;
@@ -14,7 +14,7 @@ namespace ParserLib.AST
 
         public IdNode GetId => Id;
         public bool GetIsArray => IsArray;
-        public string GetDclType => Type;
+        public string GetVarType => Type;
 
         public GlobalDclNode(IdNode id, ExpressionNode initVal, string type, bool isArray)
         {

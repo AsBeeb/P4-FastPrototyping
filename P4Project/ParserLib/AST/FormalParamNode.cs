@@ -5,7 +5,7 @@ using ParserLib.AST.DataStructures;
 
 namespace ParserLib.AST
 {
-    public class FormalParamNode : ASTnode, IDeclaration
+    public class FormalParamNode : ASTnode, IVariableBinding
     {
         public IdNode Id;
         public string Type;
@@ -18,7 +18,7 @@ namespace ParserLib.AST
 
         public bool GetIsArray => false;
 
-        public string GetDclType => Type;
+        public string GetVarType => Type;
 
         public override void Accept(Visitor v)
         {

@@ -152,12 +152,12 @@ namespace SemanticLib
 
         public override void Visit(IdExpressionNode node)
         {
-            //VisitIdNode(node);
+            return;
         }
 
         public override void Visit(IdNode node)
         {
-            //VisitIdNode(node);
+            return;
         }
 
         public override void Visit(IfNode node)

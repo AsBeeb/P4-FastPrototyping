@@ -436,7 +436,7 @@ namespace SemanticLib
             }
         }
 
-        private void VisitIdNode(INode node)
+        private void VisitIdNode(IIdentifier node)
         {
             ASTnode rootNode = symbolTable.RetrieveSymbol(node.GetId);
             if (rootNode != null)
@@ -445,9 +445,9 @@ namespace SemanticLib
                 bool tempIsArray = true;
                 if (node.GetIdOperations == null)
                 {
-                    if (rootNode is IDeclaration iDcl) // 448-455 NYT.
+                    if (rootNode is IVariableBinding iDcl) // 448-455 NYT.
                     {
-                        node.SetType(iDcl.GetDclType + (iDcl.GetIsArray? "[]" : ""));
+                        node.SetType(iDcl.GetVarType + (iDcl.GetIsArray? "[]" : ""));
                     }
                     else
                     {
@@ -463,14 +463,14 @@ namespace SemanticLib
                     if (idOp is FieldAccessNode field)
                     {
                         // DeclaratioNode and GlobalDclNode
-                        if (previousNode is IDeclaration dclNode)
+                        if (previousNode is IVariableBinding dclNode)
                         {
                             if (tempIsArray && dclNode.GetIsArray)
                             {
                                 throw new Exception("Illegal field reference on array.");
                             }
 
-                            ASTnode tempNode = symbolTable.RetrieveSymbol(dclNode.GetDclType);
+                            ASTnode tempNode = symbolTable.RetrieveSymbol(dclNode.GetVarType);
                             if (tempNode is StructDclNode structDcl)
                             {
                                 DeclarationNode tempDclNode = structDcl.Declarations.FirstOrDefault(x => x.Id.Id == field.Id.Id);
@@ -510,7 +510,7 @@ namespace SemanticLib
                             }
                         }
 
-                        if (previousNode is IDeclaration dcl)
+                        if (previousNode is IVariableBinding dcl)
                         {
                             if (dcl.GetIsArray)
                             {
@@ -525,9 +525,9 @@ namespace SemanticLib
 
                 }
 
-                if (previousNode is IDeclaration iDecl) // 528-535 NYT.
+                if (previousNode is IVariableBinding iDecl) // 528-535 NYT.
                 {
-                    node.SetType(iDecl.GetDclType + (iDecl.GetIsArray && tempIsArray ? "[]" : ""));
+                    node.SetType(iDecl.GetVarType + (iDecl.GetIsArray && tempIsArray ? "[]" : ""));
                 }
                 else
                 {

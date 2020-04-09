@@ -5,7 +5,7 @@ using System.Text;
 
 namespace ParserLib.AST
 {
-    public class IdNode : ASTnode, INode, IDeclaration
+    public class IdNode : ASTnode, IIdentifier, IVariableBinding
     {
         public string Id;
         public List<IdOperationNode> IdOperations;
@@ -16,7 +16,7 @@ namespace ParserLib.AST
 
         public bool GetIsArray => Type.Contains("[]");
 
-        public string GetDclType => Type.Replace("[]", "");
+        public string GetVarType => Type.Replace("[]", "");
 
         public IdNode(string id, List<IdOperationNode> idOperations)
         {
@@ -31,7 +31,6 @@ namespace ParserLib.AST
 
         public void SetType(string type)
         {
-            Console.WriteLine("Set " + Id + " type to: " + type);
             Type = type;
         }
     }

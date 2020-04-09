@@ -5,7 +5,7 @@ using System.Text;
 
 namespace ParserLib.AST
 {
-    public class DeclarationNode : StmtNode, IDeclaration
+    public class DeclarationNode : StmtNode, IVariableBinding
     {
         public IdNode Id;
         public string Type;
@@ -14,7 +14,7 @@ namespace ParserLib.AST
 
         public IdNode GetId => Id;
         public bool GetIsArray => IsArray;
-        public string GetDclType => Type;
+        public string GetVarType => Type;
 
         public DeclarationNode(IdNode id, string type, ExpressionNode initialValue, bool isArray)
         {
