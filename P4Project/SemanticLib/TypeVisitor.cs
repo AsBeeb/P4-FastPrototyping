@@ -531,7 +531,6 @@ namespace SemanticLib
                             throw new SemanticException($"Unexpected reference to non-variable identifier in id operations emanating from {node.GetId}.");
                         }
                     }
-
                 }
 
                 if (previousNode is IVariableBinding iDecl)

@@ -60,8 +60,7 @@ namespace SemanticLib
         {
             if (node.Id.IdOperations?.Count > 0)
             {
-                throw new SemanticException("Invalid identifier declaration.");
-
+                throw new SemanticException($"Invalid field or array access on declaration of {node.Id.Id}.");
             }
 
             symbolTable.EnterSymbol(node.Id.Id, node);
@@ -97,7 +96,7 @@ namespace SemanticLib
         {
             if (node.Id.IdOperations?.Count > 0)
             {
-                throw new SemanticException("Invalid parameter declaration.");
+                throw new SemanticException($"Invalid field or array access on declaration of parameter {node.Id.Id}.");
             }
 
             symbolTable.EnterSymbol(node.Id.Id, node);
@@ -122,12 +121,12 @@ namespace SemanticLib
         {
             if (node.Id.IdOperations?.Count > 0)
             {
-                throw new SemanticException("Invalid identifier declaration.");
+                throw new SemanticException($"Invalid field or array access on declaration of function {node.Id.Id}.");
             }
 
             if (!(symbolTable.GlobalScope.Symbols.ContainsKey(node.ReturnType) || node.ReturnType == "int" || node.ReturnType == "float" || node.ReturnType == "bool" || node.ReturnType == "string" || node.ReturnType == "void"))
             {
-                throw new SemanticException("Type doesn't exist.");
+                throw new SemanticException($"Invalid return type {node.ReturnType} declared on {node.Id.Id}.");
             }
 
             symbolTable.NewScope();
@@ -144,7 +143,7 @@ namespace SemanticLib
         {
             if(node.Id.IdOperations?.Count > 0)
             {
-                throw new SemanticException("Invalid identifier declaration.");
+                throw new SemanticException($"Invalid field or array access on global declaration of {node.Id.Id}.");
             }
 
             node.InitialValue?.Accept(this);
@@ -177,9 +176,17 @@ namespace SemanticLib
 
         public override void Visit(PlayLoopNode node)
         {
-            if (node.Player.IdOperations?.Count > 0 || node.Opponents.IdOperations?.Count > 0)
+            if (node.Player.IdOperations?.Count > 0 && node.Opponents.IdOperations?.Count > 0)
             {
-                throw new SemanticException("Invalid identifier declaration.");
+                throw new SemanticException($"Invalid field or array access on declaration of {node.Player.Id} and {node.Opponents.Id} in play loop header.");
+            }
+            else if(node.Player.IdOperations?.Count > 0 )
+            {
+                throw new SemanticException($"Invalid field or array access on declaration of {node.Player.Id} in play loop header.");
+            }
+            else if (node.Opponents.IdOperations?.Count > 0)
+            {
+                throw new SemanticException($"Invalid field or array access on declaration of {node.Opponents.Id} in play loop header.");
             }
 
             symbolTable.NewScope();
@@ -210,7 +217,7 @@ namespace SemanticLib
             }
             if (!(symbolTable.RetrieveSymbol("main") is FunctionDclNode))
             {
-                throw new SemanticException("No entry point found (Missing main func).");
+                throw new SemanticException("No entry point found: missing main function.");
             }
             node.TopDclNodes.ForEach(x => x.Accept(this));
         }
@@ -229,7 +236,7 @@ namespace SemanticLib
         {
             if (node.Id.IdOperations?.Count > 0)
             {
-                throw new SemanticException("Invalid identifier declaration.");
+                throw new SemanticException($"Invalid field or array access on declaration of struct {node.Id.Id}.");
             }
 
             symbolTable.NewScope();

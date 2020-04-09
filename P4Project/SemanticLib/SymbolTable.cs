@@ -33,7 +33,7 @@ namespace SemanticLib
             }
             else
             {
-                throw new Exception("Ran out of scopes.");
+                throw new SemanticException("Compiler error: tried to open non-existing scope.");
             }
         }
         public void CloseScope()
@@ -50,7 +50,7 @@ namespace SemanticLib
             }
             else
             {
-                throw new Exception("Symbol already declared.");
+                throw new SemanticException($"Symbol {symbolName} already declared locally.");
             }
         }
 
@@ -67,7 +67,7 @@ namespace SemanticLib
                 viewingScope = viewingScope.Parent;
             }
             while (viewingScope != null);
-            throw new Exception("Symbol not found.");
+            throw new SemanticException($"Symbol {symbolName} not found. Potentially missing declaration or not visible in scope.");
         }
 
         public bool IsDeclaredLocally(string symbolToFind)
