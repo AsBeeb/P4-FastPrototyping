@@ -12,16 +12,18 @@ namespace SemanticLib
     public class TypeVisitor : Visitor
     {
         SymbolTable symbolTable;
+
         public TypeVisitor(SymbolTable symbolTable)
         {
             this.symbolTable = symbolTable;
         }
+
         public override void Visit(ArrayAccessNode node)
         {
             node.IndexValue.Accept(this);
             if (node.IndexValue.Type != "int")
             {
-                throw new Exception("ArrayIndex is not of type integer (not cool).");
+                throw new Exception("ArrayIndex is not of type integer.");
             }
         }
 

@@ -250,7 +250,5 @@ namespace SemanticLib
             node.WhileLoopBody.Accept(this);
             symbolTable.CloseScope();
         }
-
-      
     }
 }
