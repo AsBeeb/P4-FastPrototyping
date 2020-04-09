@@ -5,7 +5,7 @@ using System.Text;
 
 namespace ParserLib.AST
 {
-    public class IdExpressionNode : ExpressionNode, INode, IDeclaration
+    public class IdExpressionNode : ExpressionNode, INode
     {
         public string Id;
         public List<IdOperationNode> IdOperations;
@@ -13,9 +13,6 @@ namespace ParserLib.AST
         public string GetId => Id;
         public List<IdOperationNode> GetIdOperations => IdOperations;
 
-        public bool GetIsArray => Type.Contains("[]");
-
-        public string GetDclType => Type.Replace("[]", "");
 
         public IdExpressionNode(string id, List<IdOperationNode> operations)
         {

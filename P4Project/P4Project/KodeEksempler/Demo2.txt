@@ -17,7 +17,7 @@ func void main()
 
 	play (player vs opponents in k)
 	{
-		player = opponents;
+		player = opponents[2];
 	} until (true);
 }
 
