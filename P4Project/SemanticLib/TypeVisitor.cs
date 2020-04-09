@@ -525,7 +525,7 @@ namespace SemanticLib
 
                 }
 
-                if (previousNode is IDeclaration iDecl) // 526-533 NYT.
+                if (previousNode is IDeclaration iDecl) // 528-535 NYT.
                 {
                     node.SetType(iDecl.GetDclType + (iDecl.GetIsArray && tempIsArray ? "[]" : ""));
                 }
