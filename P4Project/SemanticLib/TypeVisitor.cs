@@ -120,14 +120,30 @@ namespace SemanticLib
                 }
                 else
                 {
-                    throw new SemanticException($"No function of name {node.Id.Id} with {node.ActualParameters.Count} found.");
+                    throw new SemanticException($"No function of name {node.Id.Id} with {node.ActualParameters.Count} parameters found.");
                 }
 
                 node.Type = funcDcl.ReturnType;
             }
+            else if (astNode is StructDclNode structDcl && structDcl.Constructor != null)
+            {
+                if (node.ActualParameters.Count == structDcl.Constructor.FormalParamNodes.Count)
+                {
+                    for (int i = 0; i < node.ActualParameters.Count; i++)
+                    {
+                        CompatibleTypes(node.ActualParameters[i].Type, structDcl.Constructor.FormalParamNodes[i].Type, "parameter type");
+                    }
+                }
+                else
+                {
+                    throw new SemanticException($"No constructor of name {node.Id.Id} with {node.ActualParameters.Count} parameters found.");
+                }
+
+                node.Type = structDcl.Id.Id;
+            }
             else
             {
-                throw new SemanticException($"Function with id: {node.Id.Id} not found.");
+                throw new SemanticException($"Function or constructor of name {node.Id.Id} not found.");
             }
         }
 
@@ -146,8 +162,12 @@ namespace SemanticLib
                 }
                 else
                 {
-                    throw new SemanticException($"No function of name {node.Id.Id} with {node.ActualParameters.Count} found.");
+                    throw new SemanticException($"No function of name {node.Id.Id} with {node.ActualParameters.Count} parameters found.");
                 }
+            }
+            else if (astNode is StructDclNode structDcl)
+            {
+                throw new SemanticException($"Invalid constructor for {node.Id.Id} used outside an expression context.");
             }
             else
             {
