@@ -1382,7 +1382,7 @@ namespace ParserLib
 
         private List<ExpressionNode> ParseFuncValue()
         {
-            List<ExpressionNode> funcValues = null;
+            List<ExpressionNode> funcValues = new List<ExpressionNode>();
 
             if (tokens.Peek().IsInPredictSet(TokenType.comma_token))
             {

@@ -38,6 +38,8 @@ func void main()
 	{
 		player = opponents[2];
 	} until (true);
+
+	local player MyPlayer = player(10);
 }
 
 func string myFunc(float test, int type)
@@ -45,5 +47,16 @@ func string myFunc(float test, int type)
 	local string nyStr = "Hej Hej";
 	local int a = test + 2;
 	return nyStr;
+}
+
+struct player
+{
+	local int Field = 10;
+
+	player (int field)
+	{
+		Field = field;
+	}
+
 }
 
