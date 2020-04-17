@@ -315,7 +315,6 @@ namespace CodeGeneration
 
         public override void Visit(FunctionDclNode node)
         {
-            CSharpString.Append("public ");
             CSharpString.Append("static ");
             CSharpString.Append(node.ReturnType + " ");
             // Checks if the function declared is main
@@ -395,11 +394,54 @@ namespace CodeGeneration
             //Console.Write(" until (");
             //node.UntilCondition.Accept(this);
             //Console.Write(");");
+            int local = IndentationLevel;
 
-            CSharpString.Append("while(!(");
-            node.UntilCondition.Accept(this);
-            CSharpString.Append("))");
+            CSharpString.Append("{");
+            IndentationLevel++;
+            CSharpString.Append("List<" + node.Player.Type + "> AllElements" + local +  " = new List<" + node.Player.Type + ">();");
+            PrettyPrintNewLine();
+            CSharpString.Append(node.Player.Type + " ");
+            node.Player.Accept(this);
+            CSharpString.Append(";");
+            PrettyPrintNewLine();
+            CSharpString.Append("List<" + node.Player.Type + ">");
+            node.Opponents.Accept(this);
+            CSharpString.Append(" = new List<" + node.Player.Type + ">();");
+            PrettyPrintNewLine();
+            CSharpString.Append("do");
+            PrettyPrintNewLine();
+            CSharpString.Append("{");
+            IndentationLevel++;
+            PrettyPrintNewLine();
+            CSharpString.Append("AllElements" + local + " = ");
+            node.AllPlayers.Accept(this);
+            CSharpString.Append(";");
+            PrettyPrintNewLine();
+            CSharpString.Append("for (int i = 0; i < AllElements" + local + ".Count; i++)");
+            PrettyPrintNewLine();
+            IndentationLevel++;
+            CSharpString.Append("{");
+            IndentationLevel++;
+            PrettyPrintNewLine();
+            node.Player.Accept(this);
+            CSharpString.Append(" = AllElements" + local + "[i];");
+            PrettyPrintNewLine();
+            node.Opponents.Accept(this);
+            CSharpString.Append(" = AllElements" + local + ".Where((x, j) => j != i).ToList();");
             node.PlayLoopBody.Accept(this);
+            IndentationLevel--;
+            CSharpString.Append("}");
+            PrettyPrintNewLine();
+            IndentationLevel--;
+            CSharpString.Append("} while (!(");
+            node.UntilCondition.Accept(this);
+            CSharpString.Append("));");
+
+            IndentationLevel--;
+            CSharpString.Append("}");
+            IndentationLevel--;
+
+
         }
 
         public override void Visit(ProgNode node)
@@ -420,6 +462,7 @@ namespace CodeGeneration
             PrettyPrintNewLine();
             foreach (TopDclNode DclNode in node.TopDclNodes)
             {
+                CSharpString.Append("public ");
                 DclNode.Accept(this);
                 PrettyPrintNewLine();
             }
@@ -450,6 +493,7 @@ namespace CodeGeneration
             PrettyPrintNewLine();
             foreach (DeclarationNode DclNode in node.Declarations)
             {
+                CSharpString.Append("public ");
                 DclNode.Accept(this);
             }
 

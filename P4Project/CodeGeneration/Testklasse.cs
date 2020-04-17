@@ -4,26 +4,26 @@ using System.Linq;
 using System.Text;
 public class Programµµ
 {
-    string hejStrµ = ("Hej ").ToString() + ((" med ").ToString() + (" dig!").ToString()).ToString();
+    public string hejStrµ = ("Hej ").ToString() + ((" med ").ToString() + (" dig!").ToString()).ToString();
 
-    float fsaµ = 2f;
+    public float fsaµ = 2f;
 
-    class personµ
+    public class personµ
     {
-        string navnµ = "";
-        int alderµ = 0;
-        float hoejdeµ = 150.5f;
+        public string navnµ = "";
+        public int alderµ = 0;
+        public float hoejdeµ = 150.5f;
         public personµ()
         {
         }
 
     }
-    class hundµ
+    public class hundµ
     {
-        string navnµ = ("Hunni").ToString();
-        int alderµ = 0;
-        string raceµ = "";
-        string battleaxeµ = "";
+        public string navnµ = ("Hunni").ToString();
+        public int alderµ = 0;
+        public string raceµ = "";
+        public string battleaxeµ = "";
         public hundµ()
         {
         }
@@ -42,12 +42,8 @@ public class Programµµ
         hundµ Viggoµ = new hundµ(7, "Kokker");
         personµ Michaelµ = new personµ();
         List<hundµ> hundelisteµ = new List<hundµ>();
-        hundelisteµ[0] = Viggoµ;
-        hundelisteµ[1] = Viggoµ;
-        hundelisteµ[0] = Fiddoµ;
-        AddArrayElement(element, array);
-
-        AddArrayElement(Viggoµ, hundelisteµ);
+        hundelisteµ[5] = Viggoµ;
+        hundelisteµ[5].alderµ = Fiddoµ.alderµ;
         if (true)
         {
             int newValueµ = 2222;
@@ -59,18 +55,26 @@ public class Programµµ
             string minStringµ = (myFuncµ(20.2f, 3)).ToString();
 
         }
-        while (!(true))
         {
-            //playerµ = opponentsµ[2];
+            List<int> AllElements2 = new List<int>();
+            int playerµ;
+            List<int> opponentsµ = new List<int>();
+            do
+            {
+                AllElements2 = kµ;
+                for (int i = 0; i < AllElements2.Count; i++)
+                {
+                    playerµ = AllElements2[i];
+                    opponentsµ = AllElements2.Where((x, j) => j != i).ToList();
+                    {
+                        playerµ = opponentsµ[2];
 
+                    }
+                }
+            } while (!(true));
         }
         playerµ MyPlayerµ = new playerµ(10);
 
-    }
-
-    private static void AddArrayElement(hundµ viggoµ, List<hundµ> hundelisteµ)
-    {
-        hundelisteµ.Add(viggoµ);
     }
 
     public static string myFuncµ(float testµ, int typeµ)
@@ -80,9 +84,9 @@ public class Programµµ
         return nyStrµ;
     }
 
-    class playerµ
+    public class playerµ
     {
-        int Fieldµ = 10;
+        public int Fieldµ = 10;
         public playerµ()
         {
         }
