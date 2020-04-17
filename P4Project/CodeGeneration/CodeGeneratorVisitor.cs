@@ -30,7 +30,22 @@ namespace CodeGeneration
         {
             node.LeftValue.Accept(this);
             CSharpString.Append(" = ");
-            node.RightValue.Accept(this);
+            if (node.LeftValue.Type == "string")
+            {
+                CSharpString.Append("(");
+                node.RightValue.Accept(this);
+                CSharpString.Append(").ToString()");
+            }
+            else if (node.RightValue.Type == "float" && node.LeftValue.Type == "int")
+            {
+                CSharpString.Append("(int)(");
+                node.RightValue.Accept(this);
+                CSharpString.Append(")");
+            }
+            else
+            {
+                node.RightValue.Accept(this);
+            }
             CSharpString.Append(";");
             PrettyPrintNewLine();
         }
@@ -40,6 +55,7 @@ namespace CodeGeneration
             if (node.Operator != BinaryOperator.POWER && node.Operator != BinaryOperator.STRING_CONCAT)
             {
                 string binaryOperator = "";
+                CSharpString.Append("(" + node.Type + ")");
                 node.LeftExpr.Accept(this);
                 switch (node.Operator)
                 {
@@ -96,7 +112,6 @@ namespace CodeGeneration
                         CSharpString.Append(").ToString() + (");
                         node.RightExpr.Accept(this);
                         CSharpString.Append(").ToString()");
-                        
                         break;
                     case BinaryOperator.POWER:
                         CSharpString.Append("Math.Pow(");
@@ -133,7 +148,7 @@ namespace CodeGeneration
 
         public override void Visit(ConstructorNode node)
         {
-            CSharpString.Append(" ");
+            CSharpString.Append("public ");
             node.Id.Accept(this);
             CSharpString.Append(" (");
             node.FormalParamNodes?.ForEach(x => {
@@ -151,25 +166,67 @@ namespace CodeGeneration
         {
             if (node.IsArray)
             {
-                CSharpString.Append("List<" + node.Type + "> ");
+                if (IsPrimitiveType(node.Type)){
+                    CSharpString.Append("List<" + node.Type + "> ");
+                }
+                else
+                {
+                    CSharpString.Append("List<" + node.Type + "µ> ");
+                }
             }
             else
             {
-                CSharpString.Append(node.Type + " ");
+                CSharpString.Append(node.Type);
+                if (!IsPrimitiveType(node.Type))
+                {
+                    CSharpString.Append("µ");
+                }
+                CSharpString.Append(" ");
             }
             node.Id.Accept(this);
+            
             CSharpString.Append(" = ");
 
             if (node.InitialValue != null)
             {
-                node.InitialValue.Accept(this);
+                if (!IsPrimitiveType(node.Type))
+                {
+                    CSharpString.Append("new ");
+                    node.InitialValue.Accept(this);
+                }
+                else
+                {
+                    if (node.Type == "string")
+                    {
+                        CSharpString.Append("(");
+                        node.InitialValue.Accept(this);
+                        CSharpString.Append(").ToString()");
+                    }
+                    else if (node.Type == "int" && node.InitialValue.Type == "float")
+                    {
+                        CSharpString.Append("(int)(");
+                        node.InitialValue.Accept(this);
+                        CSharpString.Append(")");
+                    }
+                    else
+                    {
+                        node.InitialValue.Accept(this);
+                    }
+                }
             }
             else
             {
                 //Default values if a variable isn't initialized
                 if (node.IsArray)
                 {
-                    CSharpString.Append("new List<" + node.Type + ">()");
+                    if (IsPrimitiveType(node.Type))
+                    {
+                        CSharpString.Append("new List<" + node.Type + ">()");
+                    }
+                    else
+                    {
+                        CSharpString.Append("new List<" + node.Type + "µ>()");
+                    }
                 }
                 else
                 {
@@ -188,7 +245,7 @@ namespace CodeGeneration
                             CSharpString.Append("false");
                             break;
                         default:
-                            CSharpString.Append( "new " + node.Type + "()");
+                            CSharpString.Append( "new " + node.Type + "µ()");
                             break;
                     }
                 } 
@@ -219,7 +276,7 @@ namespace CodeGeneration
 
         public override void Visit(FloatValueNode node)
         {
-            CSharpString.Append(node.FloatValue.ToString().Replace(",", "."));
+            CSharpString.Append(node.FloatValue.ToString().Replace(",", ".") +"f");
         }
 
         public override void Visit(FormalParamNode node)
@@ -259,16 +316,15 @@ namespace CodeGeneration
         public override void Visit(FunctionDclNode node)
         {
             CSharpString.Append("public ");
+            CSharpString.Append("static ");
+            CSharpString.Append(node.ReturnType + " ");
             // Checks if the function declared is main
             if (node.Id.Id == "main")
             {
-                CSharpString.Append("static ");
-                CSharpString.Append(node.ReturnType + " ");
                 CSharpString.Append("Main");
             }
             else
             {
-                CSharpString.Append(node.ReturnType + " ");
                 node.Id.Accept(this);
             }
             CSharpString.Append("(");
@@ -399,14 +455,14 @@ namespace CodeGeneration
 
             if (node.Constructor == null || node.Constructor.FormalParamNodes.Count > 0)
             {
-                CSharpString.Append("public " + node.Id.Id + "()");
+                CSharpString.Append("public " + node.Id.Id + "µ()");
                 CSharpString.Append("{");
                 PrettyPrintNewLine();
                 CSharpString.Append("}");
                 PrettyPrintNewLine();
             }
 
-            node.Constructor.Accept(this);
+            node.Constructor?.Accept(this);
             IndentationLevel--;
             PrettyPrintNewLine();
             CSharpString.Append("}");
@@ -441,6 +497,16 @@ namespace CodeGeneration
             node.ControlExpr.Accept(this);
             CSharpString.Append(")");
             node.WhileLoopBody.Accept(this);
+        }
+
+        public bool IsPrimitiveType (string type)
+        {
+            bool isPrimitive = false;
+            if (type == "bool" || type == "int" || type == "float" || type == "string")
+            {
+                isPrimitive = true;
+            }
+            return isPrimitive;
         }
     }
 }

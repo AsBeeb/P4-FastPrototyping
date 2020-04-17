@@ -24,6 +24,10 @@ func void main()
 	local hund Fiddo;
 	local hund Viggo = hund(7, "Kokker");
 	local person Michael;
+	local hund[] hundeliste;
+	hundeliste[5] = Viggo;
+	hundeliste[5].alder = Fiddo.alder;
+
 	if(true)
 	{
 		local int newValue = 2222;
