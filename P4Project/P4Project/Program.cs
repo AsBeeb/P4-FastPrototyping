@@ -8,6 +8,7 @@ using ScannerLib;
 using ParserLib;
 using ParserLib.AST;
 using SemanticLib;
+using CodeGeneration;
 
 namespace P4Project
 {
@@ -24,9 +25,8 @@ namespace P4Project
             string gitPath = @"\GitHub\P4-FastPrototyping\P4Project\P4Project\KodeEksempler\";
             string fileToOpen = "Demo2";
             string fileExtension = ".txt";
-            string filePath = String.Format("{0}{1}{2}{3}", docPath, gitPath, fileToOpen, fileExtension);
-            //string filePath = @"C:\Users\marti\Desktop\P4-FastPrototyping\P4Project\P4Project\KodeEksempler\Demo2.txt";
-
+            //string filePath = String.Format("{0}{1}{2}{3}", docPath, gitPath, fileToOpen, fileExtension);
+            string filePath = @"C:\Users\Michael\Source\Repos\P4-FastPrototyping\P4Project\P4Project\KodeEksempler\Demo2.txt";
             using (StreamReaderExpanded reader = new StreamReaderExpanded(filePath))
             {
                 do
@@ -64,6 +64,10 @@ namespace P4Project
             var typeVisitor = new TypeVisitor(symbolTable);
             typeVisitor.Visit(AST);
 
+            CodeGeneratorVisitor codeGeneratorVisitor = new CodeGeneratorVisitor();
+            codeGeneratorVisitor.Visit(AST);
+
+            Console.WriteLine(codeGeneratorVisitor.CSharpString);
             Console.WriteLine("Færdig");
             Console.ReadKey();
         }
