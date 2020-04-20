@@ -69,9 +69,10 @@ namespace P4Project
             CodeGeneratorVisitor codeGeneratorVisitor = new CodeGeneratorVisitor();
             codeGeneratorVisitor.Visit(AST);
 
+            Console.WriteLine(codeGeneratorVisitor.CSharpString);
+
             CSharpCompiler.CompileAndStartConsole(codeGeneratorVisitor.CSharpString);
 
-            Console.WriteLine(codeGeneratorVisitor.CSharpString);
             Console.WriteLine("Færdig");
             Console.ReadKey();
         }

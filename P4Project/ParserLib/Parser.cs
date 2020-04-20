@@ -1346,7 +1346,7 @@ namespace ParserLib
 
         private List<ExpressionNode> ParseCall()
         {
-            List<ExpressionNode> call = null;
+            List<ExpressionNode> call = new List<ExpressionNode>();
 
             if (tokens.Peek().IsInPredictSet(TokenType.lparen_token)){
                 Match(TokenType.lparen_token);
@@ -1362,10 +1362,9 @@ namespace ParserLib
 
         private List<ExpressionNode> ParseActualParams()
         {
-            List<ExpressionNode> actualParams = null;
+            List<ExpressionNode> actualParams = new List<ExpressionNode>();
 
             if (tokens.Peek().IsInPredictSet(TokenType.stringval_token, TokenType.not_token, TokenType.boolval_token, TokenType.minus_token, TokenType.lparen_token, TokenType.inum_token, TokenType.fnum_token, TokenType.id_token)){
-                actualParams = new List<ExpressionNode>();
                 actualParams.Add(ParseExpr());
                 actualParams.AddRange(ParseFuncValue());
             }

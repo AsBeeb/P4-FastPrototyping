@@ -22,6 +22,9 @@ func void main()
 {
 	local int[] k;
 	local hund Fiddo;
+	local float hejhej = GetNumber();
+	Print(hejhej);
+
 	local hund Viggo = hund(7, "Kokker");
 	local person Michael;
 	local hund[] hundeliste;

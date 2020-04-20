@@ -8,7 +8,6 @@ namespace CodeGeneration.Functions
 {
     class PlayLoop<T>
     {
-        
         PlayLoop()
         {
             List<T> Elements = new List<T>();

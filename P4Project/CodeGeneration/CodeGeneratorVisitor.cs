@@ -171,7 +171,7 @@ namespace CodeGeneration
                 }
                 else
                 {
-                    CSharpString.Append("List<" + node.Type + "µ> ");
+                    CSharpString.Append("List<" + node.Type + "_> ");
                 }
             }
             else
@@ -179,7 +179,7 @@ namespace CodeGeneration
                 CSharpString.Append(node.Type);
                 if (!IsPrimitiveType(node.Type))
                 {
-                    CSharpString.Append("µ");
+                    CSharpString.Append("_");
                 }
                 CSharpString.Append(" ");
             }
@@ -225,7 +225,7 @@ namespace CodeGeneration
                     }
                     else
                     {
-                        CSharpString.Append("new List<" + node.Type + "µ>()");
+                        CSharpString.Append("new List<" + node.Type + "_>()");
                     }
                 }
                 else
@@ -245,7 +245,7 @@ namespace CodeGeneration
                             CSharpString.Append("false");
                             break;
                         default:
-                            CSharpString.Append( "new " + node.Type + "µ()");
+                            CSharpString.Append( "new " + node.Type + "_()");
                             break;
                     }
                 } 
@@ -310,7 +310,8 @@ namespace CodeGeneration
                 }
                 x.Accept(this);
             });
-            CSharpString.Append(")");
+            CSharpString.Append(");");
+            PrettyPrintNewLine();
         }
 
         public override void Visit(FunctionDclNode node)
@@ -350,7 +351,7 @@ namespace CodeGeneration
 
         public override void Visit(IdExpressionNode node)
         {
-            CSharpString.Append(node.Id + "µ");
+            CSharpString.Append(node.Id + "_");
             node.IdOperations?.ForEach(x => {
                 x.Accept(this);
             });
@@ -359,7 +360,7 @@ namespace CodeGeneration
 
         public override void Visit(IdNode node)
         {
-            CSharpString.Append(node.Id + "µ");
+            CSharpString.Append(node.Id + "_");
             node.IdOperations?.ForEach(x => {
                 x.Accept(this);
             });
@@ -382,18 +383,6 @@ namespace CodeGeneration
 
         public override void Visit(PlayLoopNode node)
         {
-            // Vent til vi har programmeret dette.
-            //Console.Write("play (");
-            //node.Player.Accept(this);
-            //Console.Write(" vs ");
-            //node.Opponents.Accept(this);
-            //Console.Write(" in ");
-            //node.AllPlayers.Accept(this);
-            //Console.Write(")");
-            //node.PlayLoopBody.Accept(this);
-            //Console.Write(" until (");
-            //node.UntilCondition.Accept(this);
-            //Console.Write(");");
             int local = IndentationLevel;
 
             CSharpString.Append("{");
@@ -455,11 +444,12 @@ namespace CodeGeneration
             CSharpString.Append("using System.Text;");
             PrettyPrintNewLine();
 
-            CSharpString.Append("public class Programµµ");
+            CSharpString.Append("public class Program__");
             PrettyPrintNewLine();
             CSharpString.Append("{");
             IndentationLevel++;
             PrettyPrintNewLine();
+            GenerateStandardFunctions();
             foreach (TopDclNode DclNode in node.TopDclNodes)
             {
                 CSharpString.Append("public ");
@@ -485,7 +475,6 @@ namespace CodeGeneration
 
         public override void Visit(StructDclNode node)
         {
-            
             CSharpString.Append("class ");
             node.Id.Accept(this);
             CSharpString.Append("{");
@@ -499,7 +488,7 @@ namespace CodeGeneration
 
             if (node.Constructor == null || node.Constructor.FormalParamNodes.Count > 0)
             {
-                CSharpString.Append("public " + node.Id.Id + "µ()");
+                CSharpString.Append("public " + node.Id.Id + "_()");
                 CSharpString.Append("{");
                 PrettyPrintNewLine();
                 CSharpString.Append("}");
@@ -551,6 +540,72 @@ namespace CodeGeneration
                 isPrimitive = true;
             }
             return isPrimitive;
+        }
+
+        private void GenerateStandardFunctions()
+        {
+            CSharpString.Append(@"  public static string GetString_()
+            {
+                return Console.ReadLine();
+            }
+
+            public static float GetNumber_()
+            {
+                float val;
+                while (!float.TryParse(Console.ReadLine(), out val));
+            
+                return val;
+            }
+
+            public static void Print_(object txt)
+            {
+                Console.Write(txt);
+            }
+
+            public static int ChooseOption_(bool displayIndex, params string[] options)
+            {
+                for (int i = 0; i < options.Length; i++)
+                {
+                    string msg = ((displayIndex == true) ? $""{ i + 1}: "" : """");
+                    Console.WriteLine(msg + $""{options[i]}"");
+                }
+
+                int choice = 0;
+                do
+                {
+                    int.TryParse(Console.ReadLine(), out choice);
+                }
+                while (choice <= 0 || choice > options.Length);
+
+                return choice;
+            }
+
+            public static float GetRandomFloat_(float min, float max, bool repeatable)
+            {
+                if (repeatable)
+                {
+                    return (float)random.NextDouble() * (max - min) + min;
+                }
+                Random rnd = new Random();
+                return (float)rnd.NextDouble() * (max - min) + min;
+            }
+
+            private static Random random;
+
+            public static int GetRandomInt_(int min, int max, bool repeatable)
+            {
+                if (repeatable)
+                {
+                    return random.Next(min, max + 1);
+                }
+                Random rnd = new Random();
+                return rnd.Next(min, max + 1);
+            }
+
+            public static void SetSeed_(int seed)
+            {
+                random = new Random(seed);
+            }");
         }
     }
 }

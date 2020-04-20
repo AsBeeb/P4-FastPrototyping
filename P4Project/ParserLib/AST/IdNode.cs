@@ -18,7 +18,7 @@ namespace ParserLib.AST
 
         public string GetVarType => Type.Replace("[]", "");
 
-        public IdNode(string id, List<IdOperationNode> idOperations)
+        public IdNode(string id, List<IdOperationNode> idOperations = null)
         {
             Id = id;
             IdOperations = idOperations;

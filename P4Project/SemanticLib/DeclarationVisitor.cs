@@ -200,6 +200,7 @@ namespace SemanticLib
 
         public override void Visit(ProgNode node)
         {
+            InsertStandardFunctions();
             foreach (TopDclNode topDclNode in node.TopDclNodes)
             {
                 switch (topDclNode)
@@ -256,6 +257,109 @@ namespace SemanticLib
             node.ControlExpr.Accept(this);
             node.WhileLoopBody.Accept(this);
             symbolTable.CloseScope();
+        }
+
+        private void InsertStandardFunctions()
+        {
+            // GetString
+            IdNode getStringIdNode = new IdNode("GetString");
+            List<FormalParamNode> getStringParams = new List<FormalParamNode>();
+            FunctionDclNode getStringFunction = new FunctionDclNode(getStringIdNode, "string", getStringParams);
+            symbolTable.EnterSymbol("GetString", getStringFunction);
+
+            // GetNumber
+            IdNode getNumberIdNode = new IdNode("GetNumber");
+            List<FormalParamNode> getNumberParams = new List<FormalParamNode>();
+            FunctionDclNode getNumberFunction = new FunctionDclNode(getNumberIdNode, "float", getNumberParams);
+            symbolTable.EnterSymbol("GetNumber", getNumberFunction);
+
+            // Print
+            IdNode printIdNode = new IdNode("Print");
+            List<FormalParamNode> printParams = new List<FormalParamNode>()
+            {
+                new FormalParamNode(null, "float")
+            };
+            FunctionDclNode printFunction = new FunctionDclNode(printIdNode, "void", printParams);
+            symbolTable.EnterSymbol("Print", printFunction);
+
+            // ChooseOption
+            IdNode chooseIdNode = new IdNode("ChooseOption");
+            List<FormalParamNode> chooseParams = new List<FormalParamNode>()
+            {
+                new FormalParamNode(null, "bool"),
+                new FormalParamNode(null, "string")
+            };
+            FunctionDclNode chooseFunction = new FunctionDclNode(chooseIdNode, "int", chooseParams);
+            symbolTable.EnterSymbol("ChooseOption", chooseFunction);
+
+            // GetRandomFloat
+            IdNode getFloatIdNode = new IdNode("GetRandomFloat");
+            List<FormalParamNode> getFloatParams = new List<FormalParamNode>()
+            {
+                new FormalParamNode(null, "float"),
+                new FormalParamNode(null, "float"),
+                new FormalParamNode(null, "bool")
+            };
+            FunctionDclNode getFloatFunction = new FunctionDclNode(getFloatIdNode, "float", getFloatParams);
+            symbolTable.EnterSymbol("GetRandomFloat", getFloatFunction);
+
+            // GetRandomInt
+            IdNode getIntIdNode = new IdNode("GetRandomInt");
+            List<FormalParamNode> getIntParams = new List<FormalParamNode>()
+            {
+                new FormalParamNode(null, "int"),
+                new FormalParamNode(null, "int"),
+                new FormalParamNode(null, "bool")
+            };
+            FunctionDclNode getIntFunction = new FunctionDclNode(getIntIdNode, "int", getIntParams);
+            symbolTable.EnterSymbol("GetRandomInt", getIntFunction);
+
+            // SetSeed
+            IdNode setSeedIdNode = new IdNode("SetSeed");
+            List<FormalParamNode> setSeedParams = new List<FormalParamNode>()
+            {
+                new FormalParamNode(null, "int")
+            };
+            FunctionDclNode setSeedFunction = new FunctionDclNode(setSeedIdNode, "void", setSeedParams);
+            symbolTable.EnterSymbol("SetSeed", setSeedFunction);
+
+            // ListAdd
+            IdNode listAddIdNode = new IdNode("ListAdd");
+            List<FormalParamNode> listAddParams = new List<FormalParamNode>()
+            {
+                new FormalParamNode(null, "[]"),
+                new FormalParamNode(null, "?")
+            };
+            FunctionDclNode listAddFunction = new FunctionDclNode(listAddIdNode, "void", listAddParams);
+            symbolTable.EnterSymbol("ListAdd", listAddFunction);
+
+            // ListRemove
+            IdNode listRemoveIdNode = new IdNode("ListRemove");
+            List<FormalParamNode> listRemoveParams = new List<FormalParamNode>()
+            {
+                new FormalParamNode(null, "[]"),
+                new FormalParamNode(null, "?")
+            };
+            FunctionDclNode listRemoveFunction = new FunctionDclNode(listRemoveIdNode, "void", listRemoveParams);
+            symbolTable.EnterSymbol("ListRemove", listRemoveFunction);
+
+            // ListEmpty
+            IdNode listEmptyIdNode = new IdNode("ListEmpty");
+            List<FormalParamNode> listEmptyParams = new List<FormalParamNode>()
+            {
+                new FormalParamNode(null, "[]"),
+            };
+            FunctionDclNode listEmptyFunction = new FunctionDclNode(listEmptyIdNode, "void", listEmptyParams);
+            symbolTable.EnterSymbol("ListEmpty", listEmptyFunction);
+
+            // ListLength
+            IdNode listLengthIdNode = new IdNode("ListLength");
+            List<FormalParamNode> listLengthParams = new List<FormalParamNode>()
+            {
+                new FormalParamNode(null, "[]"),
+            };
+            FunctionDclNode listLengthFunction = new FunctionDclNode(listLengthIdNode, "int", listLengthParams);
+            symbolTable.EnterSymbol("ListLength", listLengthFunction);
         }
     }
 }

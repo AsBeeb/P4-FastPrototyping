@@ -42,6 +42,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CodeGeneratorVisitor.cs" />
+    <Compile Include="Functions\IOFunctions.cs" />
+    <Compile Include="Functions\ListFunctions.cs" />
     <Compile Include="Functions\PlayLoop.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Testklasse.cs" />
