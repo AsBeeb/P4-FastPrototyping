@@ -68,9 +68,62 @@ namespace P4Project
             codeGeneratorVisitor.Visit(AST);
 
             Console.WriteLine(codeGeneratorVisitor.CSharpString);
-            Console.WriteLine("Færdig");
-            Console.ReadKey();
+            Console.WriteLine("Done compiling \n \n");
+            Console.WriteLine("Do you want to save? \n1: Yes \n2: No");
+            string SaveFileOption = Console.ReadLine();
+            if (SaveFileOption.Replace(" ", "") == "1")
+            {
+                SaveProgram(codeGeneratorVisitor.CSharpString.ToString());
+            }
         }
 
+
+        public static void SaveProgram(string Program)
+        {
+            //Create string variables needed
+            string fileName = "";
+            string folderPath ="";
+            string destinationOption = "";
+
+            //Find where to save the file
+            do
+            {
+                Console.WriteLine("\n \nChoose destination: \n1: Desktop \n2: Documents");
+                destinationOption = Console.ReadLine();
+                if (destinationOption == "1")
+                {
+                    folderPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+                }
+                else if (destinationOption == "2")
+                {
+                    folderPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+                }
+                else
+                {
+                    Console.WriteLine("Unavailable option chosen");
+                }
+            } while (!(destinationOption == "1" || destinationOption == "2"));
+
+            //Naming of the file
+            Console.Write("\nSpecify name of the file: ");
+            folderPath += "\\";
+            fileName += Console.ReadLine();
+            //If the file already exists we add a '1' at the end until the name doesn't exists already
+            while (File.Exists(folderPath+fileName+ ".txt"))
+            {
+                fileName += "1";
+            }
+            fileName += ".txt";
+
+            Console.WriteLine(folderPath + "\n\n");
+            //Creates and writes to the file
+            using (StreamWriter SW = File.CreateText(folderPath+fileName))
+            {
+                SW.WriteLine(Program);
+            }
+
+            Console.WriteLine($"{fileName} generated at {folderPath}");
+            Console.ReadLine();
+        }
     }
 }

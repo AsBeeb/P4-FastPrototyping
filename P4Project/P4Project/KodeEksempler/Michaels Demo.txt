@@ -1,0 +1,48 @@
+struct Vaaben {
+	local int skade;
+	local int type;
+	Vaaben(int Skade, int Type){
+		skade = Skade;
+		type = Type;
+	}
+}
+
+struct Karakter {
+	local Vaaben vaaben;
+	local int liv;
+	Karakter(int Liv, Vaaben Vaaben){
+		liv = Liv;
+		vaaben = Vaaben;
+	}
+}
+
+public Main(){
+	#oprettelse af våben.
+	Local Vaaben Svaerd = Vaaben(50, 1);
+	Local Vaaben Bue = Vaaben(20, 2);
+	# oprettelse af karaktere.
+	local Karakter Michael = Karakter(500, Svaerd);
+	local Karakter Buster = Karakter(300, Bue);
+
+	Karakter[] SpillerListe;
+	# AddArrayElement(Michael, SpillerListe);
+	# AddArrayElement(Buster, SpillerListe);
+
+	play(Angriber vs Forsvarrer in SpillerListe){
+		Angrib(Angriber, Forsvarrer[0]);
+
+	} until (Michael.liv < 0 || Buster.liv < 0);
+	if (Michael.liv < 0){
+	# Butser vandt
+	}
+	elif (Butser.liv < 0){
+	# Michael vandt
+	}
+	else{
+	# Noget gik helt galt
+	}
+
+	func void Angrib (Karakter Angriber, Karakter Forsvarrer){
+		Forsvarrer.liv = Forsvarrer.liv - Angriber.vaaben.skade;
+	}
+}
