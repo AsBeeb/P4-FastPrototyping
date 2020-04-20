@@ -15,7 +15,7 @@ namespace P4Project
 {
     public class Program
     {
-        private static void Main(string[] args)
+        private static void Main()
         {
             Queue<Token> tokenQueue = new Queue<Token>();
             //Console.WriteLine("Indskriv sti til mappe:");
@@ -26,8 +26,9 @@ namespace P4Project
             string gitPath = @"\GitHub\P4-FastPrototyping\P4Project\P4Project\KodeEksempler\";
             string fileToOpen = "Demo2";
             string fileExtension = ".txt";
-            //string filePath = String.Format("{0}{1}{2}{3}", docPath, gitPath, fileToOpen, fileExtension);
-            string filePath = @"C:\Users\Michael\Source\Repos\P4-FastPrototyping\P4Project\P4Project\KodeEksempler\Demo2.txt";
+            string filePath = String.Format("{0}{1}{2}{3}", docPath, gitPath, fileToOpen, fileExtension);
+            //string filePath = @"C:\Users\Michael\Source\Repos\P4-FastPrototyping\P4Project\P4Project\KodeEksempler\Demo2.txt";
+            
             using (StreamReaderExpanded reader = new StreamReaderExpanded(filePath))
             {
                 do
@@ -67,6 +68,8 @@ namespace P4Project
 
             CodeGeneratorVisitor codeGeneratorVisitor = new CodeGeneratorVisitor();
             codeGeneratorVisitor.Visit(AST);
+
+            CSharpCompiler.CompileAndStartConsole(codeGeneratorVisitor.CSharpString);
 
             Console.WriteLine(codeGeneratorVisitor.CSharpString);
             Console.WriteLine("Færdig");

@@ -7,7 +7,6 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace CSharpCompilerLib
 {
@@ -52,7 +51,7 @@ namespace CSharpCompilerLib
                     MethodInfo m = assembly.EntryPoint;
                     if (m != null)
                     {
-                        var parameters = m.GetParameters().Length == 0 ? null : new[] { new string[2] };
+                        object[] parameters = m.GetParameters().Length == 0 ? null : new[] { new string[m.GetParameters().Length] };
                         m.Invoke(null, parameters);
                     }
                 }

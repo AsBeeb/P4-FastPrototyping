@@ -25,13 +25,10 @@ func void main()
 	local hund Viggo = hund(7, "Kokker");
 	local person Michael;
 	local hund[] hundeliste;
-	hundeliste[5] = Viggo;
-	hundeliste[5].alder = Fiddo.alder;
 
 	if(true)
 	{
 		local int newValue = 2222;
-		local int anotherVal = k[2];
 	} 
 	else
 	{
@@ -40,7 +37,7 @@ func void main()
 
 	play (player vs opponents in k)
 	{
-		player = opponents[2];
+	local hund Fiddo2;
 	} until (true);
 
 	local player MyPlayer = player(10);
