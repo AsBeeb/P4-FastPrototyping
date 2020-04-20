@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SemanticLib", "SemanticLib\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharpCompilerLib", "ConsoleLib\CSharpCompilerLib.csproj", "{7C2810DE-401A-49B7-AFB4-486FE836E866}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeGeneration", "CodeGeneration\CodeGeneration.csproj", "{39EE8718-1CE7-4408-9909-EACABE6442DA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{7C2810DE-401A-49B7-AFB4-486FE836E866}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7C2810DE-401A-49B7-AFB4-486FE836E866}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7C2810DE-401A-49B7-AFB4-486FE836E866}.Release|Any CPU.Build.0 = Release|Any CPU
+		{39EE8718-1CE7-4408-9909-EACABE6442DA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{39EE8718-1CE7-4408-9909-EACABE6442DA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{39EE8718-1CE7-4408-9909-EACABE6442DA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{39EE8718-1CE7-4408-9909-EACABE6442DA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

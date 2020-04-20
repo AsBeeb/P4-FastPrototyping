@@ -1,9 +1,32 @@
 ﻿global string hejStr = "Hej " : " med " : " dig!";
 global float fsa = 2.0;
 
+struct person{
+	local string navn;
+	local int alder;
+	local float hoejde = 150.5;
+}
+
+struct hund {
+	local string navn = "Hunni";
+	local int alder;
+	local string race;
+	local string battleaxe;
+	hund(int Alder, string RACe){
+	alder = Alder;
+	race = RACe;
+	}
+}
+
 func void main()
 {
 	local int[] k;
+	local hund Fiddo;
+	local hund Viggo = hund(7, "Kokker");
+	local person Michael;
+	local hund[] hundeliste;
+	hundeliste[5] = Viggo;
+	hundeliste[5].alder = Fiddo.alder;
 
 	if(true)
 	{
