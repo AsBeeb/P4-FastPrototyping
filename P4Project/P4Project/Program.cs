@@ -15,7 +15,7 @@ namespace P4Project
 {
     public class Program
     {
-        private static void Main()
+        private static void Main(string[] args)
         {
             Queue<Token> tokenQueue = new Queue<Token>();
             //Console.WriteLine("Indskriv sti til mappe:");
