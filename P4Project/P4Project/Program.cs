@@ -8,6 +8,7 @@ using ScannerLib;
 using ParserLib;
 using ParserLib.AST;
 using SemanticLib;
+using CSharpCompilerLib;
 
 namespace P4Project
 {
@@ -63,6 +64,8 @@ namespace P4Project
 
             var typeVisitor = new TypeVisitor(symbolTable);
             typeVisitor.Visit(AST);
+
+            CSharpCompiler.CompileAndStartConsole()
 
             Console.WriteLine("Færdig");
             Console.ReadKey();
