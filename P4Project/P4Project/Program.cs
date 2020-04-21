@@ -73,9 +73,69 @@ namespace P4Project
 
             CSharpCompiler.CompileAndStartConsole(codeGeneratorVisitor.CSharpString);
 
-            Console.WriteLine("Færdig");
+            Console.WriteLine("Done compiling");
+
+            Console.WriteLine("Do you want to save the C# file? \n1: Yes \n2: No");
+            if (Console.ReadLine().Replace(" ", "") == "1")
+            {
+                SaveProgram(codeGeneratorVisitor.CSharpString.ToString());
+            }
+
             Console.ReadLine();
         }
 
+
+        // Skabelse af uniform fordeling af tal for floats.................. som Michael overså tidligere da han præsenterede sin random funktion
+        // TalMellem0Og1 = 1 / (50000 - randomint(0, 49999));
+        // return TalMellem0Og1 * (max - min) + min;
+
+
+        public static void SaveProgram(string Program)
+        {
+            //Create string variables needed
+            string fileName = "";
+            string folderPath = "";
+            string destinationOption = "";
+
+            //Find where to save the file
+            do
+            {
+                Console.WriteLine("\n \nChoose destination: \n1: Desktop \n2: Documents");
+                destinationOption = Console.ReadLine();
+                if (destinationOption == "1")
+                {
+                    folderPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+                }
+                else if (destinationOption == "2")
+                {
+                    folderPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+                }
+                else
+                {
+                    Console.WriteLine("Unavailable option chosen");
+                }
+            } while (!(destinationOption == "1" || destinationOption == "2"));
+
+            //Naming of the file
+            Console.Write("\nSpecify name of the file: ");
+            folderPath += "\\";
+            fileName += Console.ReadLine();
+            //If the file already exists we add a '1' at the end until the name doesn't exists already
+            while (File.Exists(folderPath + fileName + ".cs"))
+            {
+                fileName += "1";
+            }
+            fileName += ".cs";
+
+            Console.WriteLine(folderPath + "\n\n");
+            //Creates and writes to the file
+            using (StreamWriter SW = File.CreateText(folderPath + fileName))
+            {
+                SW.WriteLine(Program);
+            }
+
+            Console.WriteLine($"{fileName} saved at {folderPath}");
+            Console.ReadLine();
+        }
     }
 }

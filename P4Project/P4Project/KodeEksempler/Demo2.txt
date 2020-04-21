@@ -22,8 +22,6 @@ func void main()
 {
 	Print(5 : "\n" );
 	Print("Hej med dig \n");
-	local hund Viggo;
-	Print(Viggo);
 	Print("\n");
 	Print(GetRandomFloat(1.0, 10.0, false));
 	Print("\n \n");

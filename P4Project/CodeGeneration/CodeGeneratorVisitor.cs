@@ -544,88 +544,89 @@ namespace CodeGeneration
 
         private void GenerateStandardFunctions()
         {
-            CSharpString.Append(@"  public static string GetString_()
-            {
-                return Console.ReadLine();
-            }
+            CSharpString.Append(@"public static string GetString_()
+    {
+        return Console.ReadLine();
+    }
 
-            public static float GetNumber_()
-            {
-                float val;
-                while (!float.TryParse(Console.ReadLine(), out val));
-            
-                return val;
-            }
+    public static float GetNumber_()
+    {
+        float val;
+        while (!float.TryParse(Console.ReadLine(), out val));
+    
+        return val;
+    }
 
-            public static void Print_(object txt)
-            {
-                Console.Write(txt);
-            }
+    public static void Print_(object txt)
+    {
+        Console.Write(txt);
+    }
 
-            public static int ChooseOption_(bool displayIndex, params string[] options)
-            {
-                for (int i = 0; i < options.Length; i++)
-                {
-                    string msg = ((displayIndex == true) ? $""{ i + 1}: "" : """");
-                    Console.WriteLine(msg + $""{options[i]}"");
-                }
+    public static int ChooseOption_(bool displayIndex, params string[] options)
+    {
+        for (int i = 0; i < options.Length; i++)
+        {
+            string msg = ((displayIndex == true) ? $""{ i + 1}: "" : """");
+            Console.WriteLine(msg + $""{options[i]}"");
+        }
 
-                int choice = 0;
-                do
-                {
-                    int.TryParse(Console.ReadLine(), out choice);
-                }
-                while (choice <= 0 || choice < options.Length);
+        int choice = 0;
+        do
+        {
+            int.TryParse(Console.ReadLine(), out choice);
+        }
+        while (choice <= 0 || choice < options.Length);
 
-                return choice;
-            }
+        return choice;
+    }
 
-            public static float GetRandomFloat_(float min, float max, bool repeatable)
-            {
-                if (repeatable)
-                {
-                    return (float)random.NextDouble() * (max - min) + min;
-                }
-                Random rnd = new Random();
-                return (float)rnd.NextDouble() * (max - min) + min;
-            }
+    public static float GetRandomFloat_(float min, float max, bool repeatable)
+    {
+        if (repeatable)
+        {
+            return (float)random.NextDouble() * (max - min) + min;
+        }
+        Random rnd = new Random();
+        return (float)rnd.NextDouble() * (max - min) + min;
+    }
 
-            private static Random random;
+    private static Random random;
 
-            public static int GetRandomInt_(int min, int max, bool repeatable)
-            {
-                if (repeatable)
-                {
-                    return random.Next(min, max + 1);
-                }
-                Random rnd = new Random();
-                return rnd.Next(min, max + 1);
-            }
+    public static int GetRandomInt_(int min, int max, bool repeatable)
+    {
+        if (repeatable)
+        {
+            return random.Next(min, max + 1);
+        }
+        Random rnd = new Random();
+        return rnd.Next(min, max + 1);
+    }
 
-            public static void SetSeed_(int seed)
-            {
-                random = new Random(seed);
-            }
+    public static void SetSeed_(int seed)
+    {
+        random = new Random(seed);
+    }
 
-            private static void ListAdd_<T>(List<T> lst, T element)
-            {
-                lst.Add(element);
-            }
+    private static void ListAdd_<T>(List<T> lst, T element)
+    {
+        lst.Add(element);
+    }
 
-            private static void ListRemove_<T>(List<T> lst, T element)
-            {
-                lst.Remove(element);
-            }
+    private static void ListRemove_<T>(List<T> lst, T element)
+    {
+        lst.Remove(element);
+    }
 
-            private static void ListEmpty_<T>(List<T> lst)
-            {
-                lst.Clear();
-            }
+    private static void ListEmpty_<T>(List<T> lst)
+    {
+        lst.Clear();
+    }
 
-            private static int ListLength_<T>(List<T> lst)
-            {
-                return lst.Count;
-            }");
+    private static int ListLength_<T>(List<T> lst)
+    {
+        return lst.Count;
+    }
+    ");
         }
     }
 }
