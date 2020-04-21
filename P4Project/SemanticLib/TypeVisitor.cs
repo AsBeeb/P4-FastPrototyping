@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using CodeGeneration;
 using ParserLib;
 using ParserLib.AST;
 using ParserLib.AST.DataStructures;
@@ -133,7 +132,7 @@ namespace SemanticLib
                 {
                     if (node.ActualParameters.Count == 1)
                     {
-                        if (!CodeGeneratorVisitor.IsPrimitiveType(node.ActualParameters[0].Type))
+                        if (!IsPrimitiveType(node.ActualParameters[0].Type))
                         {
                             throw new SemanticException($"The Print function can only use integers, floats, booleans and strings.");
                         }
@@ -234,7 +233,7 @@ namespace SemanticLib
                 {
                     if (node.ActualParameters.Count == 1)
                     {
-                        if (!CodeGeneratorVisitor.IsPrimitiveType(node.ActualParameters[0].Type))
+                        if (!IsPrimitiveType(node.ActualParameters[0].Type))
                         {
                             throw new SemanticException($"The Print function can only use integers, floats, booleans and strings.");
                         }
@@ -314,9 +313,12 @@ namespace SemanticLib
 
         public override void Visit(GlobalDclNode node)
         {
-            node.InitialValue.Accept(this);
+            node.InitialValue?.Accept(this);
             string declarationType = node.Type + (node.IsArray ? "[]" : "");
-            CompatibleTypes(declarationType, node.InitialValue.Type, "initializer");
+            if (node.InitialValue != null)
+            {
+                CompatibleTypes(declarationType, node.InitialValue.Type, "initializer");
+            }
         }
 
         public override void Visit(IdExpressionNode node)
@@ -505,6 +507,22 @@ namespace SemanticLib
                 case BinaryOperator.GREATER_THAN:
                 case BinaryOperator.LESS_OR_EQUALS:
                 case BinaryOperator.LESS_THAN:
+                    if (node.LeftExpr.Type == "int" || node.LeftExpr.Type == "float")
+                    {
+                        if (node.RightExpr.Type == "int" || node.RightExpr.Type == "float")
+                        {
+                            node.Type = "bool";
+                        }
+                        else
+                        {
+                            throw new SemanticException($"Invalid binary operation: \"{node.LeftExpr.Type} {node.Operator} {node.RightExpr.Type}\".");
+                        }
+                    }
+                    else
+                    {
+                        throw new SemanticException($"Invalid binary operation: \"{node.LeftExpr.Type} {node.Operator} {node.RightExpr.Type}\".");
+                    }
+                    break;
                 case BinaryOperator.NOT_EQUALS:
                 case BinaryOperator.EQUALS:
                     if (node.LeftExpr.Type == "int" || node.LeftExpr.Type == "float")
@@ -517,6 +535,14 @@ namespace SemanticLib
                         {
                             throw new SemanticException($"Invalid binary operation: \"{node.LeftExpr.Type} {node.Operator} {node.RightExpr.Type}\".");
                         }
+                    }
+                    else if (node.LeftExpr.Type == "string" && node.RightExpr.Type == "string")
+                    {
+                        node.Type = "bool";
+                    }
+                    else
+                    {
+                        throw new SemanticException($"Invalid binary operation: \"{node.LeftExpr.Type} {node.Operator} {node.RightExpr.Type}\".");
                     }
                     break;
                 case BinaryOperator.AND:
@@ -684,6 +710,15 @@ namespace SemanticLib
 
             }
 
+        }
+        public static bool IsPrimitiveType(string type)
+        {
+            bool isPrimitive = false;
+            if (type == "bool" || type == "int" || type == "float" || type == "string")
+            {
+                isPrimitive = true;
+            }
+            return isPrimitive;
         }
         // Kommentar abc.
 

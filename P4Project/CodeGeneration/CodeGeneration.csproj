@@ -53,6 +53,10 @@
       <Project>{b0a6701e-b326-4b69-930c-7bcb20b07ead}</Project>
       <Name>ParserLib</Name>
     </ProjectReference>
+    <ProjectReference Include="..\SemanticLib\SemanticLib.csproj">
+      <Project>{d2ffd734-2ac2-418e-9617-85d80c52f8e9}</Project>
+      <Name>SemanticLib</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

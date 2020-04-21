@@ -1,32 +1,15 @@
-﻿global string hejStr = "Hej " : " med " : " dig!";
-global float fsa = 2.0;
+﻿global int[] i;
 
-struct person{
-	local string navn;
-	local int alder;
-	local float hoejde = 150.5;
-}
 
 struct hund {
 	local string navn = "Hunni";
-	local int alder;
-	local string race;
-	local string battleaxe;
-	hund(int Alder, string RACe){
-	alder = Alder;
-	race = RACe;
-	}
 }
 
 func void main()
 {
-	Print(5 : "\n" );
-	Print("Hej med dig \n");
-	Print("\n");
-	Print(GetRandomFloat(1.0, 10.0, false));
-	Print("\n \n");
-	Print (GetRandomInt(2, 50000, false));
-
+	local int[] k;
+	local hund Viggo;
+	local hund per = Viggo;
 }
 
 func string myFunc(float test, int type)
@@ -35,15 +18,3 @@ func string myFunc(float test, int type)
 	local int a = test + 2;
 	return nyStr;
 }
-
-struct player
-{
-	local int Field = 10;
-
-	player (int field)
-	{
-		Field = field;
-	}
-
-}
-

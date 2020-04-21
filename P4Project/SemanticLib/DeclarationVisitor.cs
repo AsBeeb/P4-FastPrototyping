@@ -124,7 +124,7 @@ namespace SemanticLib
                 throw new SemanticException($"Invalid field or array access on declaration of function {node.Id.Id}.");
             }
 
-            if (!(symbolTable.GlobalScope.Symbols.ContainsKey(node.ReturnType) || node.ReturnType == "int" || node.ReturnType == "float" || node.ReturnType == "bool" || node.ReturnType == "string" || node.ReturnType == "void"))
+            if (!(symbolTable.GlobalScope.Symbols.ContainsKey(node.ReturnType) || node.ReturnType == "int" || node.ReturnType == "float" || node.ReturnType == "bool" || node.ReturnType == "string" || node.ReturnType == "void" || node.ReturnType == "int[]" || node.ReturnType == "float[]" || node.ReturnType == "bool[]" || node.ReturnType == "string[]" || symbolTable.GlobalScope.Symbols.ContainsKey(node.ReturnType.Replace("[]", "")) ))
             {
                 throw new SemanticException($"Invalid return type {node.ReturnType} declared on {node.Id.Id}.");
             }
@@ -219,6 +219,14 @@ namespace SemanticLib
             if (!(symbolTable.RetrieveSymbol("main") is FunctionDclNode))
             {
                 throw new SemanticException("No entry point found: missing main function.");
+            }
+            else
+            {
+                FunctionDclNode mainNode = (FunctionDclNode)symbolTable.RetrieveSymbol("main");
+                if (mainNode.FormalParamNodes.Count > 0)
+                {
+                    throw new SemanticException("Formal parameters are not allowed in main.");
+                }
             }
             node.TopDclNodes.ForEach(x => x.Accept(this));
         }
