@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using CodeGeneration;
 using ParserLib;
 using ParserLib.AST;
 using ParserLib.AST.DataStructures;
@@ -111,7 +112,66 @@ namespace SemanticLib
             var astNode = symbolTable.RetrieveSymbol(node.Id.Id);
             if (astNode is FunctionDclNode funcDcl)
             {
-                if (node.ActualParameters.Count == funcDcl.FormalParamNodes.Count)
+                if (funcDcl.Id.Id == "ChooseOption")
+                {
+                    if (node.ActualParameters.Count > 1)
+                    {
+                        for (int i = 1; i < node.ActualParameters.Count; i++)
+                        {
+                            if (node.ActualParameters[i].Type != "string")
+                            {
+                                throw new SemanticException($"Wrong type {node.ActualParameters[i].Type} provided for ChooseOption.");
+                            }
+                        }
+                    }
+                    else
+                    {
+                        throw new SemanticException("The ChooseOption did not receive enough parameters.");
+                    }
+                }
+                else if (funcDcl.Id.Id == "Print")
+                {
+                    if (node.ActualParameters.Count == 1)
+                    {
+                        if (!CodeGeneratorVisitor.IsPrimitiveType(node.ActualParameters[0].Type))
+                        {
+                            throw new SemanticException($"The Print function can only use integers, floats, booleans and strings.");
+                        }
+                    }
+                    else
+                    {
+                        throw new SemanticException($"No function of name {node.Id.Id} with {node.ActualParameters.Count} parameters found.");
+                    }
+                }
+                else if (funcDcl.Id.Id == "ListRemove" || funcDcl.Id.Id == "ListAdd")
+                {
+                    if (node.ActualParameters.Count == 2)
+                    {
+                        if (!(node.ActualParameters[0].Type.Contains("[]") && node.ActualParameters[1].Type == node.ActualParameters[0].Type.Replace("[]", "")))
+                        {
+                            throw new SemanticException($"Element type {node.ActualParameters[1].Type} was tried to be added or removed to array of type {node.ActualParameters[0].Type}.");
+                        }
+                    }
+                    else
+                    {
+                        throw new SemanticException($"No function of name {node.Id.Id} with {node.ActualParameters.Count} parameters found.");
+                    }
+                }
+                else if (funcDcl.Id.Id == "ListLength" || funcDcl.Id.Id == "ListEmpty")
+                {
+                    if (!(node.ActualParameters.Count == 1))
+                    {
+                        throw new SemanticException($"No function of name {node.Id.Id} with {node.ActualParameters.Count} parameters found.");
+                    }
+                    else
+                    {
+                        if (!node.ActualParameters[0].Type.Contains("[]"))
+                        {
+                            throw new SemanticException($"{node.Id.Id} expected list parameter.");
+                        }
+                    }
+                }
+                else if (node.ActualParameters.Count == funcDcl.FormalParamNodes.Count)
                 {
                     for (int i = 0; i < node.ActualParameters.Count; i++)
                     {
@@ -153,7 +213,66 @@ namespace SemanticLib
             var astNode = symbolTable.RetrieveSymbol(node.Id.Id);
             if (astNode is FunctionDclNode funcDcl)
             {
-                if (node.ActualParameters.Count == funcDcl.FormalParamNodes.Count)
+                if (funcDcl.Id.Id == "ChooseOption")
+                {
+                    if (node.ActualParameters.Count > 1)
+                    {
+                        for (int i = 1; i < node.ActualParameters.Count; i++)
+                        {
+                            if (node.ActualParameters[i].Type != "string")
+                            {
+                                throw new SemanticException($"Wrong type {node.ActualParameters[i].Type} provided for ChooseOption.");
+                            }
+                        }
+                    }
+                    else
+                    {
+                        throw new SemanticException("The ChooseOption did not receive enough parameters.");
+                    }
+                }
+                else if (funcDcl.Id.Id == "Print")
+                {
+                    if (node.ActualParameters.Count == 1)
+                    {
+                        if (!CodeGeneratorVisitor.IsPrimitiveType(node.ActualParameters[0].Type))
+                        {
+                            throw new SemanticException($"The Print function can only use integers, floats, booleans and strings.");
+                        }
+                    }
+                    else
+                    {
+                        throw new SemanticException($"No function of name {node.Id.Id} with {node.ActualParameters.Count} parameters found.");
+                    }
+                }
+                else if (funcDcl.Id.Id == "ListRemove" || funcDcl.Id.Id == "ListAdd")
+                {
+                    if (node.ActualParameters.Count == 2)
+                    {
+                        if (!(node.ActualParameters[0].Type.Contains("[]") && node.ActualParameters[1].Type == node.ActualParameters[0].Type.Replace("[]", "")))
+                        {
+                            throw new SemanticException($"Element type {node.ActualParameters[1].Type} was tried to be added or removed to array of type {node.ActualParameters[0].Type}.");
+                        }
+                    }
+                    else
+                    {
+                        throw new SemanticException($"No function of name {node.Id.Id} with {node.ActualParameters.Count} parameters found.");
+                    }
+                }
+                else if (funcDcl.Id.Id == "ListLength" || funcDcl.Id.Id == "ListEmpty")
+                {
+                    if (!(node.ActualParameters.Count == 1))
+                    {
+                        throw new SemanticException($"No function of name {node.Id.Id} with {node.ActualParameters.Count} parameters found.");
+                    }
+                    else
+                    {
+                        if (!node.ActualParameters[0].Type.Contains("[]"))
+                        {
+                            throw new SemanticException($"{node.Id.Id} expected list parameter.");
+                        }
+                    }
+                }
+                else if(node.ActualParameters.Count == funcDcl.FormalParamNodes.Count)
                 {
                     for (int i = 0; i < node.ActualParameters.Count; i++)
                     {

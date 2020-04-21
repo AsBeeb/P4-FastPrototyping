@@ -532,7 +532,7 @@ namespace CodeGeneration
             node.WhileLoopBody.Accept(this);
         }
 
-        public bool IsPrimitiveType (string type)
+        public static bool IsPrimitiveType (string type)
         {
             bool isPrimitive = false;
             if (type == "bool" || type == "int" || type == "float" || type == "string")
@@ -575,7 +575,7 @@ namespace CodeGeneration
                 {
                     int.TryParse(Console.ReadLine(), out choice);
                 }
-                while (choice <= 0 || choice > options.Length);
+                while (choice <= 0 || choice < options.Length);
 
                 return choice;
             }
@@ -605,6 +605,26 @@ namespace CodeGeneration
             public static void SetSeed_(int seed)
             {
                 random = new Random(seed);
+            }
+
+            private static void ListAdd_<T>(List<T> lst, T element)
+            {
+                lst.Add(element);
+            }
+
+            private static void ListRemove_<T>(List<T> lst, T element)
+            {
+                lst.Remove(element);
+            }
+
+            private static void ListEmpty_<T>(List<T> lst)
+            {
+                lst.Clear();
+            }
+
+            private static int ListLength_<T>(List<T> lst)
+            {
+                return lst.Count;
             }");
         }
     }

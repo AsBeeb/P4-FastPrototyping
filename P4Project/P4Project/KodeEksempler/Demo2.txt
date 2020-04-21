@@ -20,30 +20,15 @@ struct hund {
 
 func void main()
 {
-	local int[] k;
-	local hund Fiddo;
-	local float hejhej = GetNumber();
-	Print(hejhej);
+	Print(5 : "\n" );
+	Print("Hej med dig \n");
+	local hund Viggo;
+	Print(Viggo);
+	Print("\n");
+	Print(GetRandomFloat(1.0, 10.0, false));
+	Print("\n \n");
+	Print (GetRandomInt(2, 50000, false));
 
-	local hund Viggo = hund(7, "Kokker");
-	local person Michael;
-	local hund[] hundeliste;
-
-	if(true)
-	{
-		local int newValue = 2222;
-	} 
-	else
-	{
-		local string minString = myFunc(20.2 , 3);
-	};
-
-	play (player vs opponents in k)
-	{
-	local hund Fiddo2;
-	} until (true);
-
-	local player MyPlayer = player(10);
 }
 
 func string myFunc(float test, int type)

@@ -8,22 +8,22 @@ namespace CodeGeneration.Functions
 {
     class ListFunctions
     {
-        private void ListAdd<T>(List<T> lst, T element)
+        private static void ListAdd<T>(List<T> lst, T element)
         {
             lst.Add(element);
         }
 
-        private void ListRemove<T>(List<T> lst, T element)
+        private static void ListRemove<T>(List<T> lst, T element)
         {
             lst.Remove(element);
         }
 
-        private void ListEmpty<T>(List<T> lst)
+        private static void ListEmpty<T>(List<T> lst)
         {
             lst.Clear();
         }
 
-        private int ListLength<T>(List<T> lst)
+        private static int ListLength<T>(List<T> lst)
         {
             return lst.Count;
         }

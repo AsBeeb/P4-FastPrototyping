@@ -277,7 +277,7 @@ namespace SemanticLib
             IdNode printIdNode = new IdNode("Print");
             List<FormalParamNode> printParams = new List<FormalParamNode>()
             {
-                new FormalParamNode(null, "float")
+                new FormalParamNode(null, "object")
             };
             FunctionDclNode printFunction = new FunctionDclNode(printIdNode, "void", printParams);
             symbolTable.EnterSymbol("Print", printFunction);

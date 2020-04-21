@@ -49,6 +49,10 @@
     <Compile Include="TypeVisitor.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\CodeGeneration\CodeGeneration.csproj">
+      <Project>{39ee8718-1ce7-4408-9909-eacabe6442da}</Project>
+      <Name>CodeGeneration</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ParserLib\ParserLib.csproj">
       <Project>{b0a6701e-b326-4b69-930c-7bcb20b07ead}</Project>
       <Name>ParserLib</Name>

@@ -39,7 +39,7 @@ namespace CodeGeneration.Functions
             {
                 int.TryParse(Console.ReadLine(), out choice);
             }
-            while (choice <= 0 || choice > options.Length);
+            while (choice <= 0 || choice < options.Length);
 
             return choice;
         }
