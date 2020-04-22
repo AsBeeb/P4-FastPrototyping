@@ -26,6 +26,12 @@ func void main()
 
 	local int a = -5;
 	Print(a);
+
+	Viggo.navn = "Max";
+	Print(Viggo.navn);
+	
+	Viggo.navn = "Janus";
+	Print(Viggo.navn);
 }
 
 func string myFunc(float test, int type)
