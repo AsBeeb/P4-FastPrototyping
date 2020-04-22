@@ -196,7 +196,6 @@ namespace ParserLib
             if (tokens.Peek().IsInPredictSet(TokenType.local_token))
             {
                 dclNodes.Add(ParseDcl());
-                Match(TokenType.semicolon_token);
                 dclNodes.AddRange(ParseDcls());
             }
             else if (tokens.Peek().IsInPredictSet(TokenType.id_token, TokenType.rcbracket_token))
@@ -339,8 +338,6 @@ namespace ParserLib
 
             if (tokens.Peek().IsInPredictSet(TokenType.lcbracket_token)){
                 Match(TokenType.lcbracket_token);
-                stmts.Add(ParseStmt());
-                Match(TokenType.semicolon_token);
                 stmts.AddRange(ParseStmts());
                 Match(TokenType.rcbracket_token);
                 block = new BlockNode(stmts);
@@ -361,7 +358,6 @@ namespace ParserLib
                                             TokenType.play_token, TokenType.if_token, TokenType.return_token))
             {
                 stmts.Add(ParseStmt());
-                Match(TokenType.semicolon_token);
                 stmts.AddRange(ParseStmts());
             }
             else if (tokens.Peek().IsInPredictSet(TokenType.rcbracket_token))
@@ -421,6 +417,7 @@ namespace ParserLib
                 bool isArray = ParseBrackets();
                 IdNode id = new IdNode(Match(TokenType.id_token).Value, null);
                 ExpressionNode init = ParseInit();
+                Match(TokenType.semicolon_token);
                 dcl = new DeclarationNode(id, type, init, isArray);
             }
             else
@@ -450,6 +447,7 @@ namespace ParserLib
                 throw new SyntacticalException(tokens.Peek());
             }
 
+            Match(TokenType.semicolon_token);
             return assignOrCall;
         }
 
@@ -545,6 +543,7 @@ namespace ParserLib
 
             if (tokens.Peek().IsInPredictSet(TokenType.elif_token))
             {
+                elifs = new List<ElifNode>();
                 Match(TokenType.elif_token);
                 Match(TokenType.lparen_token);
                 ExpressionNode exprNode = ParseBoolExpr();
@@ -553,10 +552,14 @@ namespace ParserLib
 
                 ElifNode elifNode = new ElifNode(exprNode, blockBody);
                 elifs.Add(elifNode);
-
-                elifs.AddRange(ParseElifs());
+                List<ElifNode> tempElifsList = ParseElifs();
+                if(tempElifsList != null)
+                {
+                    elifs.AddRange(tempElifsList);
+                }
             }
-            else if (tokens.Peek().IsInPredictSet(TokenType.else_token, TokenType.semicolon_token))
+            else if (tokens.Peek().IsInPredictSet(TokenType.else_token, TokenType.id_token, TokenType.local_token, TokenType.if_token,
+                                                  TokenType.while_token, TokenType.return_token, TokenType.play_token, TokenType.rcbracket_token))
             {
                 // Advance
             }
@@ -581,7 +584,9 @@ namespace ParserLib
 
                 elseNode = new ElseNode(blockBody);
             }
-            else if (tokens.Peek().IsInPredictSet(TokenType.semicolon_token))
+            else if (tokens.Peek().IsInPredictSet(TokenType.id_token, TokenType.local_token, TokenType.if_token,
+                                                  TokenType.while_token, TokenType.return_token, TokenType.play_token, 
+                                                  TokenType.rcbracket_token))
             {
                 // Advance
             }
@@ -624,6 +629,7 @@ namespace ParserLib
             {
                 Match(TokenType.return_token);
                 ExpressionNode returnValue = ParseReturnValue();
+                Match(TokenType.semicolon_token);
 
                 returnNode = new ReturnNode(returnValue);
             }

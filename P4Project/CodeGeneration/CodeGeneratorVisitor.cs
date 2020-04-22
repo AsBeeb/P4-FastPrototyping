@@ -692,8 +692,12 @@ namespace CodeGeneration
         do
         {
             int.TryParse(Console.ReadLine(), out choice);
+            if(choice <= 0 || choice > options.Length)
+            {
+                Console.WriteLine(""Choice out of bounds. Please try again."");
+            }
         }
-        while (choice <= 0 || choice < options.Length);
+        while (choice <= 0 || choice > options.Length);
 
         return choice;
     }

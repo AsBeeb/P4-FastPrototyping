@@ -1,42 +1,16 @@
-﻿global int[] i;
-
-
-struct hund {
+﻿struct hund {
 	local string navn = "Hunni";
 }
 
-struct mand {
-	local string Navn = "Jens";
-
-	mand(string navn) 
-	{
-		Navn = navn;
-	}
-}
-
-struct hus {
-	local string navn = "my house";
-}
+global hund gerefsd;
 
 func void main()
 {
-	local int[] k;
-	local hund Viggo;
-	local hund per = Viggo;
-
-	local int a = -5;
-	Print(a);
-
-	Viggo.navn = "Max";
-	Print(Viggo.navn);
-	
-	Viggo.navn = "Janus";
-	Print(Viggo.navn);
+	Print(gerefsd.navn);
 }
 
-func string myFunc(float test, int type)
+func int[] myFunc(float test, int type)
 {
-	local string nyStr = "Hej Hej";
-	local int a = test + 2;
-	return nyStr;
+	local int[] intArray;
+	return intArray;
 }
