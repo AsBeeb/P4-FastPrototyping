@@ -61,7 +61,7 @@ namespace P4Project
             SymbolTable symbolTable = new SymbolTable();
             DeclarationVisitor dclVisitor = new DeclarationVisitor(symbolTable);
             dclVisitor.Visit(AST);
-            symbolTable.PrintTable(symbolTable.GlobalScope, 1);
+            //symbolTable.PrintTable(symbolTable.GlobalScope, 1);
 
             var typeVisitor = new TypeVisitor(symbolTable);
             typeVisitor.Visit(AST);

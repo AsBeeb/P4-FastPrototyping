@@ -20,6 +20,5 @@ namespace SemanticLib
         {
             Parent = parent;
         }
-
     }
 }

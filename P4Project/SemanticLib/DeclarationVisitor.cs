@@ -247,8 +247,8 @@ namespace SemanticLib
             {
                 throw new SemanticException($"Invalid field or array access on declaration of struct {node.Id.Id}.");
             }
-
             symbolTable.NewScope();
+
             node.Declarations?.ForEach(x => x.Accept(this));
             node.Constructor?.Accept(this);
             symbolTable.CloseScope();

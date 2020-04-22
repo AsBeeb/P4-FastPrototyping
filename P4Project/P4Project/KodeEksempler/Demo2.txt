@@ -5,11 +5,27 @@ struct hund {
 	local string navn = "Hunni";
 }
 
+struct mand {
+	local string Navn = "Jens";
+
+	mand(string navn) 
+	{
+		Navn = navn;
+	}
+}
+
+struct hus {
+	local string navn = "my house";
+}
+
 func void main()
 {
 	local int[] k;
 	local hund Viggo;
 	local hund per = Viggo;
+
+	local int a = -5;
+	Print(a);
 }
 
 func string myFunc(float test, int type)

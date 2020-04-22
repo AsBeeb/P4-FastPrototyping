@@ -171,7 +171,6 @@ namespace CodeGeneration
 
         public override void Visit(DeclarationNode node)
         {
-            Console.WriteLine(node.Type);
             if (node.IsArray)
             {
                 if (IsPrimitiveType(node.Type)){

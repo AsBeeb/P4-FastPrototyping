@@ -372,6 +372,49 @@ namespace SemanticLib
         public override void Visit(ProgNode node)
         {
             node.TopDclNodes.ForEach(x => x.Accept(this));
+
+
+            // Control for struct loops:
+            List<StructDclNode> tempStructNodes = new List<StructDclNode>();
+
+            foreach (TopDclNode itemNode in node.TopDclNodes)
+            {
+                if (itemNode is StructDclNode structDclNode)
+                {
+                    tempStructNodes.Add(structDclNode);
+                }
+            }
+
+            foreach (StructDclNode structNodeItem in tempStructNodes)
+            {
+                List<string> structChain = new List<string>();
+
+                CheckChildren(structNodeItem, structChain, symbolTable);
+
+                if (structChain.Contains(structNodeItem.Id.Id))
+                {
+                    throw new SemanticException($"Error in struct {structNodeItem.Id.Id}. Possible loop or duplicate.");
+                }
+            }
+        }
+
+        public static void CheckChildren(StructDclNode node, List<string> liste, SymbolTable symbolTable)
+        {
+            foreach (DeclarationNode DCLNode in node.Declarations)
+            {
+                if (!IsPrimitiveType(DCLNode.Type))
+                {
+                    if (!DCLNode.Type.Contains("[]"))
+                    {
+                        if (!liste.Contains(DCLNode.Type))
+                        {
+                            liste.Add(DCLNode.Type);
+                            StructDclNode STDCL = (StructDclNode)symbolTable.RetrieveSymbol(DCLNode.Type);
+                            CheckChildren(STDCL, liste, symbolTable);
+                        }
+                    }
+                }
+            }
         }
 
         public override void Visit(ReturnNode node)
@@ -387,7 +430,15 @@ namespace SemanticLib
         public override void Visit(StructDclNode node)
         {
             symbolTable.EnterScope();
-            node.Declarations?.ForEach(x => x.Accept(this));
+            //node.Declarations?.ForEach(x => x.Accept(this));
+            foreach (DeclarationNode item in node.Declarations)
+            {
+                item.Accept(this);
+                if (item.Type == node.Id.Id)
+                {
+                    throw new SemanticException($"Struct {node.Id.Id} cannot contain struct of type {item.Type}.");
+                }
+            }
             node.Constructor?.Accept(this);
             symbolTable.CloseScope();
         }

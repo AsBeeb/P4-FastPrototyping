@@ -18,7 +18,7 @@ namespace SemanticLib
             CurrentScope = GlobalScope;
             
         }
-        public void NewScope ()
+        public void NewScope()
         {
             Scope newScope = new Scope(CurrentScope);
             CurrentScope.Children.Add(newScope);
