@@ -305,8 +305,7 @@ namespace SemanticLib
             List<FormalParamNode> getFloatParams = new List<FormalParamNode>()
             {
                 new FormalParamNode(null, "float"),
-                new FormalParamNode(null, "float"),
-                new FormalParamNode(null, "bool")
+                new FormalParamNode(null, "float")
             };
             FunctionDclNode getFloatFunction = new FunctionDclNode(getFloatIdNode, "float", getFloatParams);
             symbolTable.EnterSymbol("GetRandomFloat", getFloatFunction);
@@ -316,8 +315,7 @@ namespace SemanticLib
             List<FormalParamNode> getIntParams = new List<FormalParamNode>()
             {
                 new FormalParamNode(null, "int"),
-                new FormalParamNode(null, "int"),
-                new FormalParamNode(null, "bool")
+                new FormalParamNode(null, "int")
             };
             FunctionDclNode getIntFunction = new FunctionDclNode(getIntIdNode, "int", getIntParams);
             symbolTable.EnterSymbol("GetRandomInt", getIntFunction);

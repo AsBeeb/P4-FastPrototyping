@@ -9,7 +9,7 @@ namespace ParserLib.AST
     {
         public IdNode Id;
         public ExpressionNode InitialValue;
-        public bool IsArray;
+        public readonly bool IsArray;
         public string Type;
 
         public IdNode GetId => Id;
@@ -21,6 +21,7 @@ namespace ParserLib.AST
             Id = id;
             InitialValue = initVal;
             Type = type;
+            IsArray = isArray;
         }
 
         public override void Accept(Visitor v)

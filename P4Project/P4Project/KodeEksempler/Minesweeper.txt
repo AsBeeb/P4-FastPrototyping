@@ -1,0 +1,285 @@
+﻿struct Colomn {
+	local string[] Fields;
+}
+
+global int FlagsPlacedCorrectly = 0;
+
+func void main(){
+	
+	# Set settings of game
+	Print("How many colomns do you want in the field? \n");
+	local int numberOfColomns = GetNumber();
+	Print("How many rows do you want in the field? \n");
+	local int numberOfRows = GetNumber();
+	Print("How many bombs do you want in the field? \n");
+	local int numberOfBombs = GetNumber();
+
+	if (!(numberOfBombs >= 0.5 * (numberOfRows * numberOfColomns)))
+	{
+		local Colomn[] map = CreateField(numberOfColomns, numberOfRows, "0");
+		
+		PlaceBombs(numberOfBombs, map, numberOfColomns, numberOfRows);
+		PlaceNumbers(map);
+		
+		local Colomn[] viewingmap = CreateField(numberOfColomns, numberOfRows, "O");
+		
+		local string[] players;
+		Print("Write player 1's name: ");
+		ListAdd(players, GetString());
+		Print("Write player 2's name: ");
+		ListAdd(players, GetString());
+		
+		# Prints the solution
+		#PrintMap(map);
+		
+		
+		local int lostCheck = 0;
+		
+		local int playerToPlay = 0;
+		
+		play (player vs opponents in players){
+			if (FlagsPlacedCorrectly != numberOfBombs){
+				PrintMap(viewingmap);
+				Print (player : "'s turn \n");
+				lostCheck = CheckTile (player, map, viewingmap);
+				
+			}
+			elif (FlagsPlacedCorrectly == numberOfBombs){
+				Print ("You did it! You won, great teamwork!");
+			}
+			else{
+				Print("How did this happen?");
+			}
+		} until (! (lostCheck == 0 && FlagsPlacedCorrectly < numberOfBombs))
+	}
+	else {
+		Print("You wanted too many bombs. Maximum amount of bombs are 50% of the mapsize.");
+	}
+}
+
+func int CheckTile(string player, Colomn[] maps, Colomn[] viewermap){
+	local Colomn[] viewerMap = viewermap;
+
+	# Mangler check om pladsen er inden for mappet
+	Print("Choose tile: ");
+	Print("Colomn: ");
+	local int colomn = GetNumber();
+	Print("Row: ");
+	local int row = GetNumber();
+	
+	
+	local int tileCheck = ChooseOption(true, "Check tile", "Place flag", "Remove flag");
+
+	if (tileCheck == 1){
+		if (maps[row].Fields[colomn] == ("x")){
+			Print(player : " hit a bomb and lost!");
+			return 1;
+		}
+		else {
+			viewerMap[row].Fields[colomn] = maps[row].Fields[colomn];
+		}
+	}
+	elif (tileCheck == 2){
+		viewerMap[row].Fields[colomn] = "F";
+		if (maps[row].Fields[colomn] == ("x")){
+			FlagsPlacedCorrectly = FlagsPlacedCorrectly + 1;
+		}
+	}
+	else{
+		viewerMap[row].Fields[colomn] = "O";
+		if (maps[row].Fields[colomn] == ("x")){
+			FlagsPlacedCorrectly = FlagsPlacedCorrectly - 1;
+		}
+	}
+
+	return 0;
+}
+
+func Colomn[] CreateField(int numberOfColomns, int numberOfRows, string tile){
+	
+	local int i = 0;
+	local int j = 0;
+	local Colomn[] colomnArray;
+
+	while (i < numberOfColomns){
+		local Colomn newColomn;
+		while (j < numberOfRows){
+			local string field = tile;
+			ListAdd(newColomn.Fields, field);
+			j = j + 1;
+		}
+		ListAdd(colomnArray, newColomn);
+		i = i + 1;
+		j = 0;
+	}
+	
+	return colomnArray;
+}
+
+func void PlaceBombs(int numberOfBombs, Colomn[] map, int numberOfColomns, int numberOfRows){
+	
+	local int i = 0;
+	local int row;
+	local int colomn;
+
+	local Colomn[] maps = map;
+	SetSeed(10);
+	while (i < numberOfBombs){
+		row = GetRandomInt(0, numberOfRows - 1);
+		colomn = GetRandomInt(0, numberOfColomns - 1);
+		Print("i = " : i : " Colomn = " : colomn : " row =  " : row: "\n");
+
+		if (maps[row].Fields[colomn] != ("x")){
+			i = i +	1;
+			maps[row].Fields[colomn] = "x";
+		}
+	}
+}
+
+
+func void PlaceNumbers(Colomn[] maps){
+	local int colomnsNumbers = ListLength(maps);
+	local int rowsNumbers = ListLength(maps[0].Fields);
+	local int i;
+	local int j;
+	while (i < rowsNumbers){
+		while(j < colomnsNumbers){
+			if (maps[i].Fields[j] == ("x")){
+				if (i == 0){
+					if (j == 0){
+						InsertNumber(i + 1, j, maps);
+						InsertNumber(i + 1, j + 1, maps);
+						InsertNumber(i, j + 1, maps);
+					}
+					elif (j == rowsNumbers){
+						InsertNumber(i, j - 1, maps);
+						InsertNumber(i + 1, j - 1, maps);
+						InsertNumber(i + 1, j, maps);
+					}
+					else{
+						InsertNumber(i, j - 1, maps);
+						InsertNumber(i + 1, j - 1, maps);
+						InsertNumber(i + 1, j, maps);
+						InsertNumber(i + 1, j + 1, maps);
+						InsertNumber(i, j + 1, maps);
+					}
+				}
+				elif (i == colomnsNumbers - 1){
+					if (j == 0){
+						InsertNumber(i - 1, j, maps);
+						InsertNumber(i - 1, j + 1, maps);
+						InsertNumber(i, j + 1, maps);
+					}
+					elif (j == rowsNumbers - 1){
+						InsertNumber(i, j - 1, maps);
+						InsertNumber(i - 1, j - 1, maps);
+						InsertNumber(i - 1, j, maps);
+					}
+					else{
+						InsertNumber(i, j - 1, maps);
+						InsertNumber(i - 1, j - 1, maps);
+						InsertNumber(i - 1, j, maps);
+						InsertNumber(i - 1, j + 1, maps);
+						InsertNumber(i, j + 1, maps);
+					}
+				}
+				else {
+					if (j == 0){
+						InsertNumber(i - 1, j, maps);
+						InsertNumber(i - 1, j + 1, maps);
+						InsertNumber(i, j + 1, maps);
+						InsertNumber(i + 1, j + 1, maps);
+						InsertNumber(i + 1, j, maps);
+					}
+					elif (j == rowsNumbers - 1){
+						InsertNumber(i - 1, j, maps);
+						InsertNumber(i - 1, j - 1, maps);
+						InsertNumber(i, j - 1, maps);
+						InsertNumber(i + 1, j - 1, maps);
+						InsertNumber(i + 1, j, maps);
+					}
+					else{
+						InsertNumber(i, j + 1, maps);
+						InsertNumber(i, j - 1, maps);
+						InsertNumber(i - 1, j - 1, maps);
+						InsertNumber(i - 1, j, maps);
+						InsertNumber(i - 1, j + 1, maps);
+						InsertNumber(i + 1, j + 1, maps);
+						InsertNumber(i + 1, j, maps);
+						InsertNumber(i + 1, j - 1, maps);
+					}
+				}
+			}
+			j = j + 1;
+		}
+		j = 0;
+		i = i + 1;
+	}
+	
+}
+
+func void InsertNumber(int colomn, int row, Colomn[] maps){
+	if (maps[row].Fields[colomn] == ("0")){
+		maps[row].Fields[colomn] = "1";
+	}
+	elif (maps[row].Fields[colomn] == ("1")){
+		maps[row].Fields[colomn] = "2";
+	}
+	elif (maps[row].Fields[colomn] == ("2")){
+		maps[row].Fields[colomn] = "3";
+	}
+	elif (maps[row].Fields[colomn] == ("3")){
+		maps[row].Fields[colomn] = "4";
+	}
+	elif (maps[row].Fields[colomn] == ("4")){
+		maps[row].Fields[colomn] = "5";
+	}
+	elif (maps[row].Fields[colomn] == ("5")){
+		maps[row].Fields[colomn] = "6";
+	}
+	elif (maps[row].Fields[colomn] == ("6")){
+		maps[row].Fields[colomn] = "7";
+	}
+	elif (maps[row].Fields[colomn] == ("7")){
+		maps[row].Fields[colomn] = "8";
+	}
+}
+
+func void PrintMap(Colomn[] maps){
+	local int rowsNumbers= ListLength(maps);
+	local int colomnsNumbers = ListLength(maps[0].Fields);
+	local int i = - 2;
+	local int j = - 1;
+	while (i < colomnsNumbers){
+		if (i == -2){
+			while(j < rowsNumbers){
+				if (j == -1){
+					Print ("  ");
+				}
+				else {
+					Print( j : " ");
+				}
+				j = j + 1;
+			}
+		}
+		if (i == -1){
+			while(j < rowsNumbers){
+				Print("__");
+				j = j + 1;
+			}	
+		}
+		while(j < rowsNumbers){
+			if (j == -1){
+				Print (i : "|");
+			}
+			else{
+				Print(maps[i].Fields[j] : " ");
+			}
+			j = j + 1;
+		}
+		Print("\n");
+		j = -1;
+		i = i + 1;
+	}
+
+}
