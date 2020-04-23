@@ -298,12 +298,17 @@ namespace CodeGeneration
                 CSharpString.Append("List<");
             }
 
-            CSharpString.Append(node.Type.Replace("[]", "") + " "); 
+            CSharpString.Append(node.Type.Replace("[]", ""));
+            // tilføjet et tjek på om det er et struct, hvis det er så tilføjer vi _ efter typen.
+            if (!IsPrimitiveType(node.Type.Replace("[]", "")))
+            {
+                CSharpString.Append("_");
+            }
             if (node.Type.Contains("[]"))
             {
                 CSharpString.Append("> ");
             }
-            
+            CSharpString.Append(" ");
             node.Id.Accept(this);
         }
 
@@ -344,12 +349,17 @@ namespace CodeGeneration
                 CSharpString.Append("List<");
             }
             
-            CSharpString.Append(node.ReturnType.Replace("[]", "") + " ");
+            CSharpString.Append(node.ReturnType.Replace("[]", ""));
+            //midlertidig løsning til at sætte _ på typen hvis den ikke er primitiv eller void.
+            if (!IsPrimitiveType(node.ReturnType.Replace("[]", "")) && node.ReturnType != "void")
+            {
+                CSharpString.Append("_");
+            }
             if (node.ReturnType.Contains("[]"))
             {
                 CSharpString.Append("> ");
             }
-
+            CSharpString.Append(" ");
 
             // Checks if the function declared is main
             if (node.Id.Id == "main")
