@@ -1,5 +1,34 @@
-﻿
+﻿struct map {
+	local Colomn[] X;
+}
 
+struct Colomn {
+	local string[] Y;
+}
+
+struct Monster{
+	local int Health;
+	local int Damage;
+	local string Name;
+	Monster(int health, int damage, string name){
+		Health = health;
+		Damage = damage;
+		Name = name;
+	}
+}
+
+
+func Monster MonsterTest(){
+	local Monster test;
+	return test;
+}
 func void main(){
-	Print("█");
+
+
+	local Monster ork = Monster(50, 20, "ORK");
+	local Monster test = MonsterTest();
+	local Monster testork = ork;
+	Print("ork health: " :ork.Health : "\n");
+	Print("ork damage: " :ork.Damage : "\n");
+	Print("ork name: " :ork.Name : "\n");
 }
