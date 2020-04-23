@@ -9,14 +9,16 @@ namespace ParserLib.AST
     {
         public IdNode Id;
         public string Type;
+        public bool IsArray;
 
-        public FormalParamNode(IdNode id, string type)
+        public FormalParamNode(IdNode id, string type, bool isArray = false)
         {
             Id = id;
             Type = type;
+            IsArray = isArray;
         }
 
-        public bool GetIsArray => false;
+        public bool GetIsArray => IsArray;
 
         public string GetVarType => Type;
 

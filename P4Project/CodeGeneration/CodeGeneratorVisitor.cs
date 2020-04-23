@@ -293,7 +293,8 @@ namespace CodeGeneration
 
         public override void Visit(FormalParamNode node)
         {
-            if (node.Type.Contains("[]"))
+            //if (node.Type.Contains("[]"))
+            if (node.IsArray)
             {
                 CSharpString.Append("List<");
             }
@@ -304,7 +305,8 @@ namespace CodeGeneration
             {
                 CSharpString.Append("_");
             }
-            if (node.Type.Contains("[]"))
+            //if (node.Type.Contains("[]"))
+            if (node.IsArray)
             {
                 CSharpString.Append("> ");
             }
@@ -385,10 +387,11 @@ namespace CodeGeneration
         public override void Visit(GlobalDclNode node)
         {
             CSharpString.Append("static ");
-            if (node.Type.Contains("[]"))
+            //if (node.Type.Contains("[]"))
+            if (node.IsArray)
             {
                 CSharpString.Append("List<");
-                CSharpString.Append(node.Type.Replace("[]", "") + " "); // global int example 
+                CSharpString.Append(node.Type.Replace("[]", "")); // global int example 
                 CSharpString.Append("> ");
             }
             else
@@ -439,7 +442,8 @@ namespace CodeGeneration
             else
             {
                 //Default values if a variable isn't initialized
-                if (node.Type.Contains("[]"))
+                //if (node.Type.Contains("[]"))
+                if (node.IsArray)
                 {
                     string type = node.Type.Replace("[]", "");
                     if (IsPrimitiveType(type))
@@ -712,26 +716,16 @@ namespace CodeGeneration
         return choice;
     }
 
-    public static float GetRandomFloat_(float min, float max, bool repeatable)
+    public static float GetRandomFloat_(float min, float max)
     {
-        if (repeatable)
-        {
-            return (float)random.NextDouble() * (max - min) + min;
-        }
-        Random rnd = new Random();
-        return (float)rnd.NextDouble() * (max - min) + min;
+        return (float)random.NextDouble() * (max - min) + min;
     }
 
-    private static Random random;
+    private static Random random = new Random();
 
-    public static int GetRandomInt_(int min, int max, bool repeatable)
+    public static int GetRandomInt_(int min, int max)
     {
-        if (repeatable)
-        {
-            return random.Next(min, max + 1);
-        }
-        Random rnd = new Random();
-        return rnd.Next(min, max + 1);
+        return random.Next(min, max + 1);
     }
 
     public static void SetSeed_(int seed)

@@ -8,12 +8,12 @@ namespace CodeGeneration.Functions
 {
     class IOFunctions
     {
-        public string GetString_()
+        public static string GetString_()
         {
             return Console.ReadLine();
         }
 
-        public float GetNumber_()
+        public static float GetNumber_()
         {
             float val;
             while (!float.TryParse(Console.ReadLine(), out val));
@@ -21,12 +21,12 @@ namespace CodeGeneration.Functions
             return val;
         }
 
-        public void Print_(object txt)
+        public static void Print_(object txt)
         {
             Console.Write(txt);
         }
 
-        public int ChooseOption_(bool displayIndex, params string[] options)
+        public static int ChooseOption_(bool displayIndex, params string[] options)
         {
             for (int i = 0; i < options.Length; i++)
             {
@@ -44,29 +44,19 @@ namespace CodeGeneration.Functions
             return choice;
         }
 
-        public float GetRandomFloat_(float min, float max, bool repeatable)
+        public static float GetRandomFloat_(float min, float max)
         {
-            if (repeatable)
-            {
-                return (float)random.NextDouble() * (max - min) + min;
-            }
-            Random rnd = new Random();
-            return (float)rnd.NextDouble() * (max - min) + min;
+            return (float)random.NextDouble() * (max - min) + min;
         }
 
-        private static Random random;
+        private static Random random = new Random();
 
-        public int GetRandomInt_(int min, int max, bool repeatable)
+        public static int GetRandomInt_(int min, int max)
         {
-            if (repeatable)
-            {
-                return random.Next(min, max + 1);
-            }
-            Random rnd = new Random();
-            return rnd.Next(min, max + 1);
+            return random.Next(min, max + 1);
         }
 
-        public void SetSeed_(int seed)
+        public static void SetSeed_(int seed)
         {
             random = new Random(seed);
         }

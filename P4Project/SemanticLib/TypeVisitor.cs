@@ -174,7 +174,7 @@ namespace SemanticLib
                 {
                     for (int i = 0; i < node.ActualParameters.Count; i++)
                     {
-                        CompatibleTypes(node.ActualParameters[i].Type, funcDcl.FormalParamNodes[i].Type, "parameter type");
+                        CompatibleTypes(node.ActualParameters[i].Type, funcDcl.FormalParamNodes[i].Type + (funcDcl.FormalParamNodes[i].IsArray? "[]" : "") , "parameter type");
                     }
                 }
                 else
@@ -275,7 +275,7 @@ namespace SemanticLib
                 {
                     for (int i = 0; i < node.ActualParameters.Count; i++)
                     {
-                        CompatibleTypes(node.ActualParameters[i].Type, funcDcl.FormalParamNodes[i].Type, "parameter type");
+                        CompatibleTypes(node.ActualParameters[i].Type, funcDcl.FormalParamNodes[i].Type + (funcDcl.FormalParamNodes[i].IsArray? "[]": "" ), "parameter type");
                     }
                 }
                 else

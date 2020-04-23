@@ -6,8 +6,7 @@ namespace ParserLib.AST
 {
     public abstract class ASTnode
     {
-        public ASTnode Parent;
-
+        public int line;
         public abstract void Accept(Visitor v);
     }
 }

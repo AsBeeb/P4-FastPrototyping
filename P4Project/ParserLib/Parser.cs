@@ -106,17 +106,13 @@ namespace ParserLib
                 Match(TokenType.global_token);
                 string type = ParseType();
 
-                if (tokens.Peek().Type == TokenType.lsbracket_token)
-                {
-                    Match(TokenType.lsbracket_token);
-                    Match(TokenType.rsbracket_token);
-                    type += "[]";
-                }
+                bool isArray = ParseBrackets();
 
                 IdNode id = new IdNode(Match(TokenType.id_token).Value, null);
                 ExpressionNode initVal = ParseInit();
                 Match(TokenType.semicolon_token);
-                globalNode = new GlobalDclNode(id, initVal, type, false);
+                
+                globalNode = new GlobalDclNode(id, initVal, type, isArray);
             }
             else
             {             
@@ -283,16 +279,10 @@ namespace ParserLib
             if (tokens.Peek().IsInPredictSet(TokenType.intdcl_token, TokenType.floatdcl_token, TokenType.stringdcl_token, TokenType.booldcl_token, TokenType.id_token))
             {
                 string type = ParseType();
-
-                if (tokens.Peek().Type == TokenType.lsbracket_token)
-                {
-                    Match(TokenType.lsbracket_token);
-                    Match(TokenType.rsbracket_token);
-                    type += "[]";
-                }
+                bool isArray = ParseBrackets();
 
                 IdNode id = new IdNode (Match(TokenType.id_token).Value, null);
-                formalParamNode = new FormalParamNode(id, type);
+                formalParamNode = new FormalParamNode(id, type, isArray);
             }
             else
             {

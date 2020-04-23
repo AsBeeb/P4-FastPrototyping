@@ -4,11 +4,6 @@ namespace ParserLib
 {
     public abstract class Visitor
     {
-        public void Visit(ASTnode ast)
-        {
-            ast.Accept(this);
-        }
-
         public abstract void Visit(ArrayAccessNode node);
         public abstract void Visit(AssignmentNode node);
         public abstract void Visit(BinaryExpressionNode node);

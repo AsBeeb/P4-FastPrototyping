@@ -17,49 +17,47 @@ func void main(){
 	if (!(numberOfBombs >= 0.5 * (numberOfRows * numberOfColomns)))
 	{
 		local Colomn[] map = CreateField(numberOfColomns, numberOfRows, "0");
+		
 		PlaceBombs(numberOfBombs, map, numberOfColomns, numberOfRows);
 		PlaceNumbers(map);
-
+		
 		local Colomn[] viewingmap = CreateField(numberOfColomns, numberOfRows, "O");
-
+		
 		local string[] players;
 		Print("Write player 1's name: ");
 		ListAdd(players, GetString());
 		Print("Write player 2's name: ");
 		ListAdd(players, GetString());
-
+		
 		# Prints the solution
 		#PrintMap(map);
-
-
+		
+		
 		local int lostCheck = 0;
 		
 		local int playerToPlay = 0;
-
-		while (lostCheck == 0 && FlagsPlacedCorrectly < numberOfBombs){
-			PrintMap(viewingmap);
-			Print (players[playerToPlay] : "'s turn \n");
-			lostCheck = CheckTile (players[playerToPlay], map, viewingmap);
-			if (playerToPlay == 0)
-			{
-				playerToPlay = 1;
+		
+		play (player vs opponents in players){
+			if (FlagsPlacedCorrectly != numberOfBombs){
+				PrintMap(viewingmap);
+				Print (player : "'s turn \n");
+				lostCheck = CheckTile (player, map, viewingmap);
+				
 			}
-			else 
-			{
-				playerToPlay = 0;
-			}
-			if (FlagsPlacedCorrectly == numberOfBombs){
+			elif (FlagsPlacedCorrectly == numberOfBombs){
 				Print ("You did it! You won, great teamwork!");
 			}
-		}
+			else{
+				Print("How did this happen?");
+			}
+		} until (! (lostCheck == 0 && FlagsPlacedCorrectly < numberOfBombs))
 	}
 	else {
 		Print("You wanted too many bombs. Maximum amount of bombs are 50% of the mapsize.");
 	}
 }
 
-func int CheckTile(string player, Colomn[] map, Colomn[] viewermap){
-	local Colomn[] maps = map;
+func int CheckTile(string player, Colomn[] maps, Colomn[] viewermap){
 	local Colomn[] viewerMap = viewermap;
 
 	# Mangler check om pladsen er inden for mappet
@@ -118,24 +116,18 @@ func Colomn[] CreateField(int numberOfColomns, int numberOfRows, string tile){
 	return colomnArray;
 }
 
-
 func void PlaceBombs(int numberOfBombs, Colomn[] map, int numberOfColomns, int numberOfRows){
 	
 	local int i = 0;
 	local int row;
 	local int colomn;
 
-	# Dette er ikke tilladt
-	# local Colomn newCol;
-	# map[0] = newCol;
-	# men hvis man opretter en midlertidig variabel så kan den godt???
-
 	local Colomn[] maps = map;
 	SetSeed(10);
 	while (i < numberOfBombs){
-		row = GetRandomInt(0, numberOfRows - 1, true);
-		colomn = GetRandomInt(0, numberOfColomns - 1, true);
-		#Print("i = " : i : " Colomn = " : colomn : " row =  " : row: "\n");
+		row = GetRandomInt(0, numberOfRows - 1);
+		colomn = GetRandomInt(0, numberOfColomns - 1);
+		Print("i = " : i : " Colomn = " : colomn : " row =  " : row: "\n");
 
 		if (maps[row].Fields[colomn] != ("x")){
 			i = i +	1;
@@ -145,9 +137,7 @@ func void PlaceBombs(int numberOfBombs, Colomn[] map, int numberOfColomns, int n
 }
 
 
-func void PlaceNumbers(Colomn[] map){
-	local Colomn[] maps = map;
-	
+func void PlaceNumbers(Colomn[] maps){
 	local int colomnsNumbers = ListLength(maps);
 	local int rowsNumbers = ListLength(maps[0].Fields);
 	local int i;
@@ -228,9 +218,7 @@ func void PlaceNumbers(Colomn[] map){
 	
 }
 
-func void InsertNumber(int colomn, int row, Colomn[] map){
-	local Colomn[] maps = map;
-
+func void InsertNumber(int colomn, int row, Colomn[] maps){
 	if (maps[row].Fields[colomn] == ("0")){
 		maps[row].Fields[colomn] = "1";
 	}
@@ -257,8 +245,7 @@ func void InsertNumber(int colomn, int row, Colomn[] map){
 	}
 }
 
-func void PrintMap(Colomn[] map){
-	local Colomn[] maps = map;
+func void PrintMap(Colomn[] maps){
 	local int rowsNumbers= ListLength(maps);
 	local int colomnsNumbers = ListLength(maps[0].Fields);
 	local int i = - 2;
