@@ -28,7 +28,7 @@ namespace P4Project
             string fileExtension = ".txt";
             string filePath = String.Format("{0}{1}{2}{3}", docPath, gitPath, fileToOpen, fileExtension);
             //string filePath = @"C:\Users\Michael\Source\Repos\P4-FastPrototyping\P4Project\P4Project\KodeEksempler\Minesweeper.txt";
-
+            
             using (StreamReaderExpanded reader = new StreamReaderExpanded(filePath))
             {
                 do
@@ -42,7 +42,7 @@ namespace P4Project
 
                 } while (tokenQueue.Count == 0 || tokenQueue.Last().Type != TokenType.eof_token);
 
-                //Console.WriteLine(tokenQueue.Count);
+                Console.WriteLine(tokenQueue.Count);
             }
             Console.WriteLine("Scan ended");
             //Console.ReadKey();
@@ -69,7 +69,7 @@ namespace P4Project
             CodeGeneratorVisitor codeGeneratorVisitor = new CodeGeneratorVisitor(symbolTable);
             codeGeneratorVisitor.Visit(AST);
 
-            //Console.WriteLine(codeGeneratorVisitor.CSharpString);
+            Console.WriteLine(codeGeneratorVisitor.CSharpString);
 
             CSharpCompiler.CompileAndStartConsole(codeGeneratorVisitor.CSharpString);
 
@@ -80,8 +80,6 @@ namespace P4Project
             {
                 SaveProgram(codeGeneratorVisitor.CSharpString.ToString());
             }
-
-
         }
 
 
