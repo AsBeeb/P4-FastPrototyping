@@ -1,5 +1,5 @@
 ﻿func int main(){
-	local int asfsa = test(1.0);
+	local int asfsa = test(1);
 	return 0;
 }
 
