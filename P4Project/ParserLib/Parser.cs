@@ -1040,6 +1040,7 @@ namespace ParserLib
                     compExpr4Expr = new UnaryExpressionNode(compExpr4Expr, Operator);
                 }
                 sizeComp = new Tuple<ExpressionNode, TokenType>(compExpr4Expr, tokenType);
+                sizeComp.Item1.line = line;
             } 
             else if (tokens.Peek().IsInPredictSet(TokenType.lessorequal_token))
             {
@@ -1053,6 +1054,7 @@ namespace ParserLib
                     compExpr4Expr = new UnaryExpressionNode(compExpr4Expr, Operator);
                 }
                 sizeComp = new Tuple<ExpressionNode, TokenType>(compExpr4Expr, tokenType);
+                sizeComp.Item1.line = line;
             }
             else if (tokens.Peek().IsInPredictSet(TokenType.lessthan_token))
             {
@@ -1066,6 +1068,7 @@ namespace ParserLib
                     compExpr4Expr = new UnaryExpressionNode(compExpr4Expr, Operator);
                 }
                 sizeComp = new Tuple<ExpressionNode, TokenType>(compExpr4Expr, tokenType);
+                sizeComp.Item1.line = line;
             }
             else if (tokens.Peek().IsInPredictSet(TokenType.greaterthan_token))
             {
@@ -1079,6 +1082,7 @@ namespace ParserLib
                     compExpr4Expr = new UnaryExpressionNode(compExpr4Expr, Operator);
                 }
                 sizeComp = new Tuple<ExpressionNode, TokenType>(compExpr4Expr, tokenType);
+                sizeComp.Item1.line = line;
             }
             else if (tokens.Peek().IsInPredictSet(TokenType.equal_token,
                                                   TokenType.notequal_token, 
@@ -1096,7 +1100,6 @@ namespace ParserLib
                 throw new SyntacticalException(tokens.Peek());
             }
 
-            sizeComp.Item1.line = line;
             return sizeComp;
         }
         private Tuple<ExpressionNode, TokenType> ParseCompExpr4()
@@ -1193,12 +1196,14 @@ namespace ParserLib
                 TokenType tokenType = Match(TokenType.plus_token).Type;
                 ExpressionNode ArithExpr = ParseArithExpr();
                 arithOp1 = new Tuple<ExpressionNode, TokenType>(ArithExpr, tokenType);
+                arithOp1.Item1.line = line;
             }
             else if (tokens.Peek().IsInPredictSet(TokenType.minus_token))
             {
                 TokenType tokenType = Match(TokenType.minus_token).Type;
                 ExpressionNode ArithExpr = ParseArithExpr();
                 arithOp1 = new Tuple<ExpressionNode, TokenType>(ArithExpr, tokenType);
+                arithOp1.Item1.line = line;
             }
             else if (tokens.Peek().IsInPredictSet(TokenType.rsbracket_token,
                                                   TokenType.greaterorequal_token,
@@ -1220,7 +1225,6 @@ namespace ParserLib
             {
                 throw new SyntacticalException(tokens.Peek());
             }
-            arithOp1.Item1.line = line;
             return arithOp1;
         }
         private ExpressionNode ParseArithExpr1()
