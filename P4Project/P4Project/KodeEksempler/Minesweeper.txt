@@ -37,7 +37,7 @@ func void main(){
 		#PrintMap(map);
 		
 		
-		local int lostCheck = 0;
+		local bool lostCheck = false;
 		
 		local int playerToPlay = 0;
 		

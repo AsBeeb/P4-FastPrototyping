@@ -57,6 +57,7 @@
     <Content Include="KodeEksempler\Michaels Demo.txt" />
     <Content Include="KodeEksempler\Minesweeper.txt" />
     <Content Include="KodeEksempler\Numbers.txt" />
+    <Content Include="KodeEksempler\TurBaseretKampspil.txt" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ConsoleLib\CSharpCompilerLib.csproj">

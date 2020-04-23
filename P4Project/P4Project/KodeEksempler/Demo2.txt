@@ -1,7 +1,10 @@
-﻿func void main(){
+# Declaration visitor exception test dokument
+
+#	Test af mangel på main. Fanget i symbol table
+#func void main(){
 #   Dot notation test af variabel deklaration.  Fanget i parser
 #	local int a.e = 3;
-}
+#}
 
 #	Dot notation test af formelle parametre. Fanget i parser
 #func void FormalParamDotNotation( int k.e){}
@@ -21,10 +24,16 @@
 #	Dot notation test af play løkke opponents. Fanget i parser.
 #func void playloopPlayerDotTest(int[] k){ play (player vs opponents.e in k){} until (true)}
 
-#	Dot notation test af play løkke array. 
-#func void playloopPlayerDotTest(int[] k){ play (player vs opponents in k){} until (true)}
+
+#	Dot notation test af play løkke player og opponents. Fanget i parser.
+#func void playloopPlayerDotTest(int[] k){ play (player.e vs opponents.e in k){} until (true)}
+
+#	Test af main med input parametre. Fanget i declarationvisitor
+#func void main(int k){}
+
+#	Test af dot notation i struct deklaration. fanget i parser.
+#struct kurt.e { int k}
 
 
-#func int main(){
-#
-#}
+func void main(){}
+
