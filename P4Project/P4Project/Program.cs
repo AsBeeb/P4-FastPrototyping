@@ -80,8 +80,6 @@ namespace P4Project
             {
                 SaveProgram(codeGeneratorVisitor.CSharpString.ToString());
             }
-
-            Console.ReadLine();
         }
 
 
