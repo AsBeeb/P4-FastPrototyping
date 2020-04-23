@@ -1,19 +1,33 @@
-﻿struct hund {
-	local string navn = "Hunni";
+﻿# Declaration visitor exception test dokument
+
+
+func void main(){
+#   Dot notation test af variabel deklaration.  Fanget i parser
+#	local int a.e = 3;
 }
 
-global hund gerefsd;
+#	Dot notation test af formelle parametre. Fanget i parser
+#func void FormalParamDotNotation( int k.e){}
 
-func void main()
-{
-	if(true == true){
-		local bool snake = true;
-		Print(snake : 5);
-	}
-}
+#	Dot notation test af funktion deklaration. Fanget i parser
+#func void FunctionDCLWithID.e ( int k){}
 
-func int[] myFunc(float test, int type)
-{
-	local int[] intArray;
-	return intArray;
-}
+#	Test af ikke eksiterende retur type. fanget i DeclarationVisitor
+#func Hund FunctionDCLWithID ( int k){}
+
+#	Dot notation test af globale deklarationer. fanget i parser
+#global int k.e; 
+
+#	Dot notation test af play løkke player. Fanget i parser.
+#func void playloopPlayerDotTest(int[] k){ play (player.e vs opponents in k){} until (true)}
+
+#	Dot notation test af play løkke opponents. Fanget i parser.
+#func void playloopPlayerDotTest(int[] k){ play (player vs opponents.e in k){} until (true)}
+
+#	Dot notation test af play løkke array. 
+#func void playloopPlayerDotTest(int[] k){ play (player vs opponents in k){} until (true)}
+
+
+#func int main(){
+#
+#}

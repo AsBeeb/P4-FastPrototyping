@@ -27,7 +27,7 @@ namespace P4Project
             string fileToOpen = "Demo2";
             string fileExtension = ".txt";
             //string filePath = String.Format("{0}{1}{2}{3}", docPath, gitPath, fileToOpen, fileExtension);
-            string filePath = @"C:\Users\Michael\Source\Repos\P4-FastPrototyping\P4Project\P4Project\KodeEksempler\Minesweeper.txt";
+            string filePath = @"C:\Users\Michael\Source\Repos\P4-FastPrototyping\P4Project\P4Project\KodeEksempler\Demo2.txt";
             
             using (StreamReaderExpanded reader = new StreamReaderExpanded(filePath))
             {
