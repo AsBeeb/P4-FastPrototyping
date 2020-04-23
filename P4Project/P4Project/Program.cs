@@ -24,7 +24,7 @@ namespace P4Project
             //string filnavn = "\\" + Console.ReadLine() + ".txt";
             string docPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
             string gitPath = @"\GitHub\P4-FastPrototyping\P4Project\P4Project\KodeEksempler\";
-            string fileToOpen = "Demo2";
+            string fileToOpen = "demo2";
             string fileExtension = ".txt";
             string filePath = String.Format("{0}{1}{2}{3}", docPath, gitPath, fileToOpen, fileExtension);
             //string filePath = @"C:\Users\Michael\Source\Repos\P4-FastPrototyping\P4Project\P4Project\KodeEksempler\Demo2.txt";

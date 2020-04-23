@@ -6,11 +6,14 @@ global hund gerefsd;
 
 func void main()
 {
-	Print(gerefsd.navn);
+	local int[] Array = myFunc();
 }
 
-func int[] myFunc(float test, int type)
+func int[] myFunc()
 {
 	local int[] intArray;
+	ListAdd(intArray, 6);
+	local int abc = intArray[1 - 1];
+	Print(abc);
 	return intArray;
 }
