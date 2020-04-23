@@ -1,4 +1,4 @@
-﻿struct map {
+﻿struct Map {
 	local Colomn[] X;
 }
 
@@ -17,18 +17,56 @@ struct Monster{
 	}
 }
 
-
-func Monster MonsterTest(){
-	local Monster test;
-	return test;
+struct BossMonster{
+	local int Health;
+	local int Damage;
+	local string Name;
+	local Item[] Inventory;
+	BossMonster(int health, int damage, string name, Item[] items){
+		Health = health;
+		Damage = damage;
+		Name = name;
+		Inventory = items;
+	}
 }
+
+struct Character{
+	local int Health;
+	local int Damage;
+	local string Name;
+	local Item[] Inventory;
+}
+
+struct Item{
+	local string Name;
+	local int Power;
+	local string Type;
+	Item(string name, int power, string type){		
+		Name = name;
+		Power = power;
+		Type = type;
+	}
+}
+
 func void main(){
+	# Generate monsters
+	local Monster ork1 = Monster(50, 20, "ORK");
+	local Monster ork2 = Monster(50, 20, "ORK");
+	local Monster ork3 = Monster(50, 20, "ORK");
+	
+	#Generate boss items
+	local Item BossHealingPotion1 = Item("HealingPotion", 60, "Healing");
+	local Item BossHealingPotion2 = Item("HealingPotion", 60, "Healing");
+	local Item BossHealingPotion3 = Item("ManaPotion", 60, "Mana");
+
+	local Item[] BossItems;
+	ListAdd(BossItems, BossHealingPotion1);
+	ListAdd(BossItems, BossHealingPotion2);
+	ListAdd(BossItems, BossHealingPotion3);
+	
+	#Generate boss
+	local BossMonster Ogre = BossMonster(300, 45, "Ogre", BossItems);
 
 
-	local Monster ork = Monster(50, 20, "ORK");
-	local Monster test = MonsterTest();
-	local Monster testork = ork;
-	Print("ork health: " :ork.Health : "\n");
-	Print("ork damage: " :ork.Damage : "\n");
-	Print("ork name: " :ork.Name : "\n");
 }
+

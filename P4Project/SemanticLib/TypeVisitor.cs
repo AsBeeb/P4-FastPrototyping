@@ -190,7 +190,7 @@ namespace SemanticLib
                 {
                     for (int i = 0; i < node.ActualParameters.Count; i++)
                     {
-                        CompatibleTypes(node.ActualParameters[i].Type, structDcl.Constructor.FormalParamNodes[i].Type, "parameter type", node);
+                        CompatibleTypes(node.ActualParameters[i].Type, structDcl.Constructor.FormalParamNodes[i].Type + (structDcl.Constructor.FormalParamNodes[i].IsArray ? "[]" : ""), "parameter type", node);
                     }
                 }
                 else
