@@ -35,6 +35,14 @@ struct Character{
 	local int Damage;
 	local string Name;
 	local Item[] Inventory;
+	local int X = 5;
+	local int Y = 2;
+	Character(int health, int damage, string name, Item[] items){
+		Health = health;
+		Damage = damage;
+		Name = name;
+		Inventory = items;
+	}
 }
 
 struct Item{
@@ -48,11 +56,13 @@ struct Item{
 	}
 }
 
+global Map globalMap;
+
 func void main(){
 	# Generate monsters
-	local Monster ork1 = Monster(50, 20, "ORK");
-	local Monster ork2 = Monster(50, 20, "ORK");
-	local Monster ork3 = Monster(50, 20, "ORK");
+	local Monster Goblin1 = Monster(50, 20, "Goblin");
+	local Monster Goblin2 = Monster(50, 20, "Goblin");
+	local Monster Goblin3 = Monster(50, 20, "Goblin");
 	
 	#Generate boss items
 	local Item BossHealingPotion1 = Item("HealingPotion", 60, "Healing");
@@ -67,6 +77,145 @@ func void main(){
 	#Generate boss
 	local BossMonster Ogre = BossMonster(300, 45, "Ogre", BossItems);
 
+	#Generate player items
+	local Item PlayerHealingPotion1 = Item("HealingPotion", 60, "Healing");
+	local Item PlayerHealingPotion2 = Item("HealingPotion", 60, "Healing");
+	local Item PlayerHealingPotion3 = Item("ManaPotion", 60, "Mana");
 
+	local Item[] PlayerItems;
+	ListAdd(PlayerItems, PlayerHealingPotion1);
+	ListAdd(PlayerItems, PlayerHealingPotion2);
+	ListAdd(PlayerItems, PlayerHealingPotion3);
+	
+	
+	#Generate player
+	Print("Insert the Champions name: ");
+	local string PlayerName = GetString();
+	local Character Player = Character(200, 30, PlayerName, PlayerItems);
+
+	GenerateMap();
+
+	#while(Player.Health > 0 && Ogre.Health > 0){
+	local int i = 0;
+	while (i < 5){
+		MovePlayer(Player);
+	}
+
+	#}
 }
 
+func void MovePlayer(Character player){
+	local int Direction = ChooseOption(true, "Move up", "Move left", "Move right", "Move down");
+	if (Direction == 1){
+		if (globalMap.X[player.X-1].Y[player.Y] == ("█")){
+			Print("You can't walk into walls");
+		}
+		else{
+			globalMap.X[player.X-1].Y[player.Y] = "P";
+			globalMap.X[player.X].Y[player.Y] = " ";
+			player.X = player.X - 1;
+		}
+	}
+	elif (Direction == 2){
+		if (globalMap.X[player.X].Y[player.Y-1] == ("█")){
+				Print("You can't walk into walls");
+		}
+		else{
+			globalMap.X[player.X].Y[player.Y-1] = "P";
+			globalMap.X[player.X].Y[player.Y] = " ";
+			player.Y = player.Y - 1;
+		}
+	}
+	elif (Direction == 3){
+		if (globalMap.X[player.X].Y[player.Y+1] == ("█")){
+			Print("You can't walk into walls");
+		}
+		else{
+			globalMap.X[player.X].Y[player.Y+1] = "P";
+			globalMap.X[player.X].Y[player.Y] = " ";
+			player.Y = player.Y + 1;
+		}
+	}
+	else{
+		if (globalMap.X[player.X+1].Y[player.Y] == ("█")){
+			Print("You can't walk into walls");
+		}
+		else{
+			globalMap.X[player.X+1].Y[player.Y] = "P";
+			globalMap.X[player.X].Y[player.Y] = " ";
+			player.X = player.X + 1;
+		}
+	}
+	PrintMap(globalMap);
+}
+
+
+func void GenerateMap(){
+	local Map map;
+	local Colomn col1;
+	local Colomn col2;
+	local Colomn col3;
+	local Colomn col4;
+	local Colomn col5;
+	local Colomn col6;
+	local Colomn col7;
+
+	ListAdd(map.X, col1);
+	ListAdd(map.X, col2);
+	ListAdd(map.X, col3);
+	ListAdd(map.X, col4);
+	ListAdd(map.X, col5);
+	ListAdd(map.X, col6);
+	ListAdd(map.X, col7);
+
+	local int i = 0;
+	local int j = 0;
+	while (i < ListLength(map.X)){
+		while (j < 5){
+			ListAdd(map.X[i].Y, "█");
+			j = j + 1;
+		}
+		j = 0;
+		i = i + 1;
+	}
+
+	col2.Y[1] = " ";
+	col2.Y[2] = "O";
+	col2.Y[3] = " ";
+
+	col3.Y[1] = " ";
+	col3.Y[2] = " ";
+	col3.Y[3] = " ";
+
+	col4.Y[1] = "G";
+	col4.Y[2] = "G";
+	col4.Y[3] = "G";
+
+	col5.Y[1] = " ";
+	col5.Y[2] = " ";
+	col5.Y[3] = " ";
+
+	col6.Y[1] = " ";
+	col6.Y[2] = "P";
+	col6.Y[3] = " ";
+
+
+	PrintMap(map);
+	globalMap = map;
+}
+
+func void PrintMap(Map map){
+	local int RowSize = ListLength(map.X);
+	local int ColomnSize = ListLength(map.X[0].Y);
+	local int i;
+	local int j;
+	while (i < RowSize){
+		while(j < ColomnSize){
+			Print(map.X[i].Y[j] );
+			j = j + 1;
+		}
+		Print("\n");
+		j = 0;
+		i = i + 1;
+	}
+}
