@@ -1,12 +1,79 @@
-﻿1234 56 44.44 32.9 minst22reng23 
+﻿func int main(){
+	local int asfsa = test(1.0);
+	return 0;
+}
 
+func int test(int IntVar){
+	return IntVar;
+}
 
+#Symbol declared more than once in same scope
+#Caught by EnterSymbol in SymbolTable.cs 
+#func void test(){
+#	local int i;
+#	local int i;
+#}
 
+#Function call without declaration
+#Caught by RetrieveSymbol in SymbolTable.cs
+#func void test() {
+#	testCall();
+#}
 
-# hej med dig
+#Variable reference without declaration
+#Caught by RetrieveSymbol in SymbolTable.cs
+#func void test() {
+#	t = 5;
+#}
 
+#Array access using float instead of int
+#Caught by Visit(ArrayAccessNode) in TypeVisitor.cs
+#func void test(){
+#	local int[] testArray;
+#	ListAdd(testArray, 5);
+#	local int k = testArray[0.0];
+#}
 
-Buster
+#Elif control expression not bool expression
+#Caught by Visit(ElifNode) in TypeVisitor.cs
+#func void test(){
+#	if(false)
+#	{
+#		Print("if entered");
+#	}
+#	elif(5 + 4)
+#	{
+#		Print("elif success");
+#	}
+#}
 
+# Return type invalid
+# Caught by Visit(FunctionDclNode) in TypeVisitor.cs
+#func int test(){
+#	return 1.0;
+#}
 
-hej
+#If control expression not bool
+#Caught by Visit(IfNode) in TypeVisitor.cs
+#func void test(){
+#	if(5 + 5){}
+#}
+
+#AllPlayers not an array
+#Caught by Visit(PlayLoopNode) in TypeVisitor.cs
+#func void test(){
+#	local int i;
+#	play(player vs opponents in i) 
+#	{
+#	} until(true)
+#}
+
+#until condition not a bool expression
+#Caught by Visit(PlayLoopNode) in TypeVisitor.cs
+#func int test(){
+#	local int i;
+#	play(player vs opponents in i) 
+#	{
+#	} until(4.2)
+#
+#}
