@@ -50,11 +50,11 @@ namespace SemanticLib
             }
             else
             {
-                throw new SemanticException($"Symbol {symbolName} already declared locally.");
+                throw new SemanticException($"Error on line {astnode.line}: Symbol {symbolName} already declared locally.");
             }
         }
 
-        public ASTnode RetrieveSymbol(string symbolName)
+        public ASTnode RetrieveSymbol(string symbolName, ASTnode problemNode = null)
         {
             ASTnode returnValue;
             Scope viewingScope = CurrentScope;
@@ -67,7 +67,14 @@ namespace SemanticLib
                 viewingScope = viewingScope.Parent;
             }
             while (viewingScope != null);
-            throw new SemanticException($"Symbol {symbolName} not found. Potentially missing declaration or not visible in scope.");
+            if (problemNode != null)
+            {
+                throw new SemanticException($"Error on line {problemNode.line}: Symbol {symbolName} not found. Potentially missing declaration or not visible in scope.");
+            }
+            else
+            {
+                throw new SemanticException($"Symbol {symbolName} not found. Potentially missing declaration or not visible in scope.");
+            }
         }
 
         public bool IsDeclaredLocally(string symbolToFind)
