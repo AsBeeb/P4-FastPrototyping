@@ -174,7 +174,11 @@ namespace SemanticLib
                 {
                     for (int i = 0; i < node.ActualParameters.Count; i++)
                     {
-                        CompatibleTypes(node.ActualParameters[i].Type, funcDcl.FormalParamNodes[i].Type + (funcDcl.FormalParamNodes[i].IsArray? "[]" : "") , "parameter type", node);
+                        //CompatibleTypes(node.ActualParameters[i].Type, funcDcl.FormalParamNodes[i].Type + (funcDcl.FormalParamNodes[i].IsArray? "[]" : "") , "parameter type", node);
+                        if (node.ActualParameters[i].Type != funcDcl.FormalParamNodes[i].Type + (funcDcl.FormalParamNodes[i].IsArray ? "[]" : ""))
+                        {
+                            throw new SemanticException($"Error on line {node.line}: Invalid parameter type: can't convert {funcDcl.FormalParamNodes[i].Type + (funcDcl.FormalParamNodes[i].IsArray ? "[]" : "")} to type {node.ActualParameters[i].Type}.");
+                        }
                     }
                 }
                 else
@@ -190,7 +194,11 @@ namespace SemanticLib
                 {
                     for (int i = 0; i < node.ActualParameters.Count; i++)
                     {
-                        CompatibleTypes(node.ActualParameters[i].Type, structDcl.Constructor.FormalParamNodes[i].Type + (structDcl.Constructor.FormalParamNodes[i].IsArray ? "[]" : ""), "parameter type", node);
+                        //CompatibleTypes(node.ActualParameters[i].Type, structDcl.Constructor.FormalParamNodes[i].Type + (structDcl.Constructor.FormalParamNodes[i].IsArray ? "[]" : ""), "parameter type", node);
+                        if (node.ActualParameters[i].Type != structDcl.Constructor.FormalParamNodes[i].Type + (structDcl.Constructor.FormalParamNodes[i].IsArray ? "[]" : ""))
+                        {
+                            throw new SemanticException($"Error on line {node.line}: Invalid parameter type: can't convert {structDcl.Constructor.FormalParamNodes[i].Type + (structDcl.Constructor.FormalParamNodes[i].IsArray ? "[]" : "")} to type {node.ActualParameters[i].Type}.");
+                        }
                     }
                 }
                 else
@@ -275,7 +283,13 @@ namespace SemanticLib
                 {
                     for (int i = 0; i < node.ActualParameters.Count; i++)
                     {
-                        CompatibleTypes(node.ActualParameters[i].Type, funcDcl.FormalParamNodes[i].Type + (funcDcl.FormalParamNodes[i].IsArray? "[]": "" ), "parameter type", node);
+                        //CompatibleTypes(node.ActualParameters[i].Type, funcDcl.FormalParamNodes[i].Type + (funcDcl.FormalParamNodes[i].IsArray? "[]": "" ), "parameter type", node);
+
+                        if (node.ActualParameters[i].Type != funcDcl.FormalParamNodes[i].Type + (funcDcl.FormalParamNodes[i].IsArray ? "[]" : ""))
+                        {
+                            throw new SemanticException($"Error on line {node.line}: Invalid parameter type: can't convert {funcDcl.FormalParamNodes[i].Type + (funcDcl.FormalParamNodes[i].IsArray ? "[]" : "")} to type {node.ActualParameters[i].Type}.");
+                        }
+
                     }
                 }
                 else
@@ -299,6 +313,12 @@ namespace SemanticLib
             symbolTable.EnterScope();
             node.FuncBody.Accept(this);
             List<ReturnNode> returnNodes = node.FuncBody.StmtNodes.Where(x => x is ReturnNode).Select(x => (ReturnNode)x).ToList();
+
+            if (returnNodes.Count == 0 && node.ReturnType != "void")
+            {
+                throw new SemanticException($"Error on line {node.line}: Missing return statement. Expected return of type {node.ReturnType}.");
+            }
+
             foreach (ReturnNode rNode in returnNodes)
             {
                 returnNodeType = (rNode.ReturnValue != null) ? rNode.ReturnValue.Type : "void";

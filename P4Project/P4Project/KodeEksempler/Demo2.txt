@@ -1,4 +1,4 @@
-﻿# Declaration visitor exception test dokument
+# Declaration visitor exception test dokument
 
 #	Test af mangel på main. Fanget i symbol table
 #func void main(){
@@ -24,6 +24,7 @@
 #	Dot notation test af play løkke opponents. Fanget i parser.
 #func void playloopPlayerDotTest(int[] k){ play (player vs opponents.e in k){} until (true)}
 
+
 #	Dot notation test af play løkke player og opponents. Fanget i parser.
 #func void playloopPlayerDotTest(int[] k){ play (player.e vs opponents.e in k){} until (true)}
 
@@ -35,3 +36,4 @@
 
 
 func void main(){}
+
