@@ -23,11 +23,15 @@ func void main(){
 		
 		local Colomn[] viewingmap = CreateField(numberOfColomns, numberOfRows, "O");
 		
+		Print("How many players are going to play: ");
+		local int numberOfPlayers = GetNumber();
+		local int i = 0;
 		local string[] players;
-		Print("Write player 1's name: ");
-		ListAdd(players, GetString());
-		Print("Write player 2's name: ");
-		ListAdd(players, GetString());
+		while (i < numberOfPlayers){
+			Print("Write player" : i : "'s name: ");
+			ListAdd(players, GetString());
+			i = i + 1;
+		}
 		
 		# Prints the solution
 		#PrintMap(map);
@@ -42,7 +46,6 @@ func void main(){
 				PrintMap(viewingmap);
 				Print (player : "'s turn \n");
 				lostCheck = CheckTile (player, map, viewingmap);
-				
 			}
 			elif (FlagsPlacedCorrectly == numberOfBombs){
 				Print ("You did it! You won, great teamwork!");
@@ -50,14 +53,14 @@ func void main(){
 			else{
 				Print("How did this happen?");
 			}
-		} until (! (lostCheck == 0 && FlagsPlacedCorrectly < numberOfBombs))
+		} until (! (lostCheck == false && FlagsPlacedCorrectly < numberOfBombs))
 	}
 	else {
 		Print("You wanted too many bombs. Maximum amount of bombs are 50% of the mapsize.");
 	}
 }
 
-func int CheckTile(string player, Colomn[] maps, Colomn[] viewermap){
+func bool CheckTile(string player, Colomn[] maps, Colomn[] viewermap){
 	local Colomn[] viewerMap = viewermap;
 
 	# Mangler check om pladsen er inden for mappet
@@ -73,10 +76,10 @@ func int CheckTile(string player, Colomn[] maps, Colomn[] viewermap){
 	if (tileCheck == 1){
 		if (maps[row].Fields[colomn] == ("x")){
 			Print(player : " hit a bomb and lost!");
-			return 1;
+			return true;
 		}
 		else {
-			viewerMap[row].Fields[colomn] = maps[row].Fields[colomn];
+			CheckSurroundingFields(maps, viewermap, row, colomn);
 		}
 	}
 	elif (tileCheck == 2){
@@ -92,8 +95,97 @@ func int CheckTile(string player, Colomn[] maps, Colomn[] viewermap){
 		}
 	}
 
-	return 0;
+	return false;
 }
+
+func void CheckSurroundingFields(Colomn[] maps, Colomn[] viewermap, int row, int colomn){
+	local int colomnsNumbers = ListLength(maps);
+	local int rowsNumbers = ListLength(maps[0].Fields);
+	if ((!(row < 0 || row >= rowsNumbers)) && (!( colomn < 0 || colomn >= colomnsNumbers ))){
+		local string prevVal = viewermap[row].Fields[colomn];
+		viewermap[row].Fields[colomn] = maps[row].Fields[colomn];
+		if (prevVal == ("O")){
+			if(maps[row].Fields[colomn] == ("0")){
+				local int i;
+				local int j;
+				while (i < rowsNumbers){
+					while(j < colomnsNumbers){
+						if (maps[i].Fields[j] == ("0")){
+							if (i == 0){
+								if (j == 0){
+									CheckSurroundingFields(maps, viewermap, row + 1, colomn);
+									CheckSurroundingFields(maps, viewermap, row + 1, colomn + 1);
+									CheckSurroundingFields(maps, viewermap, row, colomn + 1);
+								}
+								elif (j == rowsNumbers - 1){
+									CheckSurroundingFields(maps, viewermap, row, colomn - 1);
+									CheckSurroundingFields(maps, viewermap, row + 1, colomn - 1);
+									CheckSurroundingFields(maps, viewermap, row + 1, colomn);
+								}
+								else{
+									CheckSurroundingFields(maps, viewermap, row, colomn - 1);
+									CheckSurroundingFields(maps, viewermap, row + 1, colomn - 1);
+									CheckSurroundingFields(maps, viewermap, row + 1, colomn);
+									CheckSurroundingFields(maps, viewermap, row + 1, colomn + 1);
+									CheckSurroundingFields(maps, viewermap, row, colomn + 1);
+								}
+							}
+							elif (i == colomnsNumbers - 1){
+								if (j == 0){
+									CheckSurroundingFields(maps, viewermap, row - 1, colomn);
+									CheckSurroundingFields(maps, viewermap, row - 1, colomn + 1);
+									CheckSurroundingFields(maps, viewermap, row, colomn + 1);
+								}
+								elif (j == rowsNumbers - 1){
+									CheckSurroundingFields(maps, viewermap, row, colomn - 1);
+									CheckSurroundingFields(maps, viewermap, row - 1, colomn - 1);
+									CheckSurroundingFields(maps, viewermap, row - 1, colomn);
+								}
+								else{
+									CheckSurroundingFields(maps, viewermap, row, colomn -1);
+									CheckSurroundingFields(maps, viewermap, row - 1, colomn -1);
+									CheckSurroundingFields(maps, viewermap, row - 1, colomn);
+									CheckSurroundingFields(maps, viewermap, row - 1, colomn + 1);
+									CheckSurroundingFields(maps, viewermap, row, colomn + 1);
+								}
+							}
+							else {
+								if (j == 0){
+									CheckSurroundingFields(maps, viewermap, row - 1, colomn);
+									CheckSurroundingFields(maps, viewermap, row - 1, colomn + 1);
+									CheckSurroundingFields(maps, viewermap, row, colomn + 1);
+									CheckSurroundingFields(maps, viewermap, row + 1, colomn + 1);
+									CheckSurroundingFields(maps, viewermap, row + 1, colomn);
+								}
+								elif (j == rowsNumbers - 1){
+									CheckSurroundingFields(maps, viewermap, row - 1, colomn);
+									CheckSurroundingFields(maps, viewermap, row - 1, colomn - 1);
+									CheckSurroundingFields(maps, viewermap, row, colomn - 1);
+									CheckSurroundingFields(maps, viewermap, row + 1, colomn - 1);
+									CheckSurroundingFields(maps, viewermap, row + 1, colomn);
+								}
+								else{
+									CheckSurroundingFields(maps, viewermap, row, colomn + 1);
+									CheckSurroundingFields(maps, viewermap, row, colomn - 1);
+									CheckSurroundingFields(maps, viewermap, row - 1, colomn - 1);
+									CheckSurroundingFields(maps, viewermap, row - 1, colomn);
+									CheckSurroundingFields(maps, viewermap, row - 1, colomn + 1);
+									CheckSurroundingFields(maps, viewermap, row + 1, colomn + 1);
+									CheckSurroundingFields(maps, viewermap, row + 1, colomn);
+									CheckSurroundingFields(maps, viewermap, row + 1, colomn - 1);
+								}
+							}
+						}
+						j = j + 1;
+					}
+					j = 0;
+					i = i + 1;
+				}
+			}
+		}
+	}
+}
+
 
 func Colomn[] CreateField(int numberOfColomns, int numberOfRows, string tile){
 	
@@ -218,7 +310,7 @@ func void PlaceNumbers(Colomn[] maps){
 	
 }
 
-func void InsertNumber(int colomn, int row, Colomn[] maps){
+func void InsertNumber(int row, int colomn, Colomn[] maps){
 	if (maps[row].Fields[colomn] == ("0")){
 		maps[row].Fields[colomn] = "1";
 	}
