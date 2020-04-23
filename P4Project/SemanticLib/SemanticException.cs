@@ -10,7 +10,7 @@ namespace SemanticLib
     {
         public SemanticException(string errorMessage) : base(errorMessage)
         {
-
+            
         }
     }
 }

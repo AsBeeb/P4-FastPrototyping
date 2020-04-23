@@ -6,7 +6,10 @@ global hund gerefsd;
 
 func void main()
 {
-	Print(gerefsd.navn);
+	if(true == true){
+		local bool snake = true;
+		Print(snake : 5);
+	}
 }
 
 func int[] myFunc(float test, int type)
