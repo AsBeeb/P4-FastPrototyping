@@ -312,7 +312,7 @@ namespace SemanticLib
             string returnNodeType;
             symbolTable.EnterScope();
             node.FuncBody.Accept(this);
-            List<ReturnNode> returnNodes = node.FuncBody.StmtNodes.Where(x => x is ReturnNode).Select(x => (ReturnNode)x).ToList();
+            List<ReturnNode> returnNodes = GetReturnNodes(node.FuncBody); //node.FuncBody.StmtNodes.Where(x => x is ReturnNode).Select(x => (ReturnNode)x).ToList();
 
             if (returnNodes.Count == 0 && node.ReturnType != "void")
             {
@@ -795,7 +795,37 @@ namespace SemanticLib
             }
             return isPrimitive;
         }
-        // Kommentar abc.
+
+        List<ReturnNode> GetReturnNodes(BlockNode block)
+        {
+            var returnList = new List<ReturnNode>();
+
+            foreach (StmtNode stmt in block.StmtNodes)
+            {
+                if (stmt is ReturnNode rtrn)
+                {
+                    returnList.Add(rtrn);
+                }
+                else if (stmt is IfNode IfNde)
+                {
+                    returnList.AddRange(GetReturnNodes(IfNde.IfBody));
+                    IfNde.ElifNodes?.ForEach(elifNode => returnList.AddRange(GetReturnNodes(elifNode.ElifBody)));
+                    if (IfNde.ElseNode != null)
+                    {
+                        returnList.AddRange(GetReturnNodes(IfNde.ElseNode.ElseBody));
+                    }
+                }
+                else if (stmt is WhileNode WhileNde)
+                    {
+                        returnList.AddRange(GetReturnNodes(WhileNde.WhileLoopBody));
+                    }
+                else if (stmt is PlayLoopNode playNode)
+                {
+                    returnList.AddRange(GetReturnNodes(playNode.PlayLoopBody));
+                }
+            }
+            return returnList;
+        }
 
     }
 }
