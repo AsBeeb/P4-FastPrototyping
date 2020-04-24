@@ -21,7 +21,7 @@ namespace ScannerLib
             {"return", TokenType.return_token},
             {"int", TokenType.intdcl_token},
             {"float", TokenType.floatdcl_token},
-            {"struct", TokenType.struct_token},
+            {"object", TokenType.struct_token},
             {"string", TokenType.stringdcl_token},
             {"bool", TokenType.booldcl_token},
             {"true", TokenType.boolval_token}, // OBS: true and false map to the same token type.
