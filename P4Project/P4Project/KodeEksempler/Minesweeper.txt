@@ -1,7 +1,6 @@
 ﻿struct Colomn {
 	local string[] Fields;
 }
-
 global int FlagsPlacedCorrectly = 0;
 
 func void main(){
@@ -25,9 +24,9 @@ func void main(){
 		
 		Print("How many players are going to play: ");
 		local int numberOfPlayers = GetNumber();
-		local int i = 0;
+		local int i = 1;
 		local string[] players;
-		while (i < numberOfPlayers){
+		while (i < numberOfPlayers + 1){
 			Print("Write player" : i : "'s name: ");
 			ListAdd(players, GetString());
 			i = i + 1;
@@ -215,11 +214,10 @@ func void PlaceBombs(int numberOfBombs, Colomn[] map, int numberOfColomns, int n
 	local int colomn;
 
 	local Colomn[] maps = map;
-	SetSeed(10);
 	while (i < numberOfBombs){
 		row = GetRandomInt(0, numberOfRows - 1);
 		colomn = GetRandomInt(0, numberOfColomns - 1);
-		Print("i = " : i : " Colomn = " : colomn : " row =  " : row: "\n");
+		#Print("i = " : i : " Colomn = " : colomn : " row =  " : row: "\n");
 
 		if (maps[row].Fields[colomn] != ("x")){
 			i = i +	1;

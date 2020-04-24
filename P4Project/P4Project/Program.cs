@@ -45,13 +45,13 @@ namespace P4Project
 
                 //Console.WriteLine(tokenQueue.Count);
             }
-            Console.WriteLine("Scan ended");
+            //Console.WriteLine("Scan ended");
             //Console.ReadKey();
 
             // Parser
             Parser parser = new Parser(tokenQueue);
             ProgNode AST = parser.StartParse();
-            Console.WriteLine("Parser done");
+            //Console.WriteLine("Parser done");
             //Console.ReadKey();
 
             // Pretty printer

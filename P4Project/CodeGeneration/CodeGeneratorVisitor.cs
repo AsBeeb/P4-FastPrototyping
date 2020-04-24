@@ -519,15 +519,41 @@ namespace CodeGeneration
 
             CSharpString.Append("{");
             IndentationLevel++;
-            CSharpString.Append("List<" + node.Player.Type + "> AllElements" + local +  " = new List<" + node.Player.Type + ">();");
+            CSharpString.Append("List<" + node.Player.Type); 
+            // Checks whether the type is a struct and adds the _ after the type if it is
+            if (!IsPrimitiveType(node.Player.Type))
+            {
+                CSharpString.Append("_");
+            }
+            CSharpString.Append("> AllElements" + local + " = new List<" + node.Player.Type);
+            if (!IsPrimitiveType(node.Player.Type))
+            {
+                CSharpString.Append("_");
+            }
+            CSharpString.Append(">();");
             PrettyPrintNewLine();
-            CSharpString.Append(node.Player.Type + " ");
+            CSharpString.Append(node.Player.Type);
+            if (!IsPrimitiveType(node.Player.Type))
+            {
+                CSharpString.Append("_");
+            }
+            CSharpString.Append(" ");
             node.Player.Accept(this);
             CSharpString.Append(";");
             PrettyPrintNewLine();
-            CSharpString.Append("List<" + node.Player.Type + ">");
+            CSharpString.Append("List<" + node.Player.Type);
+            if (!IsPrimitiveType(node.Player.Type))
+            {
+                CSharpString.Append("_");
+            }
+            CSharpString.Append(">");
             node.Opponents.Accept(this);
-            CSharpString.Append(" = new List<" + node.Player.Type + ">();");
+            CSharpString.Append(" = new List<" + node.Player.Type);
+            if (!IsPrimitiveType(node.Player.Type))
+            {
+                CSharpString.Append("_");
+            }
+            CSharpString.Append(">();");
             PrettyPrintNewLine();
             CSharpString.Append("do");
             PrettyPrintNewLine();
