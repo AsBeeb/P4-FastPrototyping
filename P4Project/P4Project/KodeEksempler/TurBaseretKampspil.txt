@@ -1,12 +1,12 @@
-﻿struct Map {
+﻿object Map {
 	local Colomn[] X;
 }
 
-struct Colomn {
+object Colomn {
 	local string[] Y;
 }
 
-struct Monster{
+object Monster{
 	local int Health;
 	local int Damage;
 	local string Name;
@@ -21,7 +21,7 @@ struct Monster{
 	}
 }
 
-struct BossMonster{
+object BossMonster{
 	local int Health;
 	local int Damage;
 	local string Name;
@@ -40,13 +40,13 @@ struct BossMonster{
 }
 
 
-struct BattleStruct{
+object BattleStruct{
 	local BossMonster BM;
 	local Monster M;
 	local Character C;
 }
 
-struct Character{
+object Character{
 	local int Health;
 	local int Damage;
 	local string Name;
@@ -63,7 +63,7 @@ struct Character{
 	}
 }
 
-struct Item{
+object Item{
 	local string Name;
 	local int Power;
 	local string Type;
@@ -437,7 +437,7 @@ func void PrintGoblin(){
 }
 
 func void PrintGoblinBoss(){
-	Print("   █▄█▄█\nC┐ (o.o)  █▀▀█\n ├─(▒▒▒)──████\nC┘ (▒▒▒)  █▄▄█\n   /   \\ \n");
+	Print("\n   █▄█▄█\nC┐ (o.o)  █▀▀█\n ├─(▒▒▒)──████\n ┘ (▒▒▒)  █▄▄█\n   /   \\ \n");
 }
 
 
