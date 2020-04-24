@@ -331,7 +331,7 @@ func void BeginCombat(Character player, Monster goblin){
 		goblin.X = 10;
 		goblin.Y = 10;
 		local Item healingPotion = Item("HealingPotion", 100, "Healing");
-
+		player.CritChance = 20;
 		ListAdd(player.Inventory, healingPotion);
 	}
 	if (player.Health <= 0){
@@ -360,27 +360,20 @@ func void PlayerTurn(Character player, BattleStruct monster){
 	}
 	elif(choice == 2)
 	{
-		Print("Skills not added yet \n");
-		#------------------------------------------------------------------
-		# Just attacks like normally for now until skills are implemented.
-		#------------------------------------------------------------------
-
-		local bool isCritical = (GetRandomInt(1, 100) < player.CritChance);
-		if (monster.BM.Name != ("")){
-			monster.BM.Health = monster.BM.Health - player.Damage;
-			if (isCritical){
-				monster.BM.Health = monster.BM.Health - player.Damage;
+		local int chosenOption = ChooseOption(true, "Boost Critical Chance by 20% for the fight", "Lower enemy damage by 5");
+		if (chosenOption == 1){
+			player.CritChance = player.CritChance + 20;
+		}
+		elif (chosenOption == 2){
+			if (monster.BM.Name != (""))
+			{
+				monster.BM.Damage = monster.BM.Damage - 5;
+			}
+			elif (monster.M.Name != (""))
+			{
+				monster.M.Damage = monster.M.Damage - 5;
 			}
 		}
-		elif (monster.M.Name != ("")){
-			monster.M.Health = monster.M.Health - player.Damage;
-			if (isCritical){
-				monster.M.Health = monster.M.Health - player.Damage;
-			}
-		}
-		#------------------------------------------------------------------
-
-
 	}
 	elif(choice == 3)
 	{
