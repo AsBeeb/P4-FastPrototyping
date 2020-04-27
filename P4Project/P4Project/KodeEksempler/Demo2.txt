@@ -35,7 +35,6 @@
 #struct kurt.e { int k}
 
 
-func void main(){
-	if(true){}
+func int main(){
 }
 
