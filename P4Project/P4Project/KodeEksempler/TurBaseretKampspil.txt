@@ -1,12 +1,12 @@
-﻿struct Map {
+﻿object Map {
 	local Colomn[] X;
 }
 
-struct Colomn {
+object Colomn {
 	local string[] Y;
 }
 
-struct Monster{
+object Monster{
 	local int Health;
 	local int Damage;
 	local string Name;
@@ -21,7 +21,7 @@ struct Monster{
 	}
 }
 
-struct BossMonster{
+object BossMonster{
 	local int Health;
 	local int Damage;
 	local string Name;
@@ -40,13 +40,13 @@ struct BossMonster{
 }
 
 
-struct BattleStruct{
+object BattleStruct{
 	local BossMonster BM;
 	local Monster M;
 	local Character C;
 }
 
-struct Character{
+object Character{
 	local int Health;
 	local int Damage;
 	local string Name;
@@ -54,6 +54,7 @@ struct Character{
 	local int X = 5;
 	local int Y = 2;
 	local int CritChance = 20;
+	local bool DiedToKing = false;
 	Character(int health, int damage, string name, Item[] items){
 		Health = health;
 		Damage = damage;
@@ -62,7 +63,7 @@ struct Character{
 	}
 }
 
-struct Item{
+object Item{
 	local string Name;
 	local int Power;
 	local string Type;
@@ -78,7 +79,7 @@ global Monster globalGoblin1;
 global Monster globalGoblin2;
 global Monster globalGoblin3;
 
-global BossMonster globalOgre;
+global BossMonster globalGoblinKing;
 
 
 func void main(){
@@ -93,44 +94,41 @@ func void main(){
 
 	#Generate boss items
 	local Item BossHealingPotion1 = Item("HealingPotion", 60, "Healing");
-	local Item BossHealingPotion2 = Item("HealingPotion", 60, "Healing");
-	local Item BossHealingPotion3 = Item("ManaPotion", 60, "Mana");
 
 	local Item[] BossItems;
 	ListAdd(BossItems, BossHealingPotion1);
-	ListAdd(BossItems, BossHealingPotion2);
-	ListAdd(BossItems, BossHealingPotion3);
 	
 	#Generate boss
-	local BossMonster Ogre = BossMonster(300, 45, "Ogre", BossItems, 1, 2);
+	local BossMonster GoblinKing = BossMonster(300, 40, "Goblin king", BossItems, 1, 2);
 
-	globalOgre = Ogre;
+	globalGoblinKing = GoblinKing;
 
 	#Generate player items
-	local Item PlayerHealingPotion1 = Item("HealingPotion", 60, "Healing");
-	local Item PlayerHealingPotion2 = Item("HealingPotion", 60, "Healing");
-	local Item PlayerHealingPotion3 = Item("ManaPotion", 60, "Mana");
+	local Item PlayerHealingPotion1 = Item("HealingPotion", 80, "Healing");
+	local Item PlayerHealingPotion2 = Item("HealingPotion", 80, "Healing");
 
 	local Item[] PlayerItems;
 	ListAdd(PlayerItems, PlayerHealingPotion1);
 	ListAdd(PlayerItems, PlayerHealingPotion2);
-	ListAdd(PlayerItems, PlayerHealingPotion3);
 	
 	
 	#Generate player
 	Print("Insert the Champions name: ");
 	local string PlayerName = GetString();
-	local Character Player = Character(200, 20, PlayerName, PlayerItems);
+	local Character Player = Character(200, 30, PlayerName, PlayerItems);
 
 	GenerateMap();
 
-	#while(Player.Health > 0 && Ogre.Health > 0){
-	local int i = 0;
-	while (i < 5){
+	while(Player.Health > 0 && GoblinKing.Health > 0)
+	{
 		MovePlayer(Player);
+		if (Player.Health <= 0)
+		{
+			if (Player.DiedToKing == false){
+				Print("You died.");
+			}
+		}
 	}
-
-	#}
 }
 
 func void MovePlayer(Character player){
@@ -180,7 +178,9 @@ func void MovePlayer(Character player){
 			 CheckAndBeginBattle(player);
 		}
 	}
-	PrintMap(globalMap);
+	if (player.Health > 0){
+		PrintMap(globalMap);
+	}
 
 }
 
@@ -194,8 +194,8 @@ func void CheckAndBeginBattle(Character Player){
 	elif(Player.X == globalGoblin3.X && Player.Y == globalGoblin3.Y){
 		BeginCombat(Player, globalGoblin3);
 	}
-	elif(Player.X == globalOgre.X && Player.Y == globalOgre.Y){
-		BeginBossBattle();
+	elif(Player.X == globalGoblinKing.X && Player.Y == globalGoblinKing.Y){
+		BeginBossBattle(Player, globalGoblinKing);
 	}
 }
 
@@ -309,29 +309,41 @@ func void BeginCombat(Character player, Monster goblin){
 		#print the goblin
 		PrintGoblin();
 	
-	
-	
 		if (attacker.M.Name == goblin.Name){
-			# Goblins turn
+			if (goblin.Health > 0){
+				player.Health = player.Health - goblin.Damage;
+			}
 		}
 		elif (attacker.C.Name == player.Name){
 			PlayerTurn(player, defender[0]);
 		}
-		else {
-		}
 		goblinHealthBar = "";
 		playerHealthBar = "";
 		Print("\n\n\n\n\n\n\n\n\n\n");
-
+		if (attacker.M.Name == goblin.Name){
+			if (goblin.Health > 0){
+				Print("The goblin attacked for " : goblin.Damage : "damage. \n");
+			}
+		}
 	} until (goblin.Health <= 0 || player.Health <= 0)
-	Print("The goblin died \n");
-
+	if (goblin.Health <= 0){
+		Print("The goblin died \n");
+		goblin.X = 10;
+		goblin.Y = 10;
+		local Item healingPotion = Item("HealingPotion", 100, "Healing");
+		player.CritChance = 20;
+		ListAdd(player.Inventory, healingPotion);
+	}
+	if (player.Health <= 0){
+		Print("You died.");
+	}
 }
 
 func void PlayerTurn(Character player, BattleStruct monster){
 	local int choice = ChooseOption(true, "Attack", "Use skill", "Use item");
 
-	if (choice == 1){
+	if (choice == 1)
+	{
 		local bool isCritical = (GetRandomInt(1, 100) < player.CritChance);
 		if (monster.BM.Name != ("")){
 			monster.BM.Health = monster.BM.Health - player.Damage;
@@ -346,11 +358,77 @@ func void PlayerTurn(Character player, BattleStruct monster){
 			}
 		}
 	}
-	elif(choice == 2){
-		Print("Skills not added yet \n");
+	elif(choice == 2)
+	{
+		local int chosenOption = ChooseOption(true, "Boost Critical Chance by 20% for the fight", "Lower enemy damage by 5");
+		if (chosenOption == 1){
+			player.CritChance = player.CritChance + 20;
+		}
+		elif (chosenOption == 2){
+			if (monster.BM.Name != (""))
+			{
+				monster.BM.Damage = monster.BM.Damage - 5;
+			}
+			elif (monster.M.Name != (""))
+			{
+				monster.M.Damage = monster.M.Damage - 5;
+			}
+		}
 	}
-	elif(choice == 3){
-		Print("Item use not added yet \n");
+	elif(choice == 3)
+	{
+		if (ListLength(player.Inventory) > 0){
+			Print("Choose item \n");
+			# makeshift choose option function
+			local int i = 0;
+			while (i < ListLength(player.Inventory))
+			{
+			    Print((i+1) : ": " : player.Inventory[i].Name : " heals ": player.Inventory[i].Power : " health" : "\n");
+				i = i + 1;
+			}
+			local int chosenOption = 0;
+			while (chosenOption <= 0 || chosenOption > ListLength( player.Inventory))
+			{
+			    chosenOption = GetNumber();
+				if(chosenOption <= 0 || chosenOption > ListLength( player.Inventory)){
+					Print("Item choice does not exist. Try again. \n");
+				}
+			}
+			
+			if (player.Inventory[chosenOption-1].Name == ("HealingPotion"))
+			{
+				player.Health = player.Health + player.Inventory[chosenOption-1].Power;
+				Print(player.Inventory[chosenOption-1].Name: " Was removed from your inventory.");
+				ListRemove(player.Inventory, player.Inventory[chosenOption-1]);
+			}
+		}
+		else
+		{
+			Print("You don't have any items left. \n Choose another option. \n");
+			local int chosenOption = ChooseOption(true, "Attack", "Use skill");
+			if (chosenOption == 1)
+			{
+				local bool isCritical = (GetRandomInt(1, 100) < player.CritChance);
+				if (monster.BM.Name != ("")){
+					monster.BM.Health = monster.BM.Health - player.Damage;
+					if (isCritical){
+						monster.BM.Health = monster.BM.Health - player.Damage;
+					}
+				}
+				elif (monster.M.Name != (""))
+				{
+					monster.M.Health = monster.M.Health - player.Damage;
+					if (isCritical)
+					{
+						monster.M.Health = monster.M.Health - player.Damage;
+					}
+				}
+			}
+			elif(chosenOption == 2)
+			{
+				Print("Skills not added yet \n");
+			}
+		}
 	}
 }
 
@@ -358,6 +436,96 @@ func void PrintGoblin(){
 	Print("     _▄▄▄_\n ╚╬╝ (o.o) \n  ╠==(_┼_)\n  ║  /   \\ \n");
 }
 
-func void BeginBossBattle() {
+func void PrintGoblinBoss(){
+	Print("\n   █▄█▄█\nC┐ (o.o)  █▀▀█\n ├─(▒▒▒)──████\n ┘ (▒▒▒)  █▄▄█\n   /   \\ \n");
+}
+
+
+
+func void BeginBossBattle(Character player, BossMonster goblinKing){
+	Print("\n\n\n\n\n\n\n\n\n\n");
 	Print("BossBattle!!\n");
+	Print("Battle between " : player.Name : " against " : goblinKing.Name : "\n");
+	local BattleStruct PlayerCharacter;
+	local BattleStruct GoblinCharacter;
+
+	PlayerCharacter.C = player;
+	GoblinCharacter.BM = goblinKing;
+
+	local BattleStruct[] Battle;
+	ListAdd(Battle, PlayerCharacter);
+	ListAdd(Battle, GoblinCharacter);
+	
+
+	local string playerHealthBar = "";
+	local string goblinKingHealthBar = "";
+	local int i = 0 ;
+	
+	
+
+	play (attacker vs defender in Battle){
+		
+		#update player and goblin king health
+		while (i < goblinKing.Health / 10){
+			goblinKingHealthBar = goblinKingHealthBar : "█";
+			i = i + 1;
+		}
+		i = 0;
+		while (i < player.Health / 10){
+			playerHealthBar = playerHealthBar : "█";
+			i = i + 1;
+		}
+		i = 0;
+		
+		#print healthbars
+		Print(player.Name : "s health: \n" : playerHealthBar : "\n");
+		Print("Goblins health: \n" : goblinKingHealthBar : "\n");
+		#print the goblin
+		PrintGoblinBoss();
+	
+		if (attacker.BM.Name == goblinKing.Name){
+			if (goblinKing.Health > 0){
+				BossTurn(player, goblinKing);
+			}
+		}
+		elif (attacker.C.Name == player.Name){
+			if (player.Health > 0){
+				PlayerTurn(player, defender[0]);
+			}
+		}
+		goblinKingHealthBar = "";
+		playerHealthBar = "";
+		Print("\n\n\n\n\n\n\n\n\n\n");
+		if (attacker.M.Name == goblinKing.Name){
+			if (goblinKing.Health > 0){
+				Print("The Goblin King attacked for " : goblinKing.Damage : "damage. \n");
+			}
+		}
+	} until (goblinKing.Health <= 0 || player.Health <= 0)
+	if (goblinKing.Health <= 0){
+		Print("You defeated the goblin king and won the game!\n");
+		goblinKing.X = 10;
+		goblinKing.Y = 10;
+	}
+	if (player.Health <= 0){
+		Print("You died to the goblin king and lost everything.\n");
+		player.DiedToKing = true;
+	}
+}
+
+func int BossTurn(Character player, BossMonster goblinKing){
+	
+	if (goblinKing.Health < 100){
+		if (ListLength(goblinKing.Inventory) > 0){
+			goblinKing.Health = goblinKing.Health + goblinKing.Inventory[0].Power;
+			ListRemove(goblinKing.Inventory, goblinKing.Inventory[0]);
+			Print("The goblin king used a potion");
+			return 0;
+		}
+	}
+	if (goblinKing.Health > 0){
+		player.Health = player.Health - goblinKing.Damage;
+		Print("The Goblin King attacked for " : goblinKing.Damage : "damage. \n");
+	}
+	return 0;
 }
