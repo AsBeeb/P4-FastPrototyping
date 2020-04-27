@@ -35,6 +35,6 @@
 #struct kurt.e { int k}
 
 
-func int main(){
+func void main(){
 }
 
