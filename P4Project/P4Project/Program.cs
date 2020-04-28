@@ -18,27 +18,28 @@ namespace P4Project
         private static void Main(string[] args)
         {
             Queue<Token> tokenQueue = new Queue<Token>();
+
+            string fileName = args[0];
+            string filePath = Directory.GetCurrentDirectory();
             //Console.WriteLine("Indskriv sti til mappe:");
             //string sti = Console.ReadLine();
             //Console.WriteLine("Skriv filnavn:");
             //string filnavn = "\\" + Console.ReadLine() + ".txt";
-            string docPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-            string gitPath = @"\GitHub\P4-FastPrototyping\P4Project\P4Project\KodeEksempler\";
-            string fileToOpen = "Demo2";
-            string fileExtension = ".txt";
+            //string docPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            //string gitPath = @"\GitHub\P4-FastPrototyping\P4Project\P4Project\KodeEksempler\";
+            //string fileToOpen = "Demo2";
+            //string fileExtension = ".txt";
             //string filePath = String.Format("{0}{1}{2}{3}", docPath, gitPath, fileToOpen, fileExtension);
             //string filePath = @"C:\Users\Michael\Source\Repos\P4-FastPrototyping\P4Project\P4Project\KodeEksempler\TurBaseretKampspil.txt";
             //string filePath = @"C:\Users\Michael\Source\Repos\P4-FastPrototyping\P4Project\P4Project\KodeEksempler\Minesweeper.txt";
 
-            // Location where project is installed TEMPORARY
-            string filePath = Directory.GetCurrentDirectory();
+            // Print location where project is installed TEMPORARY
             Console.WriteLine("Current Dir: " + filePath);
 
             // Check for args
             if (args.Length > 0)
             {
-                filePath += "\\" + args[0];
-                Console.WriteLine(filePath);
+                filePath += "\\" + fileName;
                 if (!File.Exists(filePath))
                 {
                     Console.WriteLine("File not found.");
@@ -47,12 +48,11 @@ namespace P4Project
             }
             else
             {
+                // If no arguments are given (filename, save option) end.
                 return;
             }
 
-            // versus Minesweeper.versus -S 
-            //        Minesweeper.cs
-
+            // Scanner
             using (StreamReaderExpanded reader = new StreamReaderExpanded(filePath))
             {
                 do
@@ -62,20 +62,14 @@ namespace P4Project
                     {
                         tokenQueue.Enqueue(tempToken);
                     }
-                    //Console.WriteLine("Value: " + tokenQueue.Last().Value + " Type: " + tokenQueue.Last().Type.ToString() + "\n");
 
                 } while (tokenQueue.Count == 0 || tokenQueue.Last().Type != TokenType.eof_token);
 
-                //Console.WriteLine(tokenQueue.Count);
             }
-            //Console.WriteLine("Scan ended");
-            //Console.ReadKey();
 
             // Parser
             Parser parser = new Parser(tokenQueue);
             ProgNode AST = parser.StartParse();
-            //Console.WriteLine("Parser done");
-            //Console.ReadKey();
 
             // Pretty printer
             //PrettyPrintVisitor vis = new PrettyPrintVisitor();
@@ -85,7 +79,6 @@ namespace P4Project
             SymbolTable symbolTable = new SymbolTable();
             DeclarationVisitor dclVisitor = new DeclarationVisitor(symbolTable);
             dclVisitor.Visit(AST);
-            //symbolTable.PrintTable(symbolTable.GlobalScope, 1);
 
             var typeVisitor = new TypeVisitor(symbolTable);
             typeVisitor.Visit(AST);
@@ -93,67 +86,28 @@ namespace P4Project
             CodeGeneratorVisitor codeGeneratorVisitor = new CodeGeneratorVisitor(symbolTable);
             codeGeneratorVisitor.Visit(AST);
 
-            //Console.WriteLine(codeGeneratorVisitor.CSharpString);
-
-            if (args.Length > 1 && args[1] == "-S" )
+            if (args.Length > 1 && args[1] == "-s" )
             {
-                SaveProgram(codeGeneratorVisitor.CSharpString.ToString());
+                SaveProgram(codeGeneratorVisitor.CSharpString.ToString(), filePath);
             }
 
             CSharpCompiler.CompileAndStartConsole(codeGeneratorVisitor.CSharpString);
         }
 
-
-        // Skabelse af uniform fordeling af tal for floats.................. som Michael overså tidligere da han præsenterede sin random funktion
-        // TalMellem0Og1 = 1 / (50000 - randomint(0, 49999));
-        // return TalMellem0Og1 * (max - min) + min;
-
-
-        public static void SaveProgram(string Program)
+        public static void SaveProgram(string Program, string filePath)
         {
-            //Create string variables needed
-            string fileName = "";
-            string folderPath = "";
-            string destinationOption = "";
-
-            //Find where to save the file
-            do
-            {
-                Console.WriteLine("\n \nChoose destination: \n1: Desktop \n2: Documents");
-                destinationOption = Console.ReadLine();
-                if (destinationOption == "1")
-                {
-                    folderPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-                }
-                else if (destinationOption == "2")
-                {
-                    folderPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-                }
-                else
-                {
-                    Console.WriteLine("Unavailable option chosen");
-                }
-            } while (!(destinationOption == "1" || destinationOption == "2"));
-
             //Naming of the file
-            Console.Write("\nSpecify name of the file: ");
-            folderPath += "\\";
-            fileName += Console.ReadLine();
-            //If the file already exists we add a '1' at the end until the name doesn't exists already
-            while (File.Exists(folderPath + fileName + ".cs"))
-            {
-                fileName += "1";
-            }
-            fileName += ".cs";
-
-            Console.WriteLine(folderPath + "\n\n");
+            //filePath = filePath.TrimEnd('.', 't', 'x', 't');
+            filePath = filePath.Replace(".txt", "");
+            filePath += DateTime.Now.Hour.ToString() + DateTime.Now.Minute.ToString() + DateTime.Now.Second.ToString();
+            filePath += ".cs";
+            Console.WriteLine(filePath);
+            Console.ReadKey();
             //Creates and writes to the file
-            using (StreamWriter SW = File.CreateText(folderPath + fileName))
+            using (StreamWriter SW = File.CreateText(filePath))
             {
                 SW.WriteLine(Program);
             }
-
-            Console.WriteLine($"{fileName} saved at {folderPath}");
         }
     }
 }
