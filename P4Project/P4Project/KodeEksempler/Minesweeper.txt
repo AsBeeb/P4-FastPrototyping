@@ -1,4 +1,4 @@
-﻿struct Colomn {
+﻿object Colomn {
 	local string[] Fields;
 }
 global int FlagsPlacedCorrectly = 0;

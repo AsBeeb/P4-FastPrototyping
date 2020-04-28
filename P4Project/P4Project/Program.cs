@@ -26,10 +26,33 @@ namespace P4Project
             string gitPath = @"\GitHub\P4-FastPrototyping\P4Project\P4Project\KodeEksempler\";
             string fileToOpen = "Demo2";
             string fileExtension = ".txt";
-            string filePath = String.Format("{0}{1}{2}{3}", docPath, gitPath, fileToOpen, fileExtension);
+            //string filePath = String.Format("{0}{1}{2}{3}", docPath, gitPath, fileToOpen, fileExtension);
             //string filePath = @"C:\Users\Michael\Source\Repos\P4-FastPrototyping\P4Project\P4Project\KodeEksempler\TurBaseretKampspil.txt";
             //string filePath = @"C:\Users\Michael\Source\Repos\P4-FastPrototyping\P4Project\P4Project\KodeEksempler\Minesweeper.txt";
-            
+
+            // Location where project is installed TEMPORARY
+            string filePath = Directory.GetCurrentDirectory();
+            Console.WriteLine("Current Dir: " + filePath);
+
+            // Check for args
+            if (args.Length > 0)
+            {
+                filePath += "\\" + args[0];
+                Console.WriteLine(filePath);
+                if (!File.Exists(filePath))
+                {
+                    Console.WriteLine("File not found.");
+                    return;
+                }
+            }
+            else
+            {
+                return;
+            }
+
+            // versus Minesweeper.versus -S 
+            //        Minesweeper.cs
+
             using (StreamReaderExpanded reader = new StreamReaderExpanded(filePath))
             {
                 do
@@ -72,15 +95,12 @@ namespace P4Project
 
             //Console.WriteLine(codeGeneratorVisitor.CSharpString);
 
-            CSharpCompiler.CompileAndStartConsole(codeGeneratorVisitor.CSharpString);
-
-            Console.WriteLine("Done compiling");
-
-            Console.WriteLine("Do you want to save the C# file? \n1: Yes \n2: No");
-            if (Console.ReadLine().Replace(" ", "") == "1")
+            if (args.Length > 1 && args[1] == "-S" )
             {
                 SaveProgram(codeGeneratorVisitor.CSharpString.ToString());
             }
+
+            CSharpCompiler.CompileAndStartConsole(codeGeneratorVisitor.CSharpString);
         }
 
 
@@ -134,7 +154,6 @@ namespace P4Project
             }
 
             Console.WriteLine($"{fileName} saved at {folderPath}");
-            Console.ReadLine();
         }
     }
 }
