@@ -728,8 +728,8 @@ namespace SemanticLib
                                     tempIsArray = tempDclNode.GetIsArray;
                                 }
                                 else
-                                {                                     /*This point we know for certain that there is at least one idoperation*/
-                                    throw new SemanticException($"Error on line {node.GetIdOperations[0].line}: Unexpected reference to field: {field.Id.Id} in object: {structDcl.Id.Id}.");
+                                {                                     
+                                    throw new SemanticException($"Error on line {idOp.line}: Unexpected reference to field: {field.Id.Id} in object: {structDcl.Id.Id}.");
                                 }
                             }
                             else
@@ -754,8 +754,8 @@ namespace SemanticLib
                         {
                             IdOperationNode previousIdOp = node.GetIdOperations[idOpIndex - 1];
                             if (previousIdOp is ArrayAccessNode)
-                            {                                  /*This point we know for certain that there is at least one idoperation*/
-                                throw new SemanticException($"Error on line {node.GetIdOperations[0].line}: Illegal reference to two-dimensional array in operations emanating from {node.GetId}.");
+                            {                                  
+                                throw new SemanticException($"Error on line {idOp.line}: Illegal reference to two-dimensional array in operations emanating from {node.GetId}.");
                             }
                         }
 
@@ -764,6 +764,10 @@ namespace SemanticLib
                             if (dcl.GetIsArray)
                             {
                                 tempIsArray = false;
+                            }
+                            else
+                            {
+                                throw new SemanticException($"Error on line {rootNode.line}: Cannot apply indexing to variable of type {dcl.GetVarType}.");
                             }
                         }
                         else
