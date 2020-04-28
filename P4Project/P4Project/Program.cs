@@ -17,19 +17,97 @@ namespace P4Project
     {
         private static void Main(string[] args)
         {
+            string filePath = "";
+            string currentPath = "";
+            StringBuilder CSharpCompiledString = new StringBuilder();
+            if (args.Length > 1)
+            {
+                currentPath = Directory.GetCurrentDirectory();
+                filePath = currentPath + args[0];
+                if (!File.Exists(filePath))
+                {
+                    throw new Exception("File not found.");
+                }
+                else
+                {
+                    CSharpCompiledString = CompileProgramToCSharp(filePath);
+                }
+                if (args[1] == "-S")
+                {
+                    SaveProgram(CSharpCompiledString.ToString(), currentPath);
+                }
+            }
+            else if (args.Length == 1)
+            {
+                if (args[0] == "-S")
+                {
+                    Console.WriteLine("Insert full path to file or name of file in current folder");
+                    filePath = Console.ReadLine();
+                    currentPath = Directory.GetCurrentDirectory();
+                    while (!File.Exists(filePath) && !File.Exists(currentPath + filePath))
+                    {
+                        Console.WriteLine("File not found, try again.");
+                        filePath = Console.ReadLine();
+                    }
+                    if (File.Exists(filePath))
+                    {
+                        CSharpCompiledString = CompileProgramToCSharp(filePath);
+                        SaveProgram(CSharpCompiledString.ToString(), currentPath);
+                    }
+                    else
+                    {
+                        CSharpCompiledString = CompileProgramToCSharp(currentPath + filePath);
+                        SaveProgram(CSharpCompiledString.ToString(), currentPath);
+                    }
+                }
+                else
+                {
+                    filePath = Directory.GetCurrentDirectory() + args[0];
+                    if (!File.Exists(filePath))
+                    {
+                        throw new Exception("File not found.");
+                    }
+                    CSharpCompiledString = CompileProgramToCSharp(filePath);
+                }
+            }
+            else
+            {
+                Console.WriteLine("Insert full path to file or name of file in current folder");
+                filePath = Console.ReadLine();
+                currentPath = Directory.GetCurrentDirectory();
+                while (!File.Exists(filePath) && !File.Exists(currentPath + filePath))
+                {
+                    Console.WriteLine("File not found, try again.");
+                    filePath = Console.ReadLine();
+                }
+                if (File.Exists(filePath))
+                {
+                    CSharpCompiledString = CompileProgramToCSharp(filePath);
+                }
+                else
+                {
+                    CSharpCompiledString = CompileProgramToCSharp(currentPath + filePath);
+                }
+                Console.WriteLine("Do you want to save the C# file? \n1: Yes \n2: No");
+                if (Console.ReadLine().Replace(" ", "") == "1")
+                {
+                    if (File.Exists(filePath))
+                    {
+                        SaveProgram(CSharpCompiledString.ToString(), currentPath);
+                    }
+                    else
+                    {
+                        SaveProgram(CSharpCompiledString.ToString(), currentPath);
+                    }
+                }
+            }
+            CSharpCompiler.CompileAndStartConsole(CSharpCompiledString);
+        }
+
+        public static StringBuilder CompileProgramToCSharp(string filePath)
+        {
             Queue<Token> tokenQueue = new Queue<Token>();
-            //Console.WriteLine("Indskriv sti til mappe:");
-            //string sti = Console.ReadLine();
-            //Console.WriteLine("Skriv filnavn:");
-            //string filnavn = "\\" + Console.ReadLine() + ".txt";
-            string docPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-            string gitPath = @"\GitHub\P4-FastPrototyping\P4Project\P4Project\KodeEksempler\";
-            string fileToOpen = "Demo2";
-            string fileExtension = ".txt";
-            string filePath = String.Format("{0}{1}{2}{3}", docPath, gitPath, fileToOpen, fileExtension);
-            //string filePath = @"C:\Users\Michael\Source\Repos\P4-FastPrototyping\P4Project\P4Project\KodeEksempler\TurBaseretKampspil.txt";
-            //string filePath = @"C:\Users\Michael\Source\Repos\P4-FastPrototyping\P4Project\P4Project\KodeEksempler\Minesweeper.txt";
-            
+
             using (StreamReaderExpanded reader = new StreamReaderExpanded(filePath))
             {
                 do
@@ -39,49 +117,25 @@ namespace P4Project
                     {
                         tokenQueue.Enqueue(tempToken);
                     }
-                    //Console.WriteLine("Value: " + tokenQueue.Last().Value + " Type: " + tokenQueue.Last().Type.ToString() + "\n");
-
                 } while (tokenQueue.Count == 0 || tokenQueue.Last().Type != TokenType.eof_token);
-
-                //Console.WriteLine(tokenQueue.Count);
             }
-            //Console.WriteLine("Scan ended");
-            //Console.ReadKey();
-
             // Parser
             Parser parser = new Parser(tokenQueue);
             ProgNode AST = parser.StartParse();
-            //Console.WriteLine("Parser done");
-            //Console.ReadKey();
-
-            // Pretty printer
-            //PrettyPrintVisitor vis = new PrettyPrintVisitor();
-            //vis.Visit(AST);
 
             // Semantics
             SymbolTable symbolTable = new SymbolTable();
             DeclarationVisitor dclVisitor = new DeclarationVisitor(symbolTable);
             dclVisitor.Visit(AST);
-            //symbolTable.PrintTable(symbolTable.GlobalScope, 1);
 
             var typeVisitor = new TypeVisitor(symbolTable);
             typeVisitor.Visit(AST);
 
             CodeGeneratorVisitor codeGeneratorVisitor = new CodeGeneratorVisitor(symbolTable);
             codeGeneratorVisitor.Visit(AST);
-
-            //Console.WriteLine(codeGeneratorVisitor.CSharpString);
-
-            CSharpCompiler.CompileAndStartConsole(codeGeneratorVisitor.CSharpString);
-
-            Console.WriteLine("Done compiling");
-
-            Console.WriteLine("Do you want to save the C# file? \n1: Yes \n2: No");
-            if (Console.ReadLine().Replace(" ", "") == "1")
-            {
-                SaveProgram(codeGeneratorVisitor.CSharpString.ToString());
-            }
+            return codeGeneratorVisitor.CSharpString;
         }
+
 
 
         // Skabelse af uniform fordeling af tal for floats.................. som Michael overså tidligere da han præsenterede sin random funktion
@@ -89,17 +143,17 @@ namespace P4Project
         // return TalMellem0Og1 * (max - min) + min;
 
 
-        public static void SaveProgram(string Program)
+        public static void SaveProgram(string Program, string directoryPath = "")
         {
             //Create string variables needed
             string fileName = "";
             string folderPath = "";
-            string destinationOption = "";
+            string destinationOption;
 
             //Find where to save the file
             do
             {
-                Console.WriteLine("\n \nChoose destination: \n1: Desktop \n2: Documents");
+                Console.WriteLine("\n \nChoose destination: \n1: Desktop \n2: Documents \n3: Current directory");
                 destinationOption = Console.ReadLine();
                 if (destinationOption == "1")
                 {
@@ -109,11 +163,22 @@ namespace P4Project
                 {
                     folderPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
                 }
+                else if (destinationOption == "3")
+                {
+                    if (directoryPath != "")
+                    {
+                        folderPath = directoryPath;
+                    }
+                    else
+                    {
+                        Console.WriteLine("Unavailable option chosen");
+                    }
+                }
                 else
                 {
                     Console.WriteLine("Unavailable option chosen");
                 }
-            } while (!(destinationOption == "1" || destinationOption == "2"));
+            } while (!(destinationOption == "1" || destinationOption == "2" ||( destinationOption == "2" && directoryPath != "")));
 
             //Naming of the file
             Console.Write("\nSpecify name of the file: ");
