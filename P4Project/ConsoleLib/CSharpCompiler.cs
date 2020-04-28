@@ -40,6 +40,10 @@ namespace CSharpCompilerLib
 
                     foreach (Diagnostic diagnostic in failures)
                     {
+                        if (diagnostic.Id == "CS0161")
+                        {
+                            throw new Exception(diagnostic.GetMessage().Replace("Program__.", "").Replace("'", "").Replace("_", "") + ".");
+                        }
                         Console.Error.WriteLine("{0}: {1}", diagnostic.Id, diagnostic.GetMessage());
                     }
                 }
@@ -52,7 +56,21 @@ namespace CSharpCompilerLib
                     if (m != null)
                     {
                         object[] parameters = m.GetParameters().Length == 0 ? null : new[] { new string[m.GetParameters().Length] };
-                        m.Invoke(null, parameters);
+                        try
+                        {
+                            try
+                            {
+                                m.Invoke(null, parameters);
+                            }
+                            catch (TargetInvocationException e)
+                            {
+                                throw e.InnerException;
+                            }
+                        }
+                        catch (ArgumentOutOfRangeException)
+                        {
+                            throw new Exception("Array index access out of range.");
+                        }
                     }
                 }
             }
