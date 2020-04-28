@@ -413,7 +413,7 @@ namespace SemanticLib
 
                 if (structChain.Contains(structNodeItem.Id.Id))
                 {
-                    throw new SemanticException($"Error on line {node.line}: Error in struct {structNodeItem.Id.Id}. Possible loop or duplicate.");
+                    throw new SemanticException($"Error on line {node.line}: Error in object {structNodeItem.Id.Id}. Possible loop or duplicate.");
                 }
             }
         }
@@ -456,7 +456,7 @@ namespace SemanticLib
                 item.Accept(this);
                 if (item.Type == node.Id.Id)
                 {
-                    throw new SemanticException($"Error on line {node.line}: Struct {node.Id.Id} cannot contain struct of type {item.Type}.");
+                    throw new SemanticException($"Error on line {node.line}: Object {node.Id.Id} cannot contain object of type {item.Type}.");
                 }
             }
             node.Constructor?.Accept(this);
@@ -698,8 +698,8 @@ namespace SemanticLib
                     }
                     else
                     {
-                        string funcOrStruct = (rootNode is FunctionDclNode) ? "function" : "struct";
-                        throw new SemanticException($"Error on line {rootNode.line}: Expected variable identifier for {node.GetId}, was a {funcOrStruct} declaration.");
+                        string funcOrStruct = (rootNode is FunctionDclNode) ? " function" : "n object"; //a function, an object
+                        throw new SemanticException($"Error on line {rootNode.line}: Expected variable identifier for {node.GetId}, was a{funcOrStruct} declaration.");
                     }
                     return;
                 }
@@ -729,12 +729,12 @@ namespace SemanticLib
                                 }
                                 else
                                 {                                     /*This point we know for certain that there is at least one idoperation*/
-                                    throw new SemanticException($"Error on line {node.GetIdOperations[0].line}: Unexpected reference to field: {field.Id.Id} in struct: {structDcl.Id.Id}.");
+                                    throw new SemanticException($"Error on line {node.GetIdOperations[0].line}: Unexpected reference to field: {field.Id.Id} in object: {structDcl.Id.Id}.");
                                 }
                             }
                             else
                             {
-                                throw new SemanticException($"Error on line {rootNode.line}: Accessing undeclared struct: {dclNode.GetVarType}.");
+                                throw new SemanticException($"Error on line {rootNode.line}: Accessing undeclared object: {dclNode.GetVarType}.");
                             }
                         }
                         else
@@ -779,8 +779,8 @@ namespace SemanticLib
                 }
                 else
                 {
-                    string funcOrStruct = (rootNode is FunctionDclNode) ? "function" : "struct";
-                    throw new SemanticException($"Error on line {rootNode.line}: Unexpected reference to a {funcOrStruct} declaration in operations emanating from identifer {node.GetId}.");
+                    string funcOrStruct = (rootNode is FunctionDclNode) ? " function" : "n object"; //a function, an object
+                    throw new SemanticException($"Error on line {rootNode.line}: Unexpected reference to a{funcOrStruct} declaration in operations emanating from identifer {node.GetId}.");
                 }
 
             }

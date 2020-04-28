@@ -62,13 +62,17 @@ func void main(){
 func bool CheckTile(string player, Colomn[] maps, Colomn[] viewermap){
 	local Colomn[] viewerMap = viewermap;
 
-	# Mangler check om pladsen er inden for mappet
 	Print("Choose tile: ");
 	Print("Colomn: ");
 	local int colomn = GetNumber();
+	while (colomn > (ListLength(maps[0].Fields) - 1)){
+		colomn = GetNumber();
+	}
 	Print("Row: ");
 	local int row = GetNumber();
-	
+	while (row > (ListLength(maps) - 1)){
+		row = GetNumber();
+	}
 	
 	local int tileCheck = ChooseOption(true, "Check tile", "Place flag", "Remove flag");
 

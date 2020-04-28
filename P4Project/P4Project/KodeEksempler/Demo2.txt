@@ -35,6 +35,11 @@
 #struct kurt.e { int k}
 
 
-func int main(){
+func void main(){
+	testFunc();
+}
+
+func int testFunc(){
+	if(false) {return 0;}
 }
 

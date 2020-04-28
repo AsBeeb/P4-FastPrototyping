@@ -245,7 +245,7 @@ namespace SemanticLib
         {
             if (node.Id.IdOperations?.Count > 0)
             {
-                throw new SemanticException($"Error on line {node.line}: Invalid field or array access on declaration of struct {node.Id.Id}.");
+                throw new SemanticException($"Error on line {node.line}: Invalid field or array access on declaration of object {node.Id.Id}.");
             }
             symbolTable.NewScope();
 
