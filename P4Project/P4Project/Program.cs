@@ -19,12 +19,12 @@ namespace P4Project
         {
             Queue<Token> tokenQueue = new Queue<Token>();
 
-            string fileName = args[0];
             string filePath = Directory.GetCurrentDirectory();
       
             // Check for args
             if (args.Length > 0)
             {
+                string fileName = args[0];
                 filePath += "\\" + fileName;
                 if (!File.Exists(filePath))
                 {
@@ -35,6 +35,8 @@ namespace P4Project
             else
             {
                 // If no arguments are given (filename, save option) end
+                Console.WriteLine("Error: missing arguments(filename)");
+                Console.ReadKey();
                 return;
             }
 
