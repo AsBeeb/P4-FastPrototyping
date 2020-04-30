@@ -11,16 +11,23 @@ using SemanticLib;
 using CSharpCompilerLib;
 using CodeGeneration;
 
-namespace P4Project
+namespace Versus
 {
     public class Program
     {
         private static void Main(string[] args)
         {
+            // Check for environment variable
+            checkOrSetEnvVariable();
+            
+            // The queue for tokens
             Queue<Token> tokenQueue = new Queue<Token>();
 
+            // The filepath for the directory in which the compiler have been launched.
             string filePath = Directory.GetCurrentDirectory();
-      
+            Console.WriteLine("Start Compiler, press a key");
+            Console.ReadKey();
+
             // Check for args
             if (args.Length > 0)
             {
@@ -97,6 +104,39 @@ namespace P4Project
             {
                 SW.WriteLine(Program);
             }
+        }
+
+        private static void checkOrSetEnvVariable()
+        {
+            string baseDir = AppDomain.CurrentDomain.BaseDirectory;
+            string pathVariable = "PATH";
+            EnvironmentVariableTarget target = EnvironmentVariableTarget.User;
+            string oldVariableValue = Environment.GetEnvironmentVariable(pathVariable, target);
+
+            if (!oldVariableValue.Contains(baseDir))
+            {
+                Console.WriteLine("ENV VAR DOESN'T EXIST, SETTING THE ENV VARIABLE");
+                string newVariableValue = oldVariableValue + ';' + baseDir;
+
+                Console.WriteLine("The old var: " + oldVariableValue);
+                Console.WriteLine("The new var: " + newVariableValue);
+
+                // Set the variable:
+                setEnvironmentVariable(pathVariable, baseDir, target);
+                Console.WriteLine("VARIABLE SET.");
+            }
+            else
+            {
+                Console.WriteLine("Env Variable exist, do noting.");
+            }
+        }
+
+        private static void setEnvironmentVariable(string variableName, string folderPath, EnvironmentVariableTarget target)
+        {
+            // Retrieve the old string var, then add the new path to it.
+            string oldVariableValue = Environment.GetEnvironmentVariable(variableName, target);
+            string newVariableValue = oldVariableValue + ';' + folderPath;
+            Environment.SetEnvironmentVariable(variableName, newVariableValue, target);
         }
     }
 }
