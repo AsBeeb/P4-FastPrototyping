@@ -5,36 +5,48 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-
 namespace SemanticLib
 {
     public class SymbolTable
     {
-        public Dictionary<string, ASTnode> GlobalScope;
-        public Stack<Dictionary<string, ASTnode>> Scopes;
+        public Scope CurrentScope;
+        public Scope GlobalScope;
 
         public SymbolTable()
         {
-            Scopes = new Stack<Dictionary<string, ASTnode>>();
-            Scopes.Push(new Dictionary<string, ASTnode>());
-            GlobalScope = Scopes.Peek();            
+            GlobalScope = new Scope();
+            CurrentScope = GlobalScope;
+            
         }
-
-        public void OpenScope()
+        public void NewScope()
         {
-            Scopes.Push(new Dictionary<string, ASTnode>());
+            Scope newScope = new Scope(CurrentScope);
+            CurrentScope.Children.Add(newScope);
+            CurrentScope = newScope;
         }
 
+        public void EnterScope()
+        {
+            if (CurrentScope.Children.Count > 0 && CurrentScope.Children[CurrentScope.NextVisitedChild] != null)
+            {
+                CurrentScope = CurrentScope.Children[CurrentScope.NextVisitedChild++];
+            }
+            else
+            {
+                throw new SemanticException("Compiler error: tried to open non-existing scope.");
+            }
+        }
         public void CloseScope()
         {
-            Scopes.Pop();
+            CurrentScope.NextVisitedChild = 0;
+            CurrentScope = CurrentScope.Parent;
         }
 
         public void EnterSymbol(string symbolName, ASTnode astnode)
         {
             if (!IsDeclaredLocally(symbolName))
             {
-                Scopes.Peek().Add(symbolName, astnode);
+                CurrentScope.Symbols.Add(symbolName, astnode);
             }
             else
             {
@@ -45,13 +57,16 @@ namespace SemanticLib
         public ASTnode RetrieveSymbol(string symbolName, ASTnode problemNode = null)
         {
             ASTnode returnValue;
-            foreach (Dictionary<string, ASTnode> scope in Scopes)
+            Scope viewingScope = CurrentScope;
+            do
             {
-                if (scope.TryGetValue(symbolName, out returnValue))
+                if (viewingScope.Symbols.TryGetValue(symbolName, out returnValue))
                 {
                     return returnValue;
                 }
+                viewingScope = viewingScope.Parent;
             }
+            while (viewingScope != null);
             if (problemNode != null)
             {
                 throw new SemanticException($"Error on line {problemNode.line}: Symbol {symbolName} not found. Potentially missing declaration or not visible in scope.");
@@ -64,7 +79,21 @@ namespace SemanticLib
 
         public bool IsDeclaredLocally(string symbolToFind)
         {
-            return Scopes.Peek().ContainsKey(symbolToFind);
+            return CurrentScope.Symbols.ContainsKey(symbolToFind);
+        }
+
+        public void PrintTable(Scope header, int level)
+        {
+            foreach(Scope scope in header.Children)
+            {
+                PrintTable(scope, level + 1);
+            }
+
+            foreach(KeyValuePair<string, ASTnode> kp in header.Symbols)
+            {
+                // Print
+                Console.WriteLine("Level: " + level + " - Name: " + kp.Key + " - Type: " + kp.Value.GetType() + ".");
+            }
         }
     }
 }
