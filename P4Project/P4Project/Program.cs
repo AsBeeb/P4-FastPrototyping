@@ -25,8 +25,6 @@ namespace Versus
 
             // The filepath for the directory in which the compiler have been launched.
             string filePath = Directory.GetCurrentDirectory();
-            Console.WriteLine("Start Compiler, press a key");
-            Console.ReadKey();
 
             // Check for args
             if (args.Length > 0)
@@ -115,19 +113,21 @@ namespace Versus
 
             if (!oldVariableValue.Contains(baseDir))
             {
-                Console.WriteLine("ENV VAR DOESN'T EXIST, SETTING THE ENV VARIABLE");
+                //Console.WriteLine("ENV VAR DOESN'T EXIST, SETTING THE ENV VARIABLE");
                 string newVariableValue = oldVariableValue + ';' + baseDir;
 
-                Console.WriteLine("The old var: " + oldVariableValue);
-                Console.WriteLine("The new var: " + newVariableValue);
+                // Print out the old and new variables:
+                //Console.WriteLine("The old var: " + oldVariableValue);
+                //Console.WriteLine("The new var: " + newVariableValue);
 
                 // Set the variable:
                 setEnvironmentVariable(pathVariable, baseDir, target);
-                Console.WriteLine("VARIABLE SET.");
+                Console.WriteLine("ENVIRONMENT VARIABLE SET(first time use)");
             }
             else
             {
-                Console.WriteLine("Env Variable exist, do noting.");
+                // The var exists do nothing
+                //Console.WriteLine("Env Variable exist, do noting.");
             }
         }
 
