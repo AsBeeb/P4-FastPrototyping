@@ -200,7 +200,7 @@ namespace CodeGeneration
                 {
                     if (node.InitialValue is FuncCallExpressionNode StructConstructerCall)
                     {
-                        if (SymTbl.RetrieveSymbol(StructConstructerCall.Id.Id) is StructDclNode)
+                        if (SymTbl.GlobalScope.Symbols[StructConstructerCall.Id.Id] is StructDclNode)
                             CSharpString.Append("new ");
                     }
                     node.InitialValue.Accept(this);
@@ -414,7 +414,7 @@ namespace CodeGeneration
                 {
                     if (node.InitialValue is FuncCallExpressionNode StructConstructerCall)
                     {
-                        if (SymTbl.RetrieveSymbol(StructConstructerCall.Id.Id) is StructDclNode)
+                        if (SymTbl.GlobalScope.Symbols[StructConstructerCall.Id.Id] is StructDclNode)
                             CSharpString.Append("new ");
                     }
                     node.InitialValue.Accept(this);

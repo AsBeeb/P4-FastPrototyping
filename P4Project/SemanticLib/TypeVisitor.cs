@@ -53,7 +53,7 @@ namespace SemanticLib
 
         public override void Visit(ConstructorNode node)
         {
-            symbolTable.EnterScope();
+            symbolTable.NewScope();
             node.FormalParamNodes?.ForEach(x => x.Accept(this));
             node.Block.Accept(this);
             symbolTable.CloseScope();
@@ -62,6 +62,12 @@ namespace SemanticLib
         public override void Visit(DeclarationNode node)
         {
             node.InitialValue?.Accept(this);
+            if (node.Id.IdOperations?.Count > 0)
+            {
+                throw new SemanticException($"Error on line {node.line}: Invalid field or array access on declaration of {node.Id.Id}.");
+            }
+            symbolTable.EnterSymbol(node.Id.Id, node);
+
             string declarationType = node.Type + (node.IsArray ? "[]" : "");
             if (node.InitialValue != null)
             {
@@ -71,7 +77,7 @@ namespace SemanticLib
 
         public override void Visit(ElifNode node)
         {
-            symbolTable.EnterScope();
+            symbolTable.NewScope();
             node.ControlExpr.Accept(this);
 
             if (node.ControlExpr.Type != "bool")
@@ -85,7 +91,7 @@ namespace SemanticLib
 
         public override void Visit(ElseNode node)
         {
-            symbolTable.EnterScope();
+            symbolTable.NewScope();
             node.ElseBody.Accept(this);
             symbolTable.CloseScope();
         }
@@ -102,7 +108,12 @@ namespace SemanticLib
 
         public override void Visit(FormalParamNode node)
         {
-            return;
+            if (node.Id.IdOperations?.Count > 0)
+            {
+                throw new SemanticException($"Error on line {node.line}: Invalid field or array access on declaration of parameter {node.Id.Id}.");
+            }
+
+            symbolTable.EnterSymbol(node.Id.Id, node);
         }
 
         public override void Visit(FuncCallExpressionNode node)
@@ -309,8 +320,25 @@ namespace SemanticLib
 
         public override void Visit(FunctionDclNode node)
         {
+            if (node.Id.IdOperations?.Count > 0)
+            {
+                throw new SemanticException($"Error on line {node.line}: Invalid field or array access on declaration of function {node.Id.Id}.");
+            }
+
+            if (!(symbolTable.GlobalScope.Symbols.ContainsKey(node.ReturnType) || node.ReturnType == "int" || node.ReturnType == "float" || node.ReturnType == "bool" || node.ReturnType == "string" || node.ReturnType == "void" || node.ReturnType == "int[]" || node.ReturnType == "float[]" || node.ReturnType == "bool[]" || node.ReturnType == "string[]" || symbolTable.GlobalScope.Symbols.ContainsKey(node.ReturnType.Replace("[]", ""))))
+            {
+                throw new SemanticException($"Error on line {node.line}: Invalid return type {node.ReturnType} declared on {node.Id.Id}.");
+            }
+
+
+
             string returnNodeType;
-            symbolTable.EnterScope();
+            symbolTable.NewScope();
+            foreach (FormalParamNode param in node.FormalParamNodes)
+            {
+                param.Accept(this);
+            }
+
             node.FuncBody.Accept(this);
             List<ReturnNode> returnNodes = GetReturnNodes(node.FuncBody); //node.FuncBody.StmtNodes.Where(x => x is ReturnNode).Select(x => (ReturnNode)x).ToList();
 
@@ -333,6 +361,11 @@ namespace SemanticLib
 
         public override void Visit(GlobalDclNode node)
         {
+            if (node.Id.IdOperations?.Count > 0)
+            {
+                throw new SemanticException($"Error on line {node.line}: Invalid field or array access on global declaration of {node.Id.Id}.");
+            }
+
             node.InitialValue?.Accept(this);
             string declarationType = node.Type + (node.IsArray ? "[]" : "");
             if (node.InitialValue != null)
@@ -353,7 +386,7 @@ namespace SemanticLib
 
         public override void Visit(IfNode node)
         {
-            symbolTable.EnterScope();
+            symbolTable.NewScope();
             node.ControlExpression.Accept(this);
             if (node.ControlExpression.Type != "bool")
             {
@@ -372,7 +405,22 @@ namespace SemanticLib
 
         public override void Visit(PlayLoopNode node)
         {
-            symbolTable.EnterScope();
+            if (node.Player.IdOperations?.Count > 0 && node.Opponents.IdOperations?.Count > 0)
+            {
+                throw new SemanticException($"Error on line {node.line}: Invalid field or array access on declaration of {node.Player.Id} and {node.Opponents.Id} in play loop header.");
+            }
+            else if (node.Player.IdOperations?.Count > 0)
+            {
+                throw new SemanticException($"Error on line {node.line}: Invalid field or array access on declaration of {node.Player.Id} in play loop header.");
+            }
+            else if (node.Opponents.IdOperations?.Count > 0)
+            {
+                throw new SemanticException($"Error on line {node.line}: Invalid field or array access on declaration of {node.Opponents.Id} in play loop header.");
+            }
+
+            symbolTable.NewScope();
+            symbolTable.EnterSymbol(node.Player.Id, node.Player);
+            symbolTable.EnterSymbol(node.Opponents.Id, node.Opponents);
             node.AllPlayers.Accept(this);
             node.UntilCondition.Accept(this);
             if (!node.AllPlayers.Type.Contains("[]"))
@@ -391,8 +439,36 @@ namespace SemanticLib
 
         public override void Visit(ProgNode node)
         {
-            node.TopDclNodes.ForEach(x => x.Accept(this));
+            InsertStandardFunctions();
+            foreach (TopDclNode topDclNode in node.TopDclNodes)
+            {
+                switch (topDclNode)
+                {
+                    case StructDclNode structDcl:
+                        symbolTable.EnterSymbol(structDcl.Id.Id, structDcl);
+                        break;
+                    case FunctionDclNode funcDcl:
+                        symbolTable.EnterSymbol(funcDcl.Id.Id, funcDcl);
+                        break;
+                    case GlobalDclNode globalDcl:
+                        symbolTable.EnterSymbol(globalDcl.Id.Id, globalDcl);
+                        break;
+                }
+            }
+            if (!(symbolTable.RetrieveSymbol("main") is FunctionDclNode))
+            {
+                throw new SemanticException($"Error on line {node.line}: No entry point found: missing main function.");
+            }
+            else
+            {
+                FunctionDclNode mainNode = (FunctionDclNode)symbolTable.RetrieveSymbol("main");
+                if (mainNode.FormalParamNodes.Count > 0)
+                {
+                    throw new SemanticException($"Error on line {node.line}: Formal parameters are not allowed in main.");
+                }
+            }
 
+            node.TopDclNodes.ForEach(x => x.Accept(this));
 
             // Control for struct loops:
             List<StructDclNode> tempStructNodes = new List<StructDclNode>();
@@ -449,7 +525,12 @@ namespace SemanticLib
 
         public override void Visit(StructDclNode node)
         {
-            symbolTable.EnterScope();
+            if (node.Id.IdOperations?.Count > 0)
+            {
+                throw new SemanticException($"Error on line {node.line}: Invalid field or array access on declaration of object {node.Id.Id}.");
+            }
+
+            symbolTable.NewScope();
             //node.Declarations?.ForEach(x => x.Accept(this));
             foreach (DeclarationNode item in node.Declarations)
             {
@@ -495,7 +576,7 @@ namespace SemanticLib
 
         public override void Visit(WhileNode node)
         {
-            symbolTable.EnterScope();
+            symbolTable.NewScope();
             node.ControlExpr.Accept(this);
             if (node.ControlExpr.Type != "bool")
             {
@@ -831,5 +912,106 @@ namespace SemanticLib
             return returnList;
         }
 
+        private void InsertStandardFunctions()
+        {
+            // GetString
+            IdNode getStringIdNode = new IdNode("GetString");
+            List<FormalParamNode> getStringParams = new List<FormalParamNode>();
+            FunctionDclNode getStringFunction = new FunctionDclNode(getStringIdNode, "string", getStringParams);
+            symbolTable.EnterSymbol("GetString", getStringFunction);
+
+            // GetNumber
+            IdNode getNumberIdNode = new IdNode("GetNumber");
+            List<FormalParamNode> getNumberParams = new List<FormalParamNode>();
+            FunctionDclNode getNumberFunction = new FunctionDclNode(getNumberIdNode, "float", getNumberParams);
+            symbolTable.EnterSymbol("GetNumber", getNumberFunction);
+
+            // Print
+            IdNode printIdNode = new IdNode("Print");
+            List<FormalParamNode> printParams = new List<FormalParamNode>()
+            {
+                new FormalParamNode(null, "object")
+            };
+            FunctionDclNode printFunction = new FunctionDclNode(printIdNode, "void", printParams);
+            symbolTable.EnterSymbol("Print", printFunction);
+
+            // ChooseOption
+            IdNode chooseIdNode = new IdNode("ChooseOption");
+            List<FormalParamNode> chooseParams = new List<FormalParamNode>()
+            {
+                new FormalParamNode(null, "bool"),
+                new FormalParamNode(null, "string")
+            };
+            FunctionDclNode chooseFunction = new FunctionDclNode(chooseIdNode, "int", chooseParams);
+            symbolTable.EnterSymbol("ChooseOption", chooseFunction);
+
+            // GetRandomFloat
+            IdNode getFloatIdNode = new IdNode("GetRandomFloat");
+            List<FormalParamNode> getFloatParams = new List<FormalParamNode>()
+            {
+                new FormalParamNode(null, "float"),
+                new FormalParamNode(null, "float")
+            };
+            FunctionDclNode getFloatFunction = new FunctionDclNode(getFloatIdNode, "float", getFloatParams);
+            symbolTable.EnterSymbol("GetRandomFloat", getFloatFunction);
+
+            // GetRandomInt
+            IdNode getIntIdNode = new IdNode("GetRandomInt");
+            List<FormalParamNode> getIntParams = new List<FormalParamNode>()
+            {
+                new FormalParamNode(null, "int"),
+                new FormalParamNode(null, "int")
+            };
+            FunctionDclNode getIntFunction = new FunctionDclNode(getIntIdNode, "int", getIntParams);
+            symbolTable.EnterSymbol("GetRandomInt", getIntFunction);
+
+            // SetSeed
+            IdNode setSeedIdNode = new IdNode("SetSeed");
+            List<FormalParamNode> setSeedParams = new List<FormalParamNode>()
+            {
+                new FormalParamNode(null, "int")
+            };
+            FunctionDclNode setSeedFunction = new FunctionDclNode(setSeedIdNode, "void", setSeedParams);
+            symbolTable.EnterSymbol("SetSeed", setSeedFunction);
+
+            // ListAdd
+            IdNode listAddIdNode = new IdNode("ListAdd");
+            List<FormalParamNode> listAddParams = new List<FormalParamNode>()
+            {
+                new FormalParamNode(null, "[]"),
+                new FormalParamNode(null, "?")
+            };
+            FunctionDclNode listAddFunction = new FunctionDclNode(listAddIdNode, "void", listAddParams);
+            symbolTable.EnterSymbol("ListAdd", listAddFunction);
+
+            // ListRemove
+            IdNode listRemoveIdNode = new IdNode("ListRemove");
+            List<FormalParamNode> listRemoveParams = new List<FormalParamNode>()
+            {
+                new FormalParamNode(null, "[]"),
+                new FormalParamNode(null, "?")
+            };
+            FunctionDclNode listRemoveFunction = new FunctionDclNode(listRemoveIdNode, "void", listRemoveParams);
+            symbolTable.EnterSymbol("ListRemove", listRemoveFunction);
+
+            // ListEmpty
+            IdNode listEmptyIdNode = new IdNode("ListEmpty");
+            List<FormalParamNode> listEmptyParams = new List<FormalParamNode>()
+            {
+                new FormalParamNode(null, "[]"),
+            };
+            FunctionDclNode listEmptyFunction = new FunctionDclNode(listEmptyIdNode, "void", listEmptyParams);
+            symbolTable.EnterSymbol("ListEmpty", listEmptyFunction);
+
+            // ListLength
+            IdNode listLengthIdNode = new IdNode("ListLength");
+            List<FormalParamNode> listLengthParams = new List<FormalParamNode>()
+            {
+                new FormalParamNode(null, "[]"),
+            };
+            FunctionDclNode listLengthFunction = new FunctionDclNode(listLengthIdNode, "int", listLengthParams);
+            symbolTable.EnterSymbol("ListLength", listLengthFunction);
+        }
     }
+
 }
