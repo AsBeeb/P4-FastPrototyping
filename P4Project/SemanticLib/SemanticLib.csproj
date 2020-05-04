@@ -41,12 +41,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DeclarationVisitor.cs" />
     <Compile Include="Scope.cs" />
     <Compile Include="SemanticException.cs" />
     <Compile Include="SymbolTable.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TypeVisitor.cs" />
+    <Compile Include="SemanticsVisitor.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ParserLib\ParserLib.csproj">

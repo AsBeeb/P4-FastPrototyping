@@ -65,11 +65,8 @@ namespace P4Project
 
             // Semantics
             SymbolTable symbolTable = new SymbolTable();
-            
-            //DeclarationVisitor dclVisitor = new DeclarationVisitor(symbolTable);
-            //dclVisitor.Visit(AST);
 
-            TypeVisitor typeVisitor = new TypeVisitor(symbolTable);
+            SemanticsVisitor typeVisitor = new SemanticsVisitor(symbolTable);
             typeVisitor.Visit(AST);
 
             // Codegeneration

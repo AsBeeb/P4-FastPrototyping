@@ -9,11 +9,11 @@ using ParserLib.AST.DataStructures;
 
 namespace SemanticLib
 {
-    public class TypeVisitor : Visitor
+    public class SemanticsVisitor : Visitor
     {
         SymbolTable symbolTable;
 
-        public TypeVisitor(SymbolTable symbolTable)
+        public SemanticsVisitor(SymbolTable symbolTable)
         {
             this.symbolTable = symbolTable;
         }
@@ -53,7 +53,7 @@ namespace SemanticLib
 
         public override void Visit(ConstructorNode node)
         {
-            symbolTable.NewScope();
+            symbolTable.OpenScope();
             node.FormalParamNodes?.ForEach(x => x.Accept(this));
             node.Block.Accept(this);
             symbolTable.CloseScope();
@@ -77,7 +77,7 @@ namespace SemanticLib
 
         public override void Visit(ElifNode node)
         {
-            symbolTable.NewScope();
+            symbolTable.OpenScope();
             node.ControlExpr.Accept(this);
 
             if (node.ControlExpr.Type != "bool")
@@ -91,7 +91,7 @@ namespace SemanticLib
 
         public override void Visit(ElseNode node)
         {
-            symbolTable.NewScope();
+            symbolTable.OpenScope();
             node.ElseBody.Accept(this);
             symbolTable.CloseScope();
         }
@@ -111,6 +111,11 @@ namespace SemanticLib
             if (node.Id.IdOperations?.Count > 0)
             {
                 throw new SemanticException($"Error on line {node.line}: Invalid field or array access on declaration of parameter {node.Id.Id}.");
+            }
+
+            if (!(symbolTable.GlobalScope.Symbols.ContainsKey(node.Type) || node.Type == "int" || node.Type == "float" || node.Type == "bool" || node.Type == "string" || node.Type == "void" || node.Type == "int[]" || node.Type == "float[]" || node.Type == "bool[]" || node.Type == "string[]" || symbolTable.GlobalScope.Symbols.ContainsKey(node.Type.Replace("[]", ""))))
+            {
+                throw new SemanticException($"Error on line {node.line}: Invalid return type {node.Type} declared on {node.Id.Id}.");
             }
 
             symbolTable.EnterSymbol(node.Id.Id, node);
@@ -333,7 +338,7 @@ namespace SemanticLib
 
 
             string returnNodeType;
-            symbolTable.NewScope();
+            symbolTable.OpenScope();
             foreach (FormalParamNode param in node.FormalParamNodes)
             {
                 param.Accept(this);
@@ -386,7 +391,7 @@ namespace SemanticLib
 
         public override void Visit(IfNode node)
         {
-            symbolTable.NewScope();
+            symbolTable.OpenScope();
             node.ControlExpression.Accept(this);
             if (node.ControlExpression.Type != "bool")
             {
@@ -418,7 +423,7 @@ namespace SemanticLib
                 throw new SemanticException($"Error on line {node.line}: Invalid field or array access on declaration of {node.Opponents.Id} in play loop header.");
             }
 
-            symbolTable.NewScope();
+            symbolTable.OpenScope();
             symbolTable.EnterSymbol(node.Player.Id, node.Player);
             symbolTable.EnterSymbol(node.Opponents.Id, node.Opponents);
             node.AllPlayers.Accept(this);
@@ -530,7 +535,7 @@ namespace SemanticLib
                 throw new SemanticException($"Error on line {node.line}: Invalid field or array access on declaration of object {node.Id.Id}.");
             }
 
-            symbolTable.NewScope();
+            symbolTable.OpenScope();
             //node.Declarations?.ForEach(x => x.Accept(this));
             foreach (DeclarationNode item in node.Declarations)
             {
@@ -576,7 +581,7 @@ namespace SemanticLib
 
         public override void Visit(WhileNode node)
         {
-            symbolTable.NewScope();
+            symbolTable.OpenScope();
             node.ControlExpr.Accept(this);
             if (node.ControlExpr.Type != "bool")
             {
