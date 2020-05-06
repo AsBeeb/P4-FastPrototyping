@@ -56,6 +56,12 @@ namespace SemanticLib
             symbolTable.OpenScope();
             node.FormalParamNodes?.ForEach(x => x.Accept(this));
             node.Block.Accept(this);
+            GetReturnNodes(node.Block).ForEach(returnNode => {
+            if (returnNode.ReturnValue != null)
+            {
+                throw new SemanticException($"Error on line {node.line}: Return type invalid. Expected void, found {returnNode.ReturnValue.Type}.");
+            }
+            });
             symbolTable.CloseScope();
         }
 
@@ -520,7 +526,7 @@ namespace SemanticLib
 
         public override void Visit(ReturnNode node)
         {
-            node.ReturnValue.Accept(this);
+            node.ReturnValue?.Accept(this);
         }
 
         public override void Visit(StringValueNode node)

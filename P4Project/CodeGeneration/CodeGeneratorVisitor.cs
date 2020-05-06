@@ -622,7 +622,7 @@ namespace CodeGeneration
         public override void Visit(ReturnNode node)
         {
             CSharpString.Append("return ");
-            node.ReturnValue.Accept(this);
+            node.ReturnValue?.Accept(this);
             CSharpString.Append(";");
         }
 
