@@ -137,6 +137,11 @@ namespace SemanticLib
                 {
                     if (node.ActualParameters.Count > 1)
                     {
+                        if (node.ActualParameters[0].Type != "bool")
+                        {
+                            throw new SemanticException($"Error on line {node.line}: Wrong type {node.ActualParameters[0].Type} provided for ChooseOption.");
+                        }
+
                         for (int i = 1; i < node.ActualParameters.Count; i++)
                         {
                             if (node.ActualParameters[i].Type != "string")
@@ -246,6 +251,11 @@ namespace SemanticLib
                 {
                     if (node.ActualParameters.Count > 1)
                     {
+                        if (node.ActualParameters[0].Type != "bool")
+                        {
+                            throw new SemanticException($"Error on line {node.line}: Wrong type {node.ActualParameters[0].Type} provided for ChooseOption.");
+                        }
+
                         for (int i = 1; i < node.ActualParameters.Count; i++)
                         {
                             if (node.ActualParameters[i].Type != "string")
