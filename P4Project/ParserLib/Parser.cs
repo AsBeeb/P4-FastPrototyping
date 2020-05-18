@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using ScannerLib;
-using System.Linq;
 using ParserLib.AST;
 using System.Globalization;
 
@@ -410,6 +409,7 @@ namespace ParserLib
             }
             return stmt;
         }
+
         private DeclarationNode ParseDcl()
         {
             DeclarationNode dcl = null;
@@ -439,6 +439,7 @@ namespace ParserLib
         {
             StmtNode assignOrCall = null;
             int line = tokens.Peek().Line;
+
             if (tokens.Peek().IsInPredictSet(TokenType.assign_token, TokenType.lsbracket_token, TokenType.dot_token))
             {
                 Tuple<List<IdOperationNode>, ExpressionNode> assign = ParseAssign();
@@ -478,6 +479,7 @@ namespace ParserLib
             {
                 throw new SyntacticalException(tokens.Peek());
             }
+
             return isArray;
         }
 
@@ -498,8 +500,8 @@ namespace ParserLib
             {
                 throw new SyntacticalException(tokens.Peek());
             }
-            return init;
 
+            return init;
         }
 
         private Tuple<List<IdOperationNode>, ExpressionNode> ParseAssign()
@@ -519,6 +521,7 @@ namespace ParserLib
                 // ERROR
                 throw new SyntacticalException(tokens.Peek());
             }
+
             return assign;
         }
 
@@ -664,7 +667,6 @@ namespace ParserLib
         {
             ExpressionNode returnValue = null;
 
-            // ReturnValue -> Expr | EPSILON
             if (tokens.Peek().IsInPredictSet(TokenType.stringval_token, TokenType.not_token, TokenType.boolval_token, TokenType.minus_token, TokenType.lparen_token, TokenType.inum_token, TokenType.fnum_token, TokenType.id_token))
             {
                 returnValue = ParseExpr();
@@ -1021,8 +1023,10 @@ namespace ParserLib
             {
                 throw new SyntacticalException(tokens.Peek());
             }
+
             return compExpr3;
         }
+
         private Tuple<ExpressionNode, TokenType> ParseSizeComp()
         {
             Tuple < ExpressionNode, TokenType > sizeComp = null;
@@ -1102,6 +1106,7 @@ namespace ParserLib
 
             return sizeComp;
         }
+
         private Tuple<ExpressionNode, TokenType> ParseCompExpr4()
         {
             Tuple<ExpressionNode, TokenType> compExpr4 = null;
@@ -1129,8 +1134,10 @@ namespace ParserLib
                 throw new SyntacticalException(tokens.Peek());
             }
             compExpr4.Item1.Line = line;
+
             return compExpr4;
         }
+
         private ExpressionNode ParseBasicBool()
         {
             ExpressionNode basicBool = null;
@@ -1183,6 +1190,7 @@ namespace ParserLib
             {
                 throw new SyntacticalException(tokens.Peek());
             }
+
             return arithExpr;
         }
 
@@ -1225,8 +1233,10 @@ namespace ParserLib
             {
                 throw new SyntacticalException(tokens.Peek());
             }
+
             return arithOp1;
         }
+
         private ExpressionNode ParseArithExpr1()
         {
             ExpressionNode arithExpr1 = null;
@@ -1265,9 +1275,9 @@ namespace ParserLib
             {
                 throw new SyntacticalException(tokens.Peek());
             }
+
             return arithExpr1;
         }
-
 
         private Tuple<ExpressionNode, TokenType> ParseArithOp2()
         {
@@ -1303,6 +1313,7 @@ namespace ParserLib
             {
                 throw new SyntacticalException(tokens.Peek());
             }
+
             return arithOp2;
         }
 
@@ -1328,8 +1339,10 @@ namespace ParserLib
             {
                 throw new SyntacticalException(tokens.Peek());
             }
+
             return arithExpr2;
         }
+
         private ExpressionNode ParseArithExpr3()
         {
             ExpressionNode arithExpr3 = null;
@@ -1353,8 +1366,10 @@ namespace ParserLib
             {
                 throw new SyntacticalException(tokens.Peek());
             }
+
             return arithExpr3;
         }
+
         private Tuple<ExpressionNode, TokenType> ParseArithOp3()
         {
             Tuple<ExpressionNode, TokenType> arithOp3 = null;
@@ -1373,6 +1388,7 @@ namespace ParserLib
             {
                 throw new SyntacticalException(tokens.Peek());
             }
+
             return arithOp3;
         }
 
@@ -1433,6 +1449,7 @@ namespace ParserLib
             }
 
             callOrOperations.Line = line;
+
             return callOrOperations;
         }
 
@@ -1449,6 +1466,7 @@ namespace ParserLib
             {
                 throw new SyntacticalException(tokens.Peek());
             }
+
             return call;
         }
 
@@ -1468,6 +1486,7 @@ namespace ParserLib
             {
                 throw new SyntacticalException(tokens.Peek());
             }
+
             return actualParams;
         }
 
@@ -1492,6 +1511,7 @@ namespace ParserLib
             {
                 throw new SyntacticalException(tokens.Peek());
             }
+
             return funcValues;
         }
 
@@ -1515,6 +1535,7 @@ namespace ParserLib
             {
                 throw new SyntacticalException(tokens.Peek());
             }
+
             return idOperations;
         }
 
@@ -1541,6 +1562,7 @@ namespace ParserLib
                 throw new SyntacticalException(tokens.Peek());
             }
             idOperation.Line = line;
+
             return idOperation;
         }
 
@@ -1555,6 +1577,7 @@ namespace ParserLib
                     Operator = UnaryOperator.UNARY_MINUS;
                     break;
             }
+
             return Operator;
         }
 
