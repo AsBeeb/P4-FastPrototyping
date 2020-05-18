@@ -1,16 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace ParserLib.AST
+﻿namespace ParserLib.AST
 {
     public class IntValueNode : ExpressionNode
     {
         public int IntValue;
 
-        public IntValueNode(int IntValue) : base("int")
+        public IntValueNode(int intValue) : base("int")
         {
-            this.IntValue = IntValue;
+            this.IntValue = intValue;
         }
 
         public override void Accept(Visitor v)

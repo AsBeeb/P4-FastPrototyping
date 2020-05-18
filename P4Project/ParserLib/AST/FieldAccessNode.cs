@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace ParserLib.AST
+﻿namespace ParserLib.AST
 {
     public class FieldAccessNode : IdOperationNode
     {
@@ -12,6 +8,7 @@ namespace ParserLib.AST
         {
             Id = id;
         }
+
         public override void Accept(Visitor v)
         {
             v.Visit(this);

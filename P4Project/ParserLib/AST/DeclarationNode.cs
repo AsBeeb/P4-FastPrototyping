@@ -1,7 +1,4 @@
 ﻿using ParserLib.AST.DataStructures;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace ParserLib.AST
 {
@@ -23,6 +20,7 @@ namespace ParserLib.AST
             InitialValue = initialValue;
             IsArray = isArray;
         }
+
         public override void Accept(Visitor v)
         {
             v.Visit(this);

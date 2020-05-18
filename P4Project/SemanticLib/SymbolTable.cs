@@ -38,7 +38,7 @@ namespace SemanticLib
             }
             else
             {
-                throw new SemanticException($"Error on line {astnode.line}: Symbol {symbolName} already declared locally.");
+                throw new SemanticException($"Error on line {astnode.Line}: Symbol {symbolName} already declared locally.");
             }
         }
 
@@ -57,7 +57,7 @@ namespace SemanticLib
             while (viewingScope != null);
             if (problemNode != null)
             {
-                throw new SemanticException($"Error on line {problemNode.line}: Symbol {symbolName} not found. Potentially missing declaration or not visible in scope.");
+                throw new SemanticException($"Error on line {problemNode.Line}: Symbol {symbolName} not found. Potentially missing declaration or not visible in scope.");
             }
             else
             {

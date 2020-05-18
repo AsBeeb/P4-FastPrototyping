@@ -114,7 +114,7 @@ namespace ParserLib
                 Match(TokenType.semicolon_token);
                 
                 globalNode = new GlobalDclNode(id, initVal, type, isArray);
-                globalNode.line = line;
+                globalNode.Line = line;
             }
             else
             {             
@@ -133,10 +133,10 @@ namespace ParserLib
                 Match(TokenType.struct_token);
                 int line = tokens.Peek().Line;
                 IdNode id = new IdNode(Match(TokenType.id_token).Value, null);
-                id.line = line;
+                id.Line = line;
                 var (constructor, declarations) = ParseStructBlock();
                 structNode = new StructDclNode(id, declarations, constructor);
-                structNode.line = line;
+                structNode.Line = line;
             }
             else
             {
@@ -174,13 +174,13 @@ namespace ParserLib
             {
                 int line = tokens.Peek().Line;
                 IdNode id = new IdNode(Match(TokenType.id_token).Value, null);
-                id.line = line;
+                id.Line = line;
                 Match(TokenType.lparen_token);
                 List<FormalParamNode> formalParams = ParseFormalParams();
                 Match(TokenType.rparen_token);
                 BlockNode block = ParseBlock();
                 ctorNode = new ConstructorNode(id, formalParams, block);
-                ctorNode.line = line;
+                ctorNode.Line = line;
             }
             else if (tokens.Peek().IsInPredictSet(TokenType.rcbracket_token))
             {
@@ -224,13 +224,13 @@ namespace ParserLib
                 Match(TokenType.func_token);
                 string returnType = ParseReturnType();
                 IdNode id = new IdNode(Match(TokenType.id_token).Value, null);
-                id.line = line;
+                id.Line = line;
                 Match(TokenType.lparen_token);
                 List<FormalParamNode> formalParams = ParseFormalParams();
                 Match(TokenType.rparen_token);
                 BlockNode block = ParseBlock();
                 funcDclNode = new FunctionDclNode(id, returnType, formalParams, block);
-                funcDclNode.line = line;
+                funcDclNode.Line = line;
             }
             else
             {
@@ -294,9 +294,9 @@ namespace ParserLib
 
                 int line = tokens.Peek().Line;
                 IdNode id = new IdNode (Match(TokenType.id_token).Value, null);
-                id.line = line;
+                id.Line = line;
                 formalParamNode = new FormalParamNode(id, type, isArray);
-                formalParamNode.line = line;
+                formalParamNode.Line = line;
             }
             else
             {
@@ -421,11 +421,11 @@ namespace ParserLib
                 string type = ParseType();
                 bool isArray = ParseBrackets();
                 IdNode id = new IdNode(Match(TokenType.id_token).Value, null);
-                id.line = line;
+                id.Line = line;
                 ExpressionNode init = ParseInit();
                 Match(TokenType.semicolon_token);
                 dcl = new DeclarationNode(id, type, init, isArray);
-                dcl.line = line;
+                dcl.Line = line;
             }
             else
             {
@@ -443,13 +443,13 @@ namespace ParserLib
             {
                 Tuple<List<IdOperationNode>, ExpressionNode> assign = ParseAssign();
                 assignOrCall = new AssignmentNode(new IdNode(idToken.Value, assign.Item1), assign.Item2);
-                assignOrCall.line = line;
+                assignOrCall.Line = line;
             }
             else if (tokens.Peek().IsInPredictSet(TokenType.lparen_token))
             {
                 List<ExpressionNode> actualParams = ParseCall();
                 assignOrCall = new FuncCallStmtNode(new IdNode(idToken.Value, null), actualParams);
-                assignOrCall.line = line;
+                assignOrCall.Line = line;
             }
             else
             {
@@ -537,7 +537,7 @@ namespace ParserLib
                 List<ElifNode> elifNodes = ParseElifs();
                 ElseNode elseNode = ParseElse();
                 ifStmt = new IfNode(controlExpr, ifBody, elifNodes, elseNode);
-                ifStmt.line = line;
+                ifStmt.Line = line;
             }
             else
             {
@@ -562,7 +562,7 @@ namespace ParserLib
                 BlockNode blockBody = ParseBlock();
 
                 ElifNode elifNode = new ElifNode(exprNode, blockBody);
-                elifNode.line = line;
+                elifNode.Line = line;
                 elifs.Add(elifNode);
                 List<ElifNode> tempElifsList = ParseElifs();
                 if(tempElifsList != null)
@@ -596,7 +596,7 @@ namespace ParserLib
                 BlockNode blockBody = ParseBlock();
 
                 elseNode = new ElseNode(blockBody);
-                elseNode.line = line;
+                elseNode.Line = line;
             }
             else if (tokens.Peek().IsInPredictSet(TokenType.id_token, TokenType.local_token, TokenType.if_token,
                                                   TokenType.while_token, TokenType.return_token, TokenType.play_token, 
@@ -626,7 +626,7 @@ namespace ParserLib
                 BlockNode whileLoopBody = ParseBlock();
 
                 whileNode = new WhileNode(controlExpr, whileLoopBody);
-                whileNode.line = line;
+                whileNode.Line = line;
             }
             else
             {
@@ -649,7 +649,7 @@ namespace ParserLib
                 Match(TokenType.semicolon_token);
 
                 returnNode = new ReturnNode(returnValue);
-                returnNode.line = line;
+                returnNode.Line = line;
             }
             else
             {
@@ -692,11 +692,11 @@ namespace ParserLib
                 Match(TokenType.lparen_token);
                 Token playerHandle = Match(TokenType.id_token);
                 IdNode playerNode = new IdNode(playerHandle.Value, null);
-                playerNode.line = line;
+                playerNode.Line = line;
                 Match(TokenType.vs_token);
                 Token otherPlayersHandle = Match(TokenType.id_token);
                 IdNode otherNode = new IdNode(otherPlayersHandle.Value, null);
-                otherNode.line = line;
+                otherNode.Line = line;
                 Match(TokenType.in_token);
                 Token allPlayers = Match(TokenType.id_token);
                 ExpressionNode allPlayerNode = ParseIdCallOrOperations(allPlayers);
@@ -708,7 +708,7 @@ namespace ParserLib
                 Match(TokenType.rparen_token);
 
                 playLoop = new PlayLoopNode(playerNode, otherNode, allPlayerNode, loopBodyNode, boolExprNode);
-                playLoop.line = line;
+                playLoop.Line = line;
             }
             else
             {
@@ -766,7 +766,7 @@ namespace ParserLib
                 if(exprNode != null)
                 {
                     BinaryExpressionNode binaryNode = new BinaryExpressionNode(expr, exprNode, BinaryOperator.STRING_CONCAT);
-                    binaryNode.line = line;
+                    binaryNode.Line = line;
                     return binaryNode; 
                 }                   
             }
@@ -787,7 +787,7 @@ namespace ParserLib
             {
                 Token tok = Match(TokenType.stringval_token);
                 expr = new StringValueNode(tok.Value);
-                expr.line = line;
+                expr.Line = line;
             }
             else if(tokens.Peek().IsInPredictSet(TokenType.not_token, TokenType.boolval_token, TokenType.minus_token, TokenType.lparen_token, TokenType.inum_token, TokenType.fnum_token, TokenType.id_token))
             {
@@ -814,7 +814,7 @@ namespace ParserLib
                 if(concatNode != null)
                 {
                     BinaryExpressionNode binExprNode = new BinaryExpressionNode(expr, concatNode, BinaryOperator.STRING_CONCAT);
-                    binExprNode.line = line;
+                    binExprNode.Line = line;
                     return binExprNode;
                 }
             }
@@ -842,7 +842,7 @@ namespace ParserLib
                 if(orExpr != null)
                 {
                     BinaryExpressionNode binExprNode = new BinaryExpressionNode(boolExpr, orExpr, BinaryOperator.OR);
-                    binExprNode.line = line;
+                    binExprNode.Line = line;
                     return binExprNode;
                 }
             }
@@ -887,7 +887,7 @@ namespace ParserLib
                 if(andExpr != null)
                 {
                     BinaryExpressionNode binExpressionNode = new BinaryExpressionNode(compExpr1, andExpr, BinaryOperator.AND);
-                    binExpressionNode.line = line;
+                    binExpressionNode.Line = line;
                     return binExpressionNode;
                 }
             }
@@ -935,13 +935,13 @@ namespace ParserLib
                     if (equalExprNode.Item2 == TokenType.equal_token)
                     {
                         binExprNode = new BinaryExpressionNode(compExpr2, equalExprNode.Item1, BinaryOperator.EQUALS);
-                        binExprNode.line = line;
+                        binExprNode.Line = line;
                         return binExprNode;
                     }
                     else if(equalExprNode.Item2 == TokenType.notequal_token)
                     {
                         binExprNode = new BinaryExpressionNode(compExpr2, equalExprNode.Item1, BinaryOperator.NOT_EQUALS);
-                        binExprNode.line = line;
+                        binExprNode.Line = line;
                         return binExprNode;
                     }
                 }
@@ -1015,7 +1015,7 @@ namespace ParserLib
                         compExpr3 = new BinaryExpressionNode(compExpr3, sizeCompExpr, Operator);
                     }
                 }
-                compExpr3.line = line;
+                compExpr3.Line = line;
             }
             else
             {
@@ -1040,7 +1040,7 @@ namespace ParserLib
                     compExpr4Expr = new UnaryExpressionNode(compExpr4Expr, Operator);
                 }
                 sizeComp = new Tuple<ExpressionNode, TokenType>(compExpr4Expr, tokenType);
-                sizeComp.Item1.line = line;
+                sizeComp.Item1.Line = line;
             } 
             else if (tokens.Peek().IsInPredictSet(TokenType.lessorequal_token))
             {
@@ -1054,7 +1054,7 @@ namespace ParserLib
                     compExpr4Expr = new UnaryExpressionNode(compExpr4Expr, Operator);
                 }
                 sizeComp = new Tuple<ExpressionNode, TokenType>(compExpr4Expr, tokenType);
-                sizeComp.Item1.line = line;
+                sizeComp.Item1.Line = line;
             }
             else if (tokens.Peek().IsInPredictSet(TokenType.lessthan_token))
             {
@@ -1068,7 +1068,7 @@ namespace ParserLib
                     compExpr4Expr = new UnaryExpressionNode(compExpr4Expr, Operator);
                 }
                 sizeComp = new Tuple<ExpressionNode, TokenType>(compExpr4Expr, tokenType);
-                sizeComp.Item1.line = line;
+                sizeComp.Item1.Line = line;
             }
             else if (tokens.Peek().IsInPredictSet(TokenType.greaterthan_token))
             {
@@ -1082,7 +1082,7 @@ namespace ParserLib
                     compExpr4Expr = new UnaryExpressionNode(compExpr4Expr, Operator);
                 }
                 sizeComp = new Tuple<ExpressionNode, TokenType>(compExpr4Expr, tokenType);
-                sizeComp.Item1.line = line;
+                sizeComp.Item1.Line = line;
             }
             else if (tokens.Peek().IsInPredictSet(TokenType.equal_token,
                                                   TokenType.notequal_token, 
@@ -1128,7 +1128,7 @@ namespace ParserLib
             {
                 throw new SyntacticalException(tokens.Peek());
             }
-            compExpr4.Item1.line = line;
+            compExpr4.Item1.Line = line;
             return compExpr4;
         }
         private ExpressionNode ParseBasicBool()
@@ -1148,7 +1148,7 @@ namespace ParserLib
             {
                 bool value = Boolean.Parse(Match(TokenType.boolval_token).Value);
                 basicBool = new BoolValueNode(value);
-                basicBool.line = line;
+                basicBool.Line = line;
             }
             else
             {
@@ -1176,7 +1176,7 @@ namespace ParserLib
                 {
                     BinaryOperator Operator = GetBinaryOperator(arithOp1.Item2);
                     arithExpr = new BinaryExpressionNode(arithExpr, arithOp1.Item1, Operator);
-                    arithExpr.line = line;
+                    arithExpr.Line = line;
                 }
             }
             else
@@ -1196,14 +1196,14 @@ namespace ParserLib
                 TokenType tokenType = Match(TokenType.plus_token).Type;
                 ExpressionNode ArithExpr = ParseArithExpr();
                 arithOp1 = new Tuple<ExpressionNode, TokenType>(ArithExpr, tokenType);
-                arithOp1.Item1.line = line;
+                arithOp1.Item1.Line = line;
             }
             else if (tokens.Peek().IsInPredictSet(TokenType.minus_token))
             {
                 TokenType tokenType = Match(TokenType.minus_token).Type;
                 ExpressionNode ArithExpr = ParseArithExpr();
                 arithOp1 = new Tuple<ExpressionNode, TokenType>(ArithExpr, tokenType);
-                arithOp1.Item1.line = line;
+                arithOp1.Item1.Line = line;
             }
             else if (tokens.Peek().IsInPredictSet(TokenType.rsbracket_token,
                                                   TokenType.greaterorequal_token,
@@ -1259,7 +1259,7 @@ namespace ParserLib
                     binary = new BinaryExpressionNode(arithExpr1, arithop2.Item1, Operator);
                     arithExpr1 = binary;
                 }
-                arithExpr1.line = line;
+                arithExpr1.Line = line;
             }
             else
             {
@@ -1346,7 +1346,7 @@ namespace ParserLib
                     int line = tokens.Peek().Line;
                     BinaryOperator Operator = GetBinaryOperator(ArithOp3Tuple.Item2);
                     arithExpr3 = new BinaryExpressionNode(arithExpr3, ArithOp3Tuple.Item1, Operator);
-                    arithExpr3.line = line;
+                    arithExpr3.Line = line;
                 }
             }
             else
@@ -1391,7 +1391,7 @@ namespace ParserLib
                 Token intToken = Match(TokenType.inum_token);
                 int intValue = int.Parse(intToken.Value);
                 arithValue = new IntValueNode(intValue);
-                arithValue.line = line;
+                arithValue.Line = line;
             }
             else if (tokens.Peek().IsInPredictSet(TokenType.fnum_token))
             {
@@ -1399,7 +1399,7 @@ namespace ParserLib
                 Token floatToken = Match(TokenType.fnum_token);
                 float floatValue = float.Parse(floatToken.Value, cultureInfo);
                 arithValue = new FloatValueNode(floatValue);
-                arithValue.line = line;
+                arithValue.Line = line;
             }
             else if (tokens.Peek().IsInPredictSet(TokenType.id_token))
             {
@@ -1421,7 +1421,7 @@ namespace ParserLib
             if (tokens.Peek().IsInPredictSet(TokenType.lparen_token))
             {
                 IdNode id = new IdNode(tok.Value, null);
-                id.line = line;
+                id.Line = line;
                 callOrOperations = new FuncCallExpressionNode(id, ParseCall());
             }
             else if (tokens.Peek().IsInPredictSet(TokenType.lsbracket_token, TokenType.dot_token, TokenType.assign_token, TokenType.rparen_token, TokenType.power_token, TokenType.multiply_token, TokenType.divide_token, TokenType.modulo_token, TokenType.plus_token, TokenType.minus_token, TokenType.rsbracket_token, TokenType.greaterorequal_token, TokenType.lessorequal_token, TokenType.lessthan_token, TokenType.greaterthan_token, TokenType.equal_token, TokenType.notequal_token, TokenType.and_token, TokenType.or_token, TokenType.colon_token, TokenType.comma_token, TokenType.semicolon_token)){
@@ -1432,7 +1432,7 @@ namespace ParserLib
                 throw new SyntacticalException(tokens.Peek());
             }
 
-            callOrOperations.line = line;
+            callOrOperations.Line = line;
             return callOrOperations;
         }
 
@@ -1540,7 +1540,7 @@ namespace ParserLib
             {
                 throw new SyntacticalException(tokens.Peek());
             }
-            idOperation.line = line;
+            idOperation.Line = line;
             return idOperation;
         }
 

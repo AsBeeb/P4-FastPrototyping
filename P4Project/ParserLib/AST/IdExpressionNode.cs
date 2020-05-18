@@ -1,7 +1,5 @@
 ﻿using ParserLib.AST.DataStructures;
-using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace ParserLib.AST
 {
@@ -12,7 +10,6 @@ namespace ParserLib.AST
 
         public string GetId => Id;
         public List<IdOperationNode> GetIdOperations => IdOperations;
-
 
         public IdExpressionNode(string id, List<IdOperationNode> operations)
         {

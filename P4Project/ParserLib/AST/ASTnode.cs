@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace ParserLib.AST
+﻿namespace ParserLib.AST
 {
     public abstract class ASTnode
     {
-        public int line;
+        public int Line;
+
         public abstract void Accept(Visitor v);
     }
 }

@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace ParserLib.AST
 {
@@ -8,9 +6,9 @@ namespace ParserLib.AST
     {
         public List<TopDclNode> TopDclNodes;
 
-        public ProgNode(List<TopDclNode> TopDclNodes)
+        public ProgNode(List<TopDclNode> topDclNodes)
         {
-            this.TopDclNodes = TopDclNodes;   
+            this.TopDclNodes = topDclNodes;   
         }
 
         public override void Accept(Visitor v)

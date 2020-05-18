@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace ParserLib.AST
+﻿namespace ParserLib.AST
 {
     public class AssignmentNode : StmtNode
     {
@@ -19,6 +15,5 @@ namespace ParserLib.AST
         {
             v.Visit(this);
         }
-
     }
 }

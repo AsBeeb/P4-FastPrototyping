@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using ParserLib.AST.DataStructures;
+﻿using ParserLib.AST.DataStructures;
 
 namespace ParserLib.AST
 {
@@ -11,16 +8,16 @@ namespace ParserLib.AST
         public string Type;
         public bool IsArray;
 
+        public bool GetIsArray => IsArray;
+
+        public string GetVarType => Type;
+
         public FormalParamNode(IdNode id, string type, bool isArray = false)
         {
             Id = id;
             Type = type;
             IsArray = isArray;
         }
-
-        public bool GetIsArray => IsArray;
-
-        public string GetVarType => Type;
 
         public override void Accept(Visitor v)
         {

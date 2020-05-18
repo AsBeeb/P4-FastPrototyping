@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace ParserLib.AST
 {
@@ -10,11 +8,11 @@ namespace ParserLib.AST
         public List<DeclarationNode> Declarations;
         public ConstructorNode Constructor;
 
-        public StructDclNode(IdNode Id, List<DeclarationNode> Declarations, ConstructorNode Constructor)
+        public StructDclNode(IdNode id, List<DeclarationNode> declarations, ConstructorNode constructor)
         {
-            this.Id = Id;
-            this.Declarations = Declarations;
-            this.Constructor = Constructor;
+            this.Id = id;
+            this.Declarations = declarations;
+            this.Constructor = constructor;
         }
 
         public override void Accept(Visitor v)

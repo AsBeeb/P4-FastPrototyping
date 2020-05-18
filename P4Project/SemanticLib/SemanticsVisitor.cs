@@ -23,7 +23,7 @@ namespace SemanticLib
             node.IndexValue.Accept(this);
             if (node.IndexValue.Type != "int")
             {
-                throw new SemanticException($"Error on line {node.line}: ArrayIndex is not of type integer.");
+                throw new SemanticException($"Error on line {node.Line}: ArrayIndex is not of type integer.");
             }
         }
 
@@ -59,7 +59,7 @@ namespace SemanticLib
             GetReturnNodes(node.Block).ForEach(returnNode => {
             if (returnNode.ReturnValue != null)
             {
-                throw new SemanticException($"Error on line {node.line}: Return type invalid. Expected void, found {returnNode.ReturnValue.Type}.");
+                throw new SemanticException($"Error on line {node.Line}: Return type invalid. Expected void, found {returnNode.ReturnValue.Type}.");
             }
             });
             symbolTable.CloseScope();
@@ -70,7 +70,7 @@ namespace SemanticLib
             node.InitialValue?.Accept(this);
             if (node.Id.IdOperations?.Count > 0)
             {
-                throw new SemanticException($"Error on line {node.line}: Invalid field or array access on declaration of {node.Id.Id}.");
+                throw new SemanticException($"Error on line {node.Line}: Invalid field or array access on declaration of {node.Id.Id}.");
             }
             symbolTable.EnterSymbol(node.Id.Id, node);
 
@@ -88,7 +88,7 @@ namespace SemanticLib
 
             if (node.ControlExpr.Type != "bool")
             {
-                throw new SemanticException($"Error on line {node.line}: Elif control expression expected type bool, was {node.ControlExpr.Type}.");
+                throw new SemanticException($"Error on line {node.Line}: Elif control expression expected type bool, was {node.ControlExpr.Type}.");
             }
 
             node.ElifBody.Accept(this);
@@ -116,12 +116,12 @@ namespace SemanticLib
         {
             if (node.Id.IdOperations?.Count > 0)
             {
-                throw new SemanticException($"Error on line {node.line}: Invalid field or array access on declaration of parameter {node.Id.Id}.");
+                throw new SemanticException($"Error on line {node.Line}: Invalid field or array access on declaration of parameter {node.Id.Id}.");
             }
 
             if (!(symbolTable.GlobalScope.Symbols.ContainsKey(node.Type) || node.Type == "int" || node.Type == "float" || node.Type == "bool" || node.Type == "string" || node.Type == "void" || node.Type == "int[]" || node.Type == "float[]" || node.Type == "bool[]" || node.Type == "string[]" || symbolTable.GlobalScope.Symbols.ContainsKey(node.Type.Replace("[]", ""))))
             {
-                throw new SemanticException($"Error on line {node.line}: Invalid return type {node.Type} declared on {node.Id.Id}.");
+                throw new SemanticException($"Error on line {node.Line}: Invalid return type {node.Type} declared on {node.Id.Id}.");
             }
 
             symbolTable.EnterSymbol(node.Id.Id, node);
@@ -139,20 +139,20 @@ namespace SemanticLib
                     {
                         if (node.ActualParameters[0].Type != "bool")
                         {
-                            throw new SemanticException($"Error on line {node.line}: Wrong type {node.ActualParameters[0].Type} provided for ChooseOption.");
+                            throw new SemanticException($"Error on line {node.Line}: Wrong type {node.ActualParameters[0].Type} provided for ChooseOption.");
                         }
 
                         for (int i = 1; i < node.ActualParameters.Count; i++)
                         {
                             if (node.ActualParameters[i].Type != "string")
                             {
-                                throw new SemanticException($"Error on line {node.line}: Wrong type {node.ActualParameters[i].Type} provided for ChooseOption.");
+                                throw new SemanticException($"Error on line {node.Line}: Wrong type {node.ActualParameters[i].Type} provided for ChooseOption.");
                             }
                         }
                     }
                     else
                     {
-                        throw new SemanticException($"Error on line {node.line}: The ChooseOption did not receive enough parameters.");
+                        throw new SemanticException($"Error on line {node.Line}: The ChooseOption did not receive enough parameters.");
                     }
                 }
                 else if (funcDcl.Id.Id == "Print")
@@ -161,12 +161,12 @@ namespace SemanticLib
                     {
                         if (!IsPrimitiveType(node.ActualParameters[0].Type))
                         {
-                            throw new SemanticException($"Error on line {node.line}: The Print function can only use integers, floats, booleans and strings.");
+                            throw new SemanticException($"Error on line {node.Line}: The Print function can only use integers, floats, booleans and strings.");
                         }
                     }
                     else
                     {
-                        throw new SemanticException($"Error on line {node.line}: No function of name {node.Id.Id} with {node.ActualParameters.Count} parameters found.");
+                        throw new SemanticException($"Error on line {node.Line}: No function of name {node.Id.Id} with {node.ActualParameters.Count} parameters found.");
                     }
                 }
                 else if (funcDcl.Id.Id == "ListRemove" || funcDcl.Id.Id == "ListAdd")
@@ -175,25 +175,25 @@ namespace SemanticLib
                     {
                         if (!(node.ActualParameters[0].Type.Contains("[]") && node.ActualParameters[1].Type == node.ActualParameters[0].Type.Replace("[]", "")))
                         {
-                            throw new SemanticException($"Error on line {node.line}: Element type {node.ActualParameters[1].Type} was tried to be added or removed to array of type {node.ActualParameters[0].Type}.");
+                            throw new SemanticException($"Error on line {node.Line}: Element type {node.ActualParameters[1].Type} was tried to be added or removed to array of type {node.ActualParameters[0].Type}.");
                         }
                     }
                     else
                     {
-                        throw new SemanticException($"Error on line {node.line}: No function of name {node.Id.Id} with {node.ActualParameters.Count} parameters found.");
+                        throw new SemanticException($"Error on line {node.Line}: No function of name {node.Id.Id} with {node.ActualParameters.Count} parameters found.");
                     }
                 }
                 else if (funcDcl.Id.Id == "ListLength" || funcDcl.Id.Id == "ListEmpty")
                 {
                     if (!(node.ActualParameters.Count == 1))
                     {
-                        throw new SemanticException($"Error on line {node.line}: No function of name {node.Id.Id} with {node.ActualParameters.Count} parameters found.");
+                        throw new SemanticException($"Error on line {node.Line}: No function of name {node.Id.Id} with {node.ActualParameters.Count} parameters found.");
                     }
                     else
                     {
                         if (!node.ActualParameters[0].Type.Contains("[]"))
                         {
-                            throw new SemanticException($"Error on line {node.line}: {node.Id.Id} expected list parameter.");
+                            throw new SemanticException($"Error on line {node.Line}: {node.Id.Id} expected list parameter.");
                         }
                     }
                 }
@@ -204,13 +204,13 @@ namespace SemanticLib
                         //CompatibleTypes(node.ActualParameters[i].Type, funcDcl.FormalParamNodes[i].Type + (funcDcl.FormalParamNodes[i].IsArray? "[]" : "") , "parameter type", node);
                         if (node.ActualParameters[i].Type != funcDcl.FormalParamNodes[i].Type + (funcDcl.FormalParamNodes[i].IsArray ? "[]" : ""))
                         {
-                            throw new SemanticException($"Error on line {node.line}: Invalid parameter type: can't convert {funcDcl.FormalParamNodes[i].Type + (funcDcl.FormalParamNodes[i].IsArray ? "[]" : "")} to type {node.ActualParameters[i].Type}.");
+                            throw new SemanticException($"Error on line {node.Line}: Invalid parameter type: can't convert {funcDcl.FormalParamNodes[i].Type + (funcDcl.FormalParamNodes[i].IsArray ? "[]" : "")} to type {node.ActualParameters[i].Type}.");
                         }
                     }
                 }
                 else
                 {
-                    throw new SemanticException($"Error on line {node.line}: No function of name {node.Id.Id} with {node.ActualParameters.Count} parameters found.");
+                    throw new SemanticException($"Error on line {node.Line}: No function of name {node.Id.Id} with {node.ActualParameters.Count} parameters found.");
                 }
 
                 node.Type = funcDcl.ReturnType;
@@ -224,20 +224,20 @@ namespace SemanticLib
                         //CompatibleTypes(node.ActualParameters[i].Type, structDcl.Constructor.FormalParamNodes[i].Type + (structDcl.Constructor.FormalParamNodes[i].IsArray ? "[]" : ""), "parameter type", node);
                         if (node.ActualParameters[i].Type != structDcl.Constructor.FormalParamNodes[i].Type + (structDcl.Constructor.FormalParamNodes[i].IsArray ? "[]" : ""))
                         {
-                            throw new SemanticException($"Error on line {node.line}: Invalid parameter type: can't convert {structDcl.Constructor.FormalParamNodes[i].Type + (structDcl.Constructor.FormalParamNodes[i].IsArray ? "[]" : "")} to type {node.ActualParameters[i].Type}.");
+                            throw new SemanticException($"Error on line {node.Line}: Invalid parameter type: can't convert {structDcl.Constructor.FormalParamNodes[i].Type + (structDcl.Constructor.FormalParamNodes[i].IsArray ? "[]" : "")} to type {node.ActualParameters[i].Type}.");
                         }
                     }
                 }
                 else
                 {
-                    throw new SemanticException($"Error on line {node.line}: No constructor of name {node.Id.Id} with {node.ActualParameters.Count} parameters found.");
+                    throw new SemanticException($"Error on line {node.Line}: No constructor of name {node.Id.Id} with {node.ActualParameters.Count} parameters found.");
                 }
 
                 node.Type = structDcl.Id.Id;
             }
             else
             {
-                throw new SemanticException($"Error on line {node.line}: Function or constructor of name {node.Id.Id} not found.");
+                throw new SemanticException($"Error on line {node.Line}: Function or constructor of name {node.Id.Id} not found.");
             }
         }
 
@@ -253,20 +253,20 @@ namespace SemanticLib
                     {
                         if (node.ActualParameters[0].Type != "bool")
                         {
-                            throw new SemanticException($"Error on line {node.line}: Wrong type {node.ActualParameters[0].Type} provided for ChooseOption.");
+                            throw new SemanticException($"Error on line {node.Line}: Wrong type {node.ActualParameters[0].Type} provided for ChooseOption.");
                         }
 
                         for (int i = 1; i < node.ActualParameters.Count; i++)
                         {
                             if (node.ActualParameters[i].Type != "string")
                             {
-                                throw new SemanticException($"Error on line {node.line}: Wrong type {node.ActualParameters[i].Type} provided for ChooseOption.");
+                                throw new SemanticException($"Error on line {node.Line}: Wrong type {node.ActualParameters[i].Type} provided for ChooseOption.");
                             }
                         }
                     }
                     else
                     {
-                        throw new SemanticException($"Error on line {node.line}: The ChooseOption did not receive enough parameters.");
+                        throw new SemanticException($"Error on line {node.Line}: The ChooseOption did not receive enough parameters.");
                     }
                 }
                 else if (funcDcl.Id.Id == "Print")
@@ -275,12 +275,12 @@ namespace SemanticLib
                     {
                         if (!IsPrimitiveType(node.ActualParameters[0].Type))
                         {
-                            throw new SemanticException($"Error on line {node.line}: The Print function can only use integers, floats, booleans and strings.");
+                            throw new SemanticException($"Error on line {node.Line}: The Print function can only use integers, floats, booleans and strings.");
                         }
                     }
                     else
                     {
-                        throw new SemanticException($"Error on line {node.line}: No function of name {node.Id.Id} with {node.ActualParameters.Count} parameters found.");
+                        throw new SemanticException($"Error on line {node.Line}: No function of name {node.Id.Id} with {node.ActualParameters.Count} parameters found.");
                     }
                 }
                 else if (funcDcl.Id.Id == "ListRemove" || funcDcl.Id.Id == "ListAdd")
@@ -289,25 +289,25 @@ namespace SemanticLib
                     {
                         if (!(node.ActualParameters[0].Type.Contains("[]") && node.ActualParameters[1].Type == node.ActualParameters[0].Type.Replace("[]", "")))
                         {
-                            throw new SemanticException($"Error on line {node.line}: Element type {node.ActualParameters[1].Type} was tried to be added or removed to array of type {node.ActualParameters[0].Type}.");
+                            throw new SemanticException($"Error on line {node.Line}: Element type {node.ActualParameters[1].Type} was tried to be added or removed to array of type {node.ActualParameters[0].Type}.");
                         }
                     }
                     else
                     {
-                        throw new SemanticException($"Error on line {node.line}: No function of name {node.Id.Id} with {node.ActualParameters.Count} parameters found.");
+                        throw new SemanticException($"Error on line {node.Line}: No function of name {node.Id.Id} with {node.ActualParameters.Count} parameters found.");
                     }
                 }
                 else if (funcDcl.Id.Id == "ListLength" || funcDcl.Id.Id == "ListEmpty")
                 {
                     if (!(node.ActualParameters.Count == 1))
                     {
-                        throw new SemanticException($"Error on line {node.line}: No function of name {node.Id.Id} with {node.ActualParameters.Count} parameters found.");
+                        throw new SemanticException($"Error on line {node.Line}: No function of name {node.Id.Id} with {node.ActualParameters.Count} parameters found.");
                     }
                     else
                     {
                         if (!node.ActualParameters[0].Type.Contains("[]"))
                         {
-                            throw new SemanticException($"Error on line {node.line}: {node.Id.Id} expected list parameter.");
+                            throw new SemanticException($"Error on line {node.Line}: {node.Id.Id} expected list parameter.");
                         }
                     }
                 }
@@ -319,23 +319,23 @@ namespace SemanticLib
 
                         if (node.ActualParameters[i].Type != funcDcl.FormalParamNodes[i].Type + (funcDcl.FormalParamNodes[i].IsArray ? "[]" : ""))
                         {
-                            throw new SemanticException($"Error on line {node.line}: Invalid parameter type: can't convert {funcDcl.FormalParamNodes[i].Type + (funcDcl.FormalParamNodes[i].IsArray ? "[]" : "")} to type {node.ActualParameters[i].Type}.");
+                            throw new SemanticException($"Error on line {node.Line}: Invalid parameter type: can't convert {funcDcl.FormalParamNodes[i].Type + (funcDcl.FormalParamNodes[i].IsArray ? "[]" : "")} to type {node.ActualParameters[i].Type}.");
                         }
 
                     }
                 }
                 else
                 {
-                    throw new SemanticException($"Error on line {node.line}: No function of name {node.Id.Id} with {node.ActualParameters.Count} parameters found.");
+                    throw new SemanticException($"Error on line {node.Line}: No function of name {node.Id.Id} with {node.ActualParameters.Count} parameters found.");
                 }
             }
             else if (astNode is StructDclNode structDcl)
             {
-                throw new SemanticException($"Error on line {node.line}: Invalid constructor for {node.Id.Id} used outside an expression context.");
+                throw new SemanticException($"Error on line {node.Line}: Invalid constructor for {node.Id.Id} used outside an expression context.");
             }
             else
             {
-                throw new SemanticException($"Error on line {node.line}: Function with id: {node.Id.Id} not found.");
+                throw new SemanticException($"Error on line {node.Line}: Function with id: {node.Id.Id} not found.");
             }
         }
 
@@ -343,12 +343,12 @@ namespace SemanticLib
         {
             if (node.Id.IdOperations?.Count > 0)
             {
-                throw new SemanticException($"Error on line {node.line}: Invalid field or array access on declaration of function {node.Id.Id}.");
+                throw new SemanticException($"Error on line {node.Line}: Invalid field or array access on declaration of function {node.Id.Id}.");
             }
 
             if (!(symbolTable.GlobalScope.Symbols.ContainsKey(node.ReturnType) || node.ReturnType == "int" || node.ReturnType == "float" || node.ReturnType == "bool" || node.ReturnType == "string" || node.ReturnType == "void" || node.ReturnType == "int[]" || node.ReturnType == "float[]" || node.ReturnType == "bool[]" || node.ReturnType == "string[]" || symbolTable.GlobalScope.Symbols.ContainsKey(node.ReturnType.Replace("[]", ""))))
             {
-                throw new SemanticException($"Error on line {node.line}: Invalid return type {node.ReturnType} declared on {node.Id.Id}.");
+                throw new SemanticException($"Error on line {node.Line}: Invalid return type {node.ReturnType} declared on {node.Id.Id}.");
             }
 
 
@@ -365,7 +365,7 @@ namespace SemanticLib
 
             if (returnNodes.Count == 0 && node.ReturnType != "void")
             {
-                throw new SemanticException($"Error on line {node.line}: Missing return statement. Expected return of type {node.ReturnType}.");
+                throw new SemanticException($"Error on line {node.Line}: Missing return statement. Expected return of type {node.ReturnType}.");
             }
 
             foreach (ReturnNode rNode in returnNodes)
@@ -373,7 +373,7 @@ namespace SemanticLib
                 returnNodeType = (rNode.ReturnValue != null) ? rNode.ReturnValue.Type : "void";
                 if (returnNodeType != node.ReturnType)
                 {
-                    throw new SemanticException($"Error on line {node.line}: Return type invalid. Expected {node.ReturnType}, found {returnNodeType}.");
+                    throw new SemanticException($"Error on line {node.Line}: Return type invalid. Expected {node.ReturnType}, found {returnNodeType}.");
                 }
             }
 
@@ -384,7 +384,7 @@ namespace SemanticLib
         {
             if (node.Id.IdOperations?.Count > 0)
             {
-                throw new SemanticException($"Error on line {node.line}: Invalid field or array access on global declaration of {node.Id.Id}.");
+                throw new SemanticException($"Error on line {node.Line}: Invalid field or array access on global declaration of {node.Id.Id}.");
             }
 
             node.InitialValue?.Accept(this);
@@ -411,7 +411,7 @@ namespace SemanticLib
             node.ControlExpression.Accept(this);
             if (node.ControlExpression.Type != "bool")
             {
-                throw new SemanticException($"Error on line {node.line}: If control expression expected type bool, was {node.ControlExpression.Type}.");
+                throw new SemanticException($"Error on line {node.Line}: If control expression expected type bool, was {node.ControlExpression.Type}.");
             }
             node.IfBody.Accept(this);
             symbolTable.CloseScope();
@@ -428,15 +428,15 @@ namespace SemanticLib
         {
             if (node.Player.IdOperations?.Count > 0 && node.Opponents.IdOperations?.Count > 0)
             {
-                throw new SemanticException($"Error on line {node.line}: Invalid field or array access on declaration of {node.Player.Id} and {node.Opponents.Id} in play loop header.");
+                throw new SemanticException($"Error on line {node.Line}: Invalid field or array access on declaration of {node.Player.Id} and {node.Opponents.Id} in play loop header.");
             }
             else if (node.Player.IdOperations?.Count > 0)
             {
-                throw new SemanticException($"Error on line {node.line}: Invalid field or array access on declaration of {node.Player.Id} in play loop header.");
+                throw new SemanticException($"Error on line {node.Line}: Invalid field or array access on declaration of {node.Player.Id} in play loop header.");
             }
             else if (node.Opponents.IdOperations?.Count > 0)
             {
-                throw new SemanticException($"Error on line {node.line}: Invalid field or array access on declaration of {node.Opponents.Id} in play loop header.");
+                throw new SemanticException($"Error on line {node.Line}: Invalid field or array access on declaration of {node.Opponents.Id} in play loop header.");
             }
 
             symbolTable.OpenScope();
@@ -446,11 +446,11 @@ namespace SemanticLib
             node.UntilCondition.Accept(this);
             if (!node.AllPlayers.Type.Contains("[]"))
             {
-                throw new SemanticException($"Error on line {node.line}: PlayLoop expected array expression in loopheader, found {node.AllPlayers.Type}.");
+                throw new SemanticException($"Error on line {node.Line}: PlayLoop expected array expression in loopheader, found {node.AllPlayers.Type}.");
             }
             if (node.UntilCondition.Type != "bool")
             {
-                throw new SemanticException($"Error on line {node.line}: Expected boolean expression in the until condition, was {node.UntilCondition.Type}.");
+                throw new SemanticException($"Error on line {node.Line}: Expected boolean expression in the until condition, was {node.UntilCondition.Type}.");
             }
             node.Player.Type = node.AllPlayers.Type.Replace("[]", "");
             node.Opponents.Type = node.AllPlayers.Type;
@@ -478,14 +478,14 @@ namespace SemanticLib
             }
             if (!(symbolTable.RetrieveSymbol("main") is FunctionDclNode))
             {
-                throw new SemanticException($"Error on line {node.line}: No entry point found: missing main function.");
+                throw new SemanticException($"Error on line {node.Line}: No entry point found: missing main function.");
             }
             else
             {
                 FunctionDclNode mainNode = (FunctionDclNode)symbolTable.RetrieveSymbol("main");
                 if (mainNode.FormalParamNodes.Count > 0)
                 {
-                    throw new SemanticException($"Error on line {node.line}: Formal parameters are not allowed in main.");
+                    throw new SemanticException($"Error on line {node.Line}: Formal parameters are not allowed in main.");
                 }
             }
 
@@ -510,7 +510,7 @@ namespace SemanticLib
 
                 if (structChain.Contains(structNodeItem.Id.Id))
                 {
-                    throw new SemanticException($"Error on line {node.line}: Error in object {structNodeItem.Id.Id}. Possible loop or duplicate.");
+                    throw new SemanticException($"Error on line {node.Line}: Error in object {structNodeItem.Id.Id}. Possible loop or duplicate.");
                 }
             }
         }
@@ -548,7 +548,7 @@ namespace SemanticLib
         {
             if (node.Id.IdOperations?.Count > 0)
             {
-                throw new SemanticException($"Error on line {node.line}: Invalid field or array access on declaration of object {node.Id.Id}.");
+                throw new SemanticException($"Error on line {node.Line}: Invalid field or array access on declaration of object {node.Id.Id}.");
             }
 
             symbolTable.OpenScope();
@@ -558,7 +558,7 @@ namespace SemanticLib
                 item.Accept(this);
                 if (item.Type == node.Id.Id)
                 {
-                    throw new SemanticException($"Error on line {node.line}: Object {node.Id.Id} cannot contain object of type {item.Type}.");
+                    throw new SemanticException($"Error on line {node.Line}: Object {node.Id.Id} cannot contain object of type {item.Type}.");
                 }
             }
             node.Constructor?.Accept(this);
@@ -577,7 +577,7 @@ namespace SemanticLib
                     }
                     else
                     {
-                        throw new SemanticException($"Error on line {node.line}: Invalid type: {node.ExprNode.Type}. Expected type bool.");
+                        throw new SemanticException($"Error on line {node.Line}: Invalid type: {node.ExprNode.Type}. Expected type bool.");
                     }
                     break;
                 case UnaryOperator.UNARY_MINUS:
@@ -587,11 +587,11 @@ namespace SemanticLib
                     }
                     else
                     {
-                        throw new SemanticException($"Error on line {node.line}: Invalid type {node.ExprNode.Type}. Expected int or float.");
+                        throw new SemanticException($"Error on line {node.Line}: Invalid type {node.ExprNode.Type}. Expected int or float.");
                     }
                     break;
                 default:
-                    throw new SemanticException($"Error on line {node.line}: Invalid unary operator.");
+                    throw new SemanticException($"Error on line {node.Line}: Invalid unary operator.");
             }
         }
 
@@ -601,7 +601,7 @@ namespace SemanticLib
             node.ControlExpr.Accept(this);
             if (node.ControlExpr.Type != "bool")
             {
-                throw new SemanticException($"Error on line {node.line}: Expected boolean expression, found {node.ControlExpr.Type}.");
+                throw new SemanticException($"Error on line {node.Line}: Expected boolean expression, found {node.ControlExpr.Type}.");
             }
             node.WhileLoopBody.Accept(this);
             symbolTable.CloseScope();
@@ -627,7 +627,7 @@ namespace SemanticLib
                         }
                         else
                         {
-                            throw new SemanticException($"Error on line {node.line}: Invalid binary operation: \"int + {node.RightExpr.Type}\".");
+                            throw new SemanticException($"Error on line {node.Line}: Invalid binary operation: \"int + {node.RightExpr.Type}\".");
                         }
                     }
                     else if (node.LeftExpr.Type == "float")
@@ -638,7 +638,7 @@ namespace SemanticLib
                         }
                         else
                         {
-                            throw new SemanticException($"Error on line {node.line}: Invalid binary operation: \"float + {node.RightExpr.Type}\".");
+                            throw new SemanticException($"Error on line {node.Line}: Invalid binary operation: \"float + {node.RightExpr.Type}\".");
                         }
                     }
                     break;
@@ -651,12 +651,12 @@ namespace SemanticLib
                         }
                         else
                         {
-                            throw new SemanticException($"Error on line {node.line}: Invalid binary operation: \"{node.LeftExpr.Type} / {node.RightExpr.Type}\".");
+                            throw new SemanticException($"Error on line {node.Line}: Invalid binary operation: \"{node.LeftExpr.Type} / {node.RightExpr.Type}\".");
                         }
                     }
                     else
                     {
-                        throw new SemanticException($"Error on line {node.line}: Invalid binary operation: \"{node.LeftExpr.Type} / {node.RightExpr.Type}\".");
+                        throw new SemanticException($"Error on line {node.Line}: Invalid binary operation: \"{node.LeftExpr.Type} / {node.RightExpr.Type}\".");
                     }
                     break;
                 case BinaryOperator.MODULO:
@@ -668,12 +668,12 @@ namespace SemanticLib
                         }
                         else
                         {
-                            throw new SemanticException($"Error on line {node.line}: Invalid binary operation: \"{node.LeftExpr.Type} % {node.RightExpr.Type}\".");
+                            throw new SemanticException($"Error on line {node.Line}: Invalid binary operation: \"{node.LeftExpr.Type} % {node.RightExpr.Type}\".");
                         }
                     }
                     else
                     {
-                        throw new SemanticException($"Error on line {node.line}: Invalid binary operation: \"{node.LeftExpr.Type} % {node.RightExpr.Type}\".");
+                        throw new SemanticException($"Error on line {node.Line}: Invalid binary operation: \"{node.LeftExpr.Type} % {node.RightExpr.Type}\".");
                     }
                     break;
                 case BinaryOperator.GREATER_OR_EQUALS:
@@ -688,12 +688,12 @@ namespace SemanticLib
                         }
                         else
                         {
-                            throw new SemanticException($"Error on line {node.line}: Invalid binary operation: \"{node.LeftExpr.Type} {node.Operator} {node.RightExpr.Type}\".");
+                            throw new SemanticException($"Error on line {node.Line}: Invalid binary operation: \"{node.LeftExpr.Type} {node.Operator} {node.RightExpr.Type}\".");
                         }
                     }
                     else
                     {
-                        throw new SemanticException($"Error on line {node.line}: Invalid binary operation: \"{node.LeftExpr.Type} {node.Operator} {node.RightExpr.Type}\".");
+                        throw new SemanticException($"Error on line {node.Line}: Invalid binary operation: \"{node.LeftExpr.Type} {node.Operator} {node.RightExpr.Type}\".");
                     }
                     break;
                 case BinaryOperator.NOT_EQUALS:
@@ -706,7 +706,7 @@ namespace SemanticLib
                         }
                         else
                         {
-                            throw new SemanticException($"Error on line {node.line}: Invalid binary operation: \"{node.LeftExpr.Type} {node.Operator} {node.RightExpr.Type}\".");
+                            throw new SemanticException($"Error on line {node.Line}: Invalid binary operation: \"{node.LeftExpr.Type} {node.Operator} {node.RightExpr.Type}\".");
                         }
                     }
                     else if (node.LeftExpr.Type == "string" && node.RightExpr.Type == "string")
@@ -719,7 +719,7 @@ namespace SemanticLib
                     }
                     else
                     {
-                        throw new SemanticException($"Error on line {node.line}: Invalid binary operation: \"{node.LeftExpr.Type} {node.Operator} {node.RightExpr.Type}\".");
+                        throw new SemanticException($"Error on line {node.Line}: Invalid binary operation: \"{node.LeftExpr.Type} {node.Operator} {node.RightExpr.Type}\".");
                     }
                     break;
                 case BinaryOperator.AND:
@@ -730,7 +730,7 @@ namespace SemanticLib
                     }
                     else
                     {
-                        throw new SemanticException($"Error on line {node.line}: Invalid binary operation: \"{node.LeftExpr.Type} {node.Operator} {node.RightExpr.Type}\".");
+                        throw new SemanticException($"Error on line {node.Line}: Invalid binary operation: \"{node.LeftExpr.Type} {node.Operator} {node.RightExpr.Type}\".");
                     }
                     break;
                 case BinaryOperator.STRING_CONCAT:
@@ -742,16 +742,16 @@ namespace SemanticLib
                         }
                         else
                         {
-                            throw new SemanticException($"Error on line {node.line}: Invalid binary operation: \"{node.LeftExpr.Type} : {node.RightExpr.Type}\".");
+                            throw new SemanticException($"Error on line {node.Line}: Invalid binary operation: \"{node.LeftExpr.Type} : {node.RightExpr.Type}\".");
                         }
                     }
                     else
                     {
-                        throw new SemanticException($"Error on line {node.line}: Invalid binary operation: \"{node.LeftExpr.Type} : {node.RightExpr.Type}\".");
+                        throw new SemanticException($"Error on line {node.Line}: Invalid binary operation: \"{node.LeftExpr.Type} : {node.RightExpr.Type}\".");
                     }
                     break;
                 default:
-                    throw new SemanticException($"Error on line {node.line}: Invalid binary operator.");
+                    throw new SemanticException($"Error on line {node.Line}: Invalid binary operator.");
             }
         }
 
@@ -764,23 +764,23 @@ namespace SemanticLib
                     case "int":
                         if (secondType != "float")
                         {
-                            throw new SemanticException($"Error on line {problemNode.line}: Invalid {exceptionString}: can't convert {secondType} to type int.");
+                            throw new SemanticException($"Error on line {problemNode.Line}: Invalid {exceptionString}: can't convert {secondType} to type int.");
                         }
                         break;
                     case "float":
                         if (secondType != "int")
                         {
-                            throw new SemanticException($"Error on line {problemNode.line}: Invalid {exceptionString}: can't convert {secondType} to type float.");
+                            throw new SemanticException($"Error on line {problemNode.Line}: Invalid {exceptionString}: can't convert {secondType} to type float.");
                         }
                         break;
                     case "string":
                         if (secondType != "float" && secondType != "int" && secondType != "bool")
                         {
-                            throw new SemanticException($"Error on line {problemNode.line}: Invalid {exceptionString}: can't convert {secondType} to type string.");
+                            throw new SemanticException($"Error on line {problemNode.Line}: Invalid {exceptionString}: can't convert {secondType} to type string.");
                         }
                         break;
                     default:
-                        throw new SemanticException($"Error on line {problemNode.line}: Invalid {exceptionString}: can't convert {secondType} to type {firstType}.");
+                        throw new SemanticException($"Error on line {problemNode.Line}: Invalid {exceptionString}: can't convert {secondType} to type {firstType}.");
                 }
             }
         }
@@ -801,7 +801,7 @@ namespace SemanticLib
                     else
                     {
                         string funcOrStruct = (rootNode is FunctionDclNode) ? " function" : "n object"; //a function, an object
-                        throw new SemanticException($"Error on line {rootNode.line}: Expected variable identifier for {node.GetId}, was a{funcOrStruct} declaration.");
+                        throw new SemanticException($"Error on line {rootNode.Line}: Expected variable identifier for {node.GetId}, was a{funcOrStruct} declaration.");
                     }
                     return;
                 }
@@ -817,7 +817,7 @@ namespace SemanticLib
                         {
                             if (tempIsArray && dclNode.GetIsArray)
                             {
-                                throw new SemanticException($"Error on line {rootNode.line}: Unexpected field reference in operations emanating from identifer {node.GetId}.");
+                                throw new SemanticException($"Error on line {rootNode.Line}: Unexpected field reference in operations emanating from identifer {node.GetId}.");
                             }
 
                             ASTnode tempNode = symbolTable.RetrieveSymbol(dclNode.GetVarType, idOp);
@@ -831,17 +831,17 @@ namespace SemanticLib
                                 }
                                 else
                                 {                                     
-                                    throw new SemanticException($"Error on line {idOp.line}: Unexpected reference to field: {field.Id.Id} in object: {structDcl.Id.Id}.");
+                                    throw new SemanticException($"Error on line {idOp.Line}: Unexpected reference to field: {field.Id.Id} in object: {structDcl.Id.Id}.");
                                 }
                             }
                             else
                             {
-                                throw new SemanticException($"Error on line {rootNode.line}: Accessing undeclared object: {dclNode.GetVarType}.");
+                                throw new SemanticException($"Error on line {rootNode.Line}: Accessing undeclared object: {dclNode.GetVarType}.");
                             }
                         }
                         else
                         {
-                            throw new SemanticException($"Error on line {rootNode.line}: Unexpected reference to non-variable identifier in operations emanating from {node.GetId}.");
+                            throw new SemanticException($"Error on line {rootNode.Line}: Unexpected reference to non-variable identifier in operations emanating from {node.GetId}.");
                         }
                     }
                     // ArrayOperation
@@ -857,7 +857,7 @@ namespace SemanticLib
                             IdOperationNode previousIdOp = node.GetIdOperations[idOpIndex - 1];
                             if (previousIdOp is ArrayAccessNode)
                             {                                  
-                                throw new SemanticException($"Error on line {idOp.line}: Illegal reference to two-dimensional array in operations emanating from {node.GetId}.");
+                                throw new SemanticException($"Error on line {idOp.Line}: Illegal reference to two-dimensional array in operations emanating from {node.GetId}.");
                             }
                         }
 
@@ -869,12 +869,12 @@ namespace SemanticLib
                             }
                             else
                             {
-                                throw new SemanticException($"Error on line {rootNode.line}: Cannot apply indexing to variable of type {dcl.GetVarType}.");
+                                throw new SemanticException($"Error on line {rootNode.Line}: Cannot apply indexing to variable of type {dcl.GetVarType}.");
                             }
                         }
                         else
                         {
-                            throw new SemanticException($"Error on line {rootNode.line}: Unexpected reference to non-variable identifier in id operations emanating from {node.GetId}.");
+                            throw new SemanticException($"Error on line {rootNode.Line}: Unexpected reference to non-variable identifier in id operations emanating from {node.GetId}.");
                         }
                     }
                 }
@@ -886,7 +886,7 @@ namespace SemanticLib
                 else
                 {
                     string funcOrStruct = (rootNode is FunctionDclNode) ? " function" : "n object"; //a function, an object
-                    throw new SemanticException($"Error on line {rootNode.line}: Unexpected reference to a{funcOrStruct} declaration in operations emanating from identifer {node.GetId}.");
+                    throw new SemanticException($"Error on line {rootNode.Line}: Unexpected reference to a{funcOrStruct} declaration in operations emanating from identifer {node.GetId}.");
                 }
 
             }

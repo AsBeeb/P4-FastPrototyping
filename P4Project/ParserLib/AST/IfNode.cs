@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace ParserLib.AST
 {
@@ -11,13 +9,14 @@ namespace ParserLib.AST
         public List<ElifNode> ElifNodes;
         public ElseNode ElseNode;
 
-        public IfNode(ExpressionNode ControlExpression, BlockNode IfBody, List<ElifNode> ElifNodes, ElseNode ElseNode)
+        public IfNode(ExpressionNode controlExpression, BlockNode ifBody, List<ElifNode> elifNodes, ElseNode elseNode)
         {
-            this.ControlExpression = ControlExpression;
-            this.IfBody = IfBody;
-            this.ElifNodes = ElifNodes;
-            this.ElseNode = ElseNode;
+            ControlExpression = controlExpression;
+            IfBody = ifBody;
+            ElifNodes = elifNodes;
+            ElseNode = elseNode;
         }
+
         public override void Accept(Visitor v)
         {
             v.Visit(this);

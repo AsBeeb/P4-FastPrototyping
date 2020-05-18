@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace ParserLib.AST
 {
@@ -17,6 +15,5 @@ namespace ParserLib.AST
         {
             v.Visit(this);
         }
-
     }
 }

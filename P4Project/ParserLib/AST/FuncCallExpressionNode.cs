@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace ParserLib.AST
 {
@@ -14,6 +12,7 @@ namespace ParserLib.AST
             Id = id;
             ActualParameters = actualParameters;
         }
+
         public override void Accept(Visitor v)
         {
             v.Visit(this);

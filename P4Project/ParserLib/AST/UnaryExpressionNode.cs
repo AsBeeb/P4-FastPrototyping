@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace ParserLib.AST
+﻿namespace ParserLib.AST
 {
     public enum UnaryOperator
     {
@@ -14,10 +10,10 @@ namespace ParserLib.AST
         public ExpressionNode ExprNode;
         public UnaryOperator Operator;
 
-        public UnaryExpressionNode(ExpressionNode ExprNode, UnaryOperator Operator)
+        public UnaryExpressionNode(ExpressionNode exprNode, UnaryOperator unaryOperator)
         {
-            this.ExprNode = ExprNode;
-            this.Operator = Operator;
+            this.ExprNode = exprNode;
+            this.Operator = unaryOperator;
         }
 
         public override void Accept(Visitor v)

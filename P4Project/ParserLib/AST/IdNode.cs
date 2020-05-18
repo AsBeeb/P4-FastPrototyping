@@ -1,7 +1,5 @@
 ﻿using ParserLib.AST.DataStructures;
-using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace ParserLib.AST
 {
@@ -15,7 +13,6 @@ namespace ParserLib.AST
         public List<IdOperationNode> GetIdOperations => IdOperations;
 
         public bool GetIsArray => Type.Contains("[]");
-
         public string GetVarType => Type.Replace("[]", "");
 
         public IdNode(string id, List<IdOperationNode> idOperations = null)
