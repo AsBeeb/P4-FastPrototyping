@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace CodeGeneration.Functions
 {
-    class ListFunctions
+    public class ListFunctions
     {
         private static void ListAdd<T>(List<T> lst, T element)
         {

@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CodeGeneration.Functions
 {
-    class IOFunctions
+    public class IOFunctions
     {
         public static string GetString_()
         {

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Text;
 using ParserLib;
 using ParserLib.AST;
 using SemanticLib;
@@ -12,17 +8,18 @@ namespace CodeGeneration
     public class CodeGeneratorVisitor : Visitor
     {
         public StringBuilder CSharpString = new StringBuilder();
-        private int IndentationLevel = 0;
-        public SymbolTable SymTbl;
 
-        public CodeGeneratorVisitor(SymbolTable ST) 
+        private int indentationLevel = 0;
+        private SymbolTable symTable;
+
+        public CodeGeneratorVisitor(SymbolTable table) 
         {
-            SymTbl = ST;
+            symTable = table;
         }
 
         private void PrettyPrintNewLine()
         {
-            CSharpString.Append($"\n" + new string(' ', 4 * IndentationLevel));
+            CSharpString.Append($"\n" + new string(' ', 4 * indentationLevel));
         }
 
         public override void Visit(ArrayAccessNode node)
@@ -135,18 +132,17 @@ namespace CodeGeneration
         {
             PrettyPrintNewLine();
             CSharpString.Append("{");
-            IndentationLevel++;
+            indentationLevel++;
             PrettyPrintNewLine();
             foreach (StmtNode stmt in node.StmtNodes)
             {
                 stmt.Accept(this);
             }
-            IndentationLevel--;
+            indentationLevel--;
             PrettyPrintNewLine();
             CSharpString.Append("}");
             PrettyPrintNewLine();
         }
-
 
         public override void Visit(BoolValueNode node)
         {
@@ -158,7 +154,8 @@ namespace CodeGeneration
             CSharpString.Append("public ");
             node.Id.Accept(this);
             CSharpString.Append(" (");
-            node.FormalParamNodes?.ForEach(x => {
+            node.FormalParamNodes?.ForEach(x => 
+            {
                 if (node.FormalParamNodes.IndexOf(x) != 0)
                 {
                     CSharpString.Append(", ");
@@ -173,7 +170,8 @@ namespace CodeGeneration
         {
             if (node.IsArray)
             {
-                if (IsPrimitiveType(node.Type)){
+                if (IsPrimitiveType(node.Type))
+                {
                     CSharpString.Append("List<" + node.Type + "> ");
                 }
                 else
@@ -200,7 +198,7 @@ namespace CodeGeneration
                 {
                     if (node.InitialValue is FuncCallExpressionNode StructConstructerCall)
                     {
-                        if (SymTbl.GlobalScope.Symbols[StructConstructerCall.Id.Id] is StructDclNode)
+                        if (symTable.GlobalScope.Symbols[StructConstructerCall.Id.Id] is StructDclNode)
                             CSharpString.Append("new ");
                     }
                     node.InitialValue.Accept(this);
@@ -300,12 +298,11 @@ namespace CodeGeneration
             }
 
             CSharpString.Append(node.Type.Replace("[]", ""));
-            // tilføjet et tjek på om det er et struct, hvis det er så tilføjer vi _ efter typen.
+            // If the type is a struct, append _ after the type.
             if (!IsPrimitiveType(node.Type.Replace("[]", "")))
             {
                 CSharpString.Append("_");
             }
-            //if (node.Type.Contains("[]"))
             if (node.IsArray)
             {
                 CSharpString.Append("> ");
@@ -318,7 +315,8 @@ namespace CodeGeneration
         {
             node.Id.Accept(this);
             CSharpString.Append("(");
-            node.ActualParameters?.ForEach(x => {
+            node.ActualParameters?.ForEach(x => 
+            {
                 if (node.ActualParameters.IndexOf(x) != 0)
                 {
                     CSharpString.Append(", ");
@@ -332,7 +330,8 @@ namespace CodeGeneration
         {
             node.Id.Accept(this);
             CSharpString.Append("(");
-            node.ActualParameters?.ForEach(x => {
+            node.ActualParameters?.ForEach(x => 
+            {
                 if (node.ActualParameters.IndexOf(x) != 0)
                 {
                     CSharpString.Append(", ");
@@ -352,7 +351,6 @@ namespace CodeGeneration
             }
             
             CSharpString.Append(node.ReturnType.Replace("[]", ""));
-            //midlertidig løsning til at sætte _ på typen hvis den ikke er primitiv eller void.
             if (!IsPrimitiveType(node.ReturnType.Replace("[]", "")) && node.ReturnType != "void")
             {
                 CSharpString.Append("_");
@@ -373,7 +371,8 @@ namespace CodeGeneration
                 node.Id.Accept(this);
             }
             CSharpString.Append("(");
-            node.FormalParamNodes?.ForEach(x => {
+            node.FormalParamNodes?.ForEach(x => 
+            {
                 if (node.FormalParamNodes.IndexOf(x) != 0)
                 {
                     CSharpString.Append(", ");
@@ -387,11 +386,10 @@ namespace CodeGeneration
         public override void Visit(GlobalDclNode node)
         {
             CSharpString.Append("static ");
-            //if (node.Type.Contains("[]"))
             if (node.IsArray)
             {
                 CSharpString.Append("List<");
-                CSharpString.Append(node.Type.Replace("[]", "")); // global int example 
+                CSharpString.Append(node.Type.Replace("[]", "")); 
                 CSharpString.Append("> ");
             }
             else
@@ -403,8 +401,6 @@ namespace CodeGeneration
                 }
                 CSharpString.Append(" ");
             }
-
-
             
             node.Id.Accept(this);
             CSharpString.Append(" = ");
@@ -414,7 +410,7 @@ namespace CodeGeneration
                 {
                     if (node.InitialValue is FuncCallExpressionNode StructConstructerCall)
                     {
-                        if (SymTbl.GlobalScope.Symbols[StructConstructerCall.Id.Id] is StructDclNode)
+                        if (symTable.GlobalScope.Symbols[StructConstructerCall.Id.Id] is StructDclNode)
                             CSharpString.Append("new ");
                     }
                     node.InitialValue.Accept(this);
@@ -442,7 +438,6 @@ namespace CodeGeneration
             else
             {
                 //Default values if a variable isn't initialized
-                //if (node.Type.Contains("[]"))
                 if (node.IsArray)
                 {
                     string type = node.Type.Replace("[]", "");
@@ -484,7 +479,8 @@ namespace CodeGeneration
         public override void Visit(IdExpressionNode node)
         {
             CSharpString.Append(node.Id + "_");
-            node.IdOperations?.ForEach(x => {
+            node.IdOperations?.ForEach(x => 
+            {
                 x.Accept(this);
             });
             
@@ -493,7 +489,8 @@ namespace CodeGeneration
         public override void Visit(IdNode node)
         {
             CSharpString.Append(node.Id + "_");
-            node.IdOperations?.ForEach(x => {
+            node.IdOperations?.ForEach(x => 
+            {
                 x.Accept(this);
             });
         }
@@ -515,10 +512,10 @@ namespace CodeGeneration
 
         public override void Visit(PlayLoopNode node)
         {
-            int local = IndentationLevel;
+            int local = indentationLevel;
 
             CSharpString.Append("{");
-            IndentationLevel++;
+            indentationLevel++;
             CSharpString.Append("List<" + node.Player.Type); 
             // Checks whether the type is a struct and adds the _ after the type if it is
             if (!IsPrimitiveType(node.Player.Type))
@@ -558,7 +555,7 @@ namespace CodeGeneration
             CSharpString.Append("do");
             PrettyPrintNewLine();
             CSharpString.Append("{");
-            IndentationLevel++;
+            indentationLevel++;
             PrettyPrintNewLine();
             CSharpString.Append("AllElements" + local + " = ");
             node.AllPlayers.Accept(this);
@@ -566,9 +563,9 @@ namespace CodeGeneration
             PrettyPrintNewLine();
             CSharpString.Append("for (int i = 0; i < AllElements" + local + ".Count; i++)");
             PrettyPrintNewLine();
-            IndentationLevel++;
+            indentationLevel++;
             CSharpString.Append("{");
-            IndentationLevel++;
+            indentationLevel++;
             PrettyPrintNewLine();
             node.Player.Accept(this);
             CSharpString.Append(" = AllElements" + local + "[i];");
@@ -576,19 +573,17 @@ namespace CodeGeneration
             node.Opponents.Accept(this);
             CSharpString.Append(" = AllElements" + local + ".Where((x, j) => j != i).ToList();");
             node.PlayLoopBody.Accept(this);
-            IndentationLevel--;
+            indentationLevel--;
             CSharpString.Append("}");
             PrettyPrintNewLine();
-            IndentationLevel--;
+            indentationLevel--;
             CSharpString.Append("} while (!(");
             node.UntilCondition.Accept(this);
             CSharpString.Append("));");
 
-            IndentationLevel--;
+            indentationLevel--;
             CSharpString.Append("}");
-            IndentationLevel--;
-
-
+            indentationLevel--;
         }
 
         public override void Visit(ProgNode node)
@@ -605,7 +600,7 @@ namespace CodeGeneration
             CSharpString.Append("public class Program__");
             PrettyPrintNewLine();
             CSharpString.Append("{");
-            IndentationLevel++;
+            indentationLevel++;
             PrettyPrintNewLine();
             GenerateStandardFunctions();
             foreach (TopDclNode DclNode in node.TopDclNodes)
@@ -614,7 +609,7 @@ namespace CodeGeneration
                 DclNode.Accept(this);
                 PrettyPrintNewLine();
             }
-            IndentationLevel--;
+            indentationLevel--;
             PrettyPrintNewLine();
             CSharpString.Append("}");
         }
@@ -636,7 +631,7 @@ namespace CodeGeneration
             CSharpString.Append("class ");
             node.Id.Accept(this);
             CSharpString.Append("{");
-            IndentationLevel++;
+            indentationLevel++;
             PrettyPrintNewLine();
             foreach (DeclarationNode DclNode in node.Declarations)
             {
@@ -654,17 +649,17 @@ namespace CodeGeneration
             }
 
             node.Constructor?.Accept(this);
-            IndentationLevel--;
+            indentationLevel--;
             PrettyPrintNewLine();
             CSharpString.Append("}");
         }
 
         public override void Visit(UnaryExpressionNode node)
         {
-            UnaryOperator Operator = node.Operator;
+            UnaryOperator unOperator = node.Operator;
             if (node.Operator != UnaryOperator.DEFAULT)
             {
-                switch (Operator)
+                switch (unOperator)
                 {
                     case UnaryOperator.NOT:
                         CSharpString.Append(" !(");

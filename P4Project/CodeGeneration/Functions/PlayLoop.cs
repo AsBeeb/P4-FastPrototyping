@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CodeGeneration.Functions
 {
-    class PlayLoop<T>
+    public class PlayLoop<T>
     {
-        PlayLoop()
+        public PlayLoop()
         {
             List<T> Elements = new List<T>();
             List<T> TemporaryElements = new List<T>();
@@ -25,11 +22,9 @@ namespace CodeGeneration.Functions
                     player = TemporaryElements[i];
                     Opponents = TemporaryElements.Where((x, j) => j != i).ToList();
                     // sæt programmørens kode ind
-
                 }
 
             } while (!(Condition));
         }
-
     }
 }
