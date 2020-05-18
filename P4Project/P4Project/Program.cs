@@ -17,13 +17,13 @@ namespace P4Project
         {
             Queue<Token> tokenQueue = new Queue<Token>();
 
-            string filePath = Directory.GetCurrentDirectory();
+            string filePath; // = Directory.GetCurrentDirectory();
       
             // Check for args
             if (args.Length > 0)
             {
-                string fileName = args[0];
-                filePath += "\\" + fileName;
+                filePath = args[0];
+                //filePath += "\\" + fileName;
                 if (!File.Exists(filePath))
                 {
                     Console.WriteLine("File not found.");
