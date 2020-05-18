@@ -27,6 +27,7 @@ namespace P4Project
                 if (!File.Exists(filePath))
                 {
                     Console.WriteLine("File not found.");
+                    Console.ReadKey();
                     return;
                 }
             }
