@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.IO;
 using ScannerLib;
 using ParserLib;
@@ -83,16 +81,16 @@ namespace P4Project
             CSharpCompiler.CompileAndStartConsole(codeGeneratorVisitor.CSharpString);
         }
 
-        public static void SaveProgram(string Program, string filePath)
+        private static void SaveProgram(string Program, string filePath)
         {
             filePath = filePath.Replace(".txt", "");
             filePath += DateTime.Now.Hour.ToString() + DateTime.Now.Minute.ToString() + DateTime.Now.Second.ToString();
             filePath += ".cs";
             
             //Creates and writes to the file
-            using (StreamWriter SW = File.CreateText(filePath))
+            using (StreamWriter sw = File.CreateText(filePath))
             {
-                SW.WriteLine(Program);
+                sw.WriteLine(Program);
             }
         }
     }
