@@ -1,20 +1,15 @@
 ﻿using ParserLib.AST;
 using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Text;
 
 namespace ParserLib
 {
     public class PrettyPrintVisitor : Visitor
     {
-        private int IndentationLevel = 0;
-
+        private int indentationLevel = 0;
 
         private void PrettyPrintNewLine()
         {
-            Console.Write($"\n" + new string(' ', 4 * IndentationLevel));
+            Console.Write($"\n" + new string(' ', 4 * indentationLevel));
         }
 
         public override void Visit(ArrayAccessNode node)
@@ -96,13 +91,13 @@ namespace ParserLib
         {
             PrettyPrintNewLine();
             Console.Write("{");
-            IndentationLevel++;
+            indentationLevel++;
             PrettyPrintNewLine();
             foreach (StmtNode stmt in node.StmtNodes)
             {
                 stmt.Accept(this);
             }
-            IndentationLevel--;
+            indentationLevel--;
             PrettyPrintNewLine();
             Console.Write("}");
             PrettyPrintNewLine();
@@ -161,7 +156,6 @@ namespace ParserLib
             node.ElseBody.Accept(this);
         }
 
-        // De to Andreaser
         public override void Visit(FieldAccessNode node)
         {
             node.Id.Accept(this);
@@ -224,7 +218,7 @@ namespace ParserLib
 
         public override void Visit(GlobalDclNode node)
         {
-            Console.Write("global " + node.Type + " "); // global int 
+            Console.Write("global " + node.Type + " "); 
             node.Id.Accept(this);
             Console.Write(" = ");
             node.InitialValue.Accept(this);
@@ -307,14 +301,14 @@ namespace ParserLib
             Console.Write("struct ");
             node.Id.Accept(this);
             Console.Write("{");
-            IndentationLevel++;
+            indentationLevel++;
             PrettyPrintNewLine();
             foreach (DeclarationNode DclNode in node.Declarations)
             {
                 DclNode.Accept(this);
             }
             node.Constructor.Accept(this);
-            IndentationLevel--;
+            indentationLevel--;
             PrettyPrintNewLine();
             Console.Write("}");
         }
@@ -339,7 +333,6 @@ namespace ParserLib
             }
 
             node.ExprNode.Accept(this);
-            
         }
 
         public override void Visit(WhileNode node)
