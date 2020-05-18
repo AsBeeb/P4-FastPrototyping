@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Linq;
+﻿using System.Linq;
+
 namespace ScannerLib
 {
     public enum TokenType
@@ -20,6 +18,7 @@ namespace ScannerLib
         public string Value;
         public TokenType Type;
         public int Line;
+
         public Token(string value, TokenType type, int line)
         {
             Value = value;

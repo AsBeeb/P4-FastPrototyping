@@ -1,40 +1,38 @@
 ﻿using ParserLib.AST;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SemanticLib
 {
     public class SymbolTable
     {
-        public Scope CurrentScope;
         public Scope GlobalScope;
+
+        private Scope currentScope;
 
         public SymbolTable()
         {
             GlobalScope = new Scope();
-            CurrentScope = GlobalScope;
-            
+            currentScope = GlobalScope;
         }
+
         public void OpenScope()
         {
-            Scope newScope = new Scope(CurrentScope);
-            CurrentScope.Children.Add(newScope);
-            CurrentScope = newScope;
+            Scope newScope = new Scope(currentScope);
+            currentScope.Children.Add(newScope);
+            currentScope = newScope;
         }
 
         public void CloseScope()
         {
-            CurrentScope = CurrentScope.Parent;
+            currentScope = currentScope.Parent;
         }
 
         public void EnterSymbol(string symbolName, ASTnode astnode)
         {
             if (!IsDeclaredLocally(symbolName))
             {
-                CurrentScope.Symbols.Add(symbolName, astnode);
+                currentScope.Symbols.Add(symbolName, astnode);
             }
             else
             {
@@ -44,11 +42,10 @@ namespace SemanticLib
 
         public ASTnode RetrieveSymbol(string symbolName, ASTnode problemNode = null)
         {
-            ASTnode returnValue;
-            Scope viewingScope = CurrentScope;
+            Scope viewingScope = currentScope;
             do
             {
-                if (viewingScope.Symbols.TryGetValue(symbolName, out returnValue))
+                if (viewingScope.Symbols.TryGetValue(symbolName, out ASTnode returnValue))
                 {
                     return returnValue;
                 }
@@ -65,11 +62,6 @@ namespace SemanticLib
             }
         }
 
-        public bool IsDeclaredLocally(string symbolToFind)
-        {
-            return CurrentScope.Symbols.ContainsKey(symbolToFind);
-        }
-
         public void PrintTable(Scope header, int level)
         {
             foreach(Scope scope in header.Children)
@@ -82,6 +74,11 @@ namespace SemanticLib
                 // Print
                 Console.WriteLine("Level: " + level + " - Name: " + kp.Key + " - Type: " + kp.Value.GetType() + ".");
             }
+        }
+
+        private bool IsDeclaredLocally(string symbolToFind)
+        {
+            return currentScope.Symbols.ContainsKey(symbolToFind);
         }
     }
 }

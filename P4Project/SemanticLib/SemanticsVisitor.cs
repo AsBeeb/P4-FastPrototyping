@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using ParserLib;
 using ParserLib.AST;
 using ParserLib.AST.DataStructures;
@@ -11,7 +8,7 @@ namespace SemanticLib
 {
     public class SemanticsVisitor : Visitor
     {
-        SymbolTable symbolTable;
+        private SymbolTable symbolTable;
 
         public SemanticsVisitor(SymbolTable symbolTable)
         {
@@ -56,11 +53,12 @@ namespace SemanticLib
             symbolTable.OpenScope();
             node.FormalParamNodes?.ForEach(x => x.Accept(this));
             node.Block.Accept(this);
-            GetReturnNodes(node.Block).ForEach(returnNode => {
-            if (returnNode.ReturnValue != null)
+            GetReturnNodes(node.Block).ForEach(returnNode =>
             {
-                throw new SemanticException($"Error on line {node.Line}: Return type invalid. Expected void, found {returnNode.ReturnValue.Type}.");
-            }
+                if (returnNode.ReturnValue != null)
+                {
+                    throw new SemanticException($"Error on line {node.Line}: Return type invalid. Expected void, found {returnNode.ReturnValue.Type}.");
+                }
             });
             symbolTable.CloseScope();
         }
@@ -201,7 +199,6 @@ namespace SemanticLib
                 {
                     for (int i = 0; i < node.ActualParameters.Count; i++)
                     {
-                        //CompatibleTypes(node.ActualParameters[i].Type, funcDcl.FormalParamNodes[i].Type + (funcDcl.FormalParamNodes[i].IsArray? "[]" : "") , "parameter type", node);
                         if (node.ActualParameters[i].Type != funcDcl.FormalParamNodes[i].Type + (funcDcl.FormalParamNodes[i].IsArray ? "[]" : ""))
                         {
                             throw new SemanticException($"Error on line {node.Line}: Invalid parameter type: can't convert {funcDcl.FormalParamNodes[i].Type + (funcDcl.FormalParamNodes[i].IsArray ? "[]" : "")} to type {node.ActualParameters[i].Type}.");
@@ -221,7 +218,6 @@ namespace SemanticLib
                 {
                     for (int i = 0; i < node.ActualParameters.Count; i++)
                     {
-                        //CompatibleTypes(node.ActualParameters[i].Type, structDcl.Constructor.FormalParamNodes[i].Type + (structDcl.Constructor.FormalParamNodes[i].IsArray ? "[]" : ""), "parameter type", node);
                         if (node.ActualParameters[i].Type != structDcl.Constructor.FormalParamNodes[i].Type + (structDcl.Constructor.FormalParamNodes[i].IsArray ? "[]" : ""))
                         {
                             throw new SemanticException($"Error on line {node.Line}: Invalid parameter type: can't convert {structDcl.Constructor.FormalParamNodes[i].Type + (structDcl.Constructor.FormalParamNodes[i].IsArray ? "[]" : "")} to type {node.ActualParameters[i].Type}.");
@@ -311,12 +307,10 @@ namespace SemanticLib
                         }
                     }
                 }
-                else if(node.ActualParameters.Count == funcDcl.FormalParamNodes.Count)
+                else if (node.ActualParameters.Count == funcDcl.FormalParamNodes.Count)
                 {
                     for (int i = 0; i < node.ActualParameters.Count; i++)
                     {
-                        //CompatibleTypes(node.ActualParameters[i].Type, funcDcl.FormalParamNodes[i].Type + (funcDcl.FormalParamNodes[i].IsArray? "[]": "" ), "parameter type", node);
-
                         if (node.ActualParameters[i].Type != funcDcl.FormalParamNodes[i].Type + (funcDcl.FormalParamNodes[i].IsArray ? "[]" : ""))
                         {
                             throw new SemanticException($"Error on line {node.Line}: Invalid parameter type: can't convert {funcDcl.FormalParamNodes[i].Type + (funcDcl.FormalParamNodes[i].IsArray ? "[]" : "")} to type {node.ActualParameters[i].Type}.");
@@ -351,8 +345,6 @@ namespace SemanticLib
                 throw new SemanticException($"Error on line {node.Line}: Invalid return type {node.ReturnType} declared on {node.Id.Id}.");
             }
 
-
-
             string returnNodeType;
             symbolTable.OpenScope();
             foreach (FormalParamNode param in node.FormalParamNodes)
@@ -361,7 +353,7 @@ namespace SemanticLib
             }
 
             node.FuncBody.Accept(this);
-            List<ReturnNode> returnNodes = GetReturnNodes(node.FuncBody); //node.FuncBody.StmtNodes.Where(x => x is ReturnNode).Select(x => (ReturnNode)x).ToList();
+            List<ReturnNode> returnNodes = GetReturnNodes(node.FuncBody); 
 
             if (returnNodes.Count == 0 && node.ReturnType != "void")
             {
@@ -552,7 +544,6 @@ namespace SemanticLib
             }
 
             symbolTable.OpenScope();
-            //node.Declarations?.ForEach(x => x.Accept(this));
             foreach (DeclarationNode item in node.Declarations)
             {
                 item.Accept(this);
@@ -713,7 +704,7 @@ namespace SemanticLib
                     {
                         node.Type = "bool";
                     }
-                    else if(node.LeftExpr.Type == "bool" && node.RightExpr.Type == "bool")
+                    else if (node.LeftExpr.Type == "bool" && node.RightExpr.Type == "bool")
                     {
                         node.Type = "bool";
                     }
@@ -830,7 +821,7 @@ namespace SemanticLib
                                     tempIsArray = tempDclNode.GetIsArray;
                                 }
                                 else
-                                {                                     
+                                {
                                     throw new SemanticException($"Error on line {idOp.Line}: Unexpected reference to field: {field.Id.Id} in object: {structDcl.Id.Id}.");
                                 }
                             }
@@ -856,7 +847,7 @@ namespace SemanticLib
                         {
                             IdOperationNode previousIdOp = node.GetIdOperations[idOpIndex - 1];
                             if (previousIdOp is ArrayAccessNode)
-                            {                                  
+                            {
                                 throw new SemanticException($"Error on line {idOp.Line}: Illegal reference to two-dimensional array in operations emanating from {node.GetId}.");
                             }
                         }
@@ -892,7 +883,8 @@ namespace SemanticLib
             }
 
         }
-        public static bool IsPrimitiveType(string type)
+
+        private static bool IsPrimitiveType(string type)
         {
             bool isPrimitive = false;
             if (type == "bool" || type == "int" || type == "float" || type == "string")
@@ -902,7 +894,7 @@ namespace SemanticLib
             return isPrimitive;
         }
 
-        List<ReturnNode> GetReturnNodes(BlockNode block)
+        private List<ReturnNode> GetReturnNodes(BlockNode block)
         {
             var returnList = new List<ReturnNode>();
 
@@ -922,14 +914,15 @@ namespace SemanticLib
                     }
                 }
                 else if (stmt is WhileNode WhileNde)
-                    {
-                        returnList.AddRange(GetReturnNodes(WhileNde.WhileLoopBody));
-                    }
+                {
+                    returnList.AddRange(GetReturnNodes(WhileNde.WhileLoopBody));
+                }
                 else if (stmt is PlayLoopNode playNode)
                 {
                     returnList.AddRange(GetReturnNodes(playNode.PlayLoopBody));
                 }
             }
+
             return returnList;
         }
 
@@ -1034,5 +1027,4 @@ namespace SemanticLib
             symbolTable.EnterSymbol("ListLength", listLengthFunction);
         }
     }
-
 }
