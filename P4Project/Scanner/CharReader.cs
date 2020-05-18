@@ -1,17 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Text;
+﻿using System.IO;
 
 namespace ScannerLib
 {
-    class CharReader : StreamReader
+    public class CharReader : StreamReader
     {
         public CharReader(string InputFile) : base(InputFile)
         {
         }
 
-        new public char Peek()
+        public new char Peek()
         {
             return (char) base.Peek();
         }

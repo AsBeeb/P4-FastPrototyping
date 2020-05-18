@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 
 namespace ScannerLib
 {
     public static class Scanner
     {
-        public static int line = 1;
+        public static int Line = 1;
+
         //Specifies all the keyword tokens
         private static Dictionary<string, TokenType> Keywords = new Dictionary<string, TokenType>
         {
@@ -41,7 +41,7 @@ namespace ScannerLib
             {
                 //Counts the line number for the exception message
                 if (reader.PeekChar() == '\n')
-                    line += 1;
+                    Line += 1;
                 reader.Read();
 
             }
@@ -49,7 +49,7 @@ namespace ScannerLib
             // If end of file, return eof token
             if (reader.EndOfStream)
             {
-                ans = new Token(TokenType.eof_token, line);
+                ans = new Token(TokenType.eof_token, Line);
             }
             else
             {
@@ -68,30 +68,30 @@ namespace ScannerLib
                     char ch = reader.ReadChar();
                     switch (ch)
                     {
-                        // Aritmetiske
+                        // Arithmetic
                         case '+':
-                            ans = new Token(TokenType.plus_token, line);
+                            ans = new Token(TokenType.plus_token, Line);
                             break;
                         case '-':
-                            ans = new Token(TokenType.minus_token, line);
+                            ans = new Token(TokenType.minus_token, Line);
                             break;
                         case '=':
                             ans = TokenComp(reader, '=', TokenType.assign_token, TokenType.equal_token);
                             break;
                         case '*':
-                            ans = new Token(TokenType.multiply_token, line);
+                            ans = new Token(TokenType.multiply_token, Line);
                             break;
                         case '/':
-                            ans = new Token(TokenType.divide_token, line);
+                            ans = new Token(TokenType.divide_token, Line);
                             break;
                         case '%':
-                            ans = new Token(TokenType.modulo_token, line);
+                            ans = new Token(TokenType.modulo_token, Line);
                             break;
                         case '^':
-                            ans = new Token(TokenType.power_token, line);
+                            ans = new Token(TokenType.power_token, Line);
                             break;
 
-                        // Logiske
+                        // Logical
                         case '!':
                             ans = TokenComp(reader, '=', TokenType.not_token, TokenType.notequal_token);
                             break;
@@ -108,40 +108,40 @@ namespace ScannerLib
                             ans = TokenComp(reader, '|', TokenType.or_token, TokenType.or_token);
                             break;
 
-                        // Kontrolstruktur
+                        // Controlstructures
                         case ';':
-                            ans = new Token(TokenType.semicolon_token, line);
+                            ans = new Token(TokenType.semicolon_token, Line);
                             break;
                         case ',':
-                            ans = new Token(TokenType.comma_token, line);
+                            ans = new Token(TokenType.comma_token, Line);
                             break;
 
-                        // Datatyper
+                        // Datatypes
                         case '(':
-                            ans = new Token(TokenType.lparen_token, line);
+                            ans = new Token(TokenType.lparen_token, Line);
                             break;
                         case ')':
-                            ans = new Token(TokenType.rparen_token, line);
+                            ans = new Token(TokenType.rparen_token, Line);
                             break;
                         case '[':
-                            ans = new Token(TokenType.lsbracket_token, line);
+                            ans = new Token(TokenType.lsbracket_token, Line);
                             break;
                         case ']':
-                            ans = new Token(TokenType.rsbracket_token, line);
+                            ans = new Token(TokenType.rsbracket_token, Line);
                             break;
                         case '{':
-                            ans = new Token(TokenType.lcbracket_token, line);
+                            ans = new Token(TokenType.lcbracket_token, Line);
                             break;
                         case '}':
-                            ans = new Token(TokenType.rcbracket_token, line);
+                            ans = new Token(TokenType.rcbracket_token, Line);
                             break;
 
-                        // Diverse
+                        // Misc
                         case '.':
-                            ans = new Token(TokenType.dot_token, line);
+                            ans = new Token(TokenType.dot_token, Line);
                             break;
                         case ':':
-                            ans = new Token(TokenType.colon_token, line);
+                            ans = new Token(TokenType.colon_token, Line);
                             break;
                         case '\"':
                             ans = GetString(reader);
@@ -151,7 +151,7 @@ namespace ScannerLib
                             break;
 
                         default:
-                            throw new LexicalException(line);
+                            throw new LexicalException(Line);
                     }
                 }
             }
@@ -166,7 +166,6 @@ namespace ScannerLib
             {
                 reader.Read();
             }
-
         }
 
         private static Token GetString(StreamReaderExpanded reader)
@@ -181,12 +180,12 @@ namespace ScannerLib
             if (reader.PeekChar() == '\"')
             {
                 reader.Read();
-                return new Token(value, TokenType.stringval_token, line);
+                return new Token(value, TokenType.stringval_token, Line);
             }
             // Throw exception because of EOF or runaway string.
             else
             {
-                throw new LexicalException(line);
+                throw new LexicalException(Line);
             }
         }
 
@@ -196,17 +195,17 @@ namespace ScannerLib
             if (reader.PeekChar() == expectedSymbol)
             {
                 reader.Read();
-                return new Token(option2, line);
+                return new Token(option2, Line);
             }
             // If it isn't the expected symbol and the options are the same it throws an exception. 
             // This could be if we expect && but only read &, then the second one would throw the exception.
             else if (option1 == option2)
             {
-                throw new LexicalException(line);
+                throw new LexicalException(Line);
             }
             else
             {
-                return new Token(option1, line);
+                return new Token(option1, Line);
             }
         }
 
@@ -232,7 +231,7 @@ namespace ScannerLib
                 // If there is no digits after the dot we throw an exception.
                 if (!Char.IsDigit(reader.PeekChar()))
                 {
-                    throw new LexicalException(line);
+                    throw new LexicalException(Line);
                 }
                     
                 // Reads the digits after the dot.
@@ -242,7 +241,7 @@ namespace ScannerLib
                 }
             }
 
-            return new Token(value, type, line);
+            return new Token(value, type, Line);
         }
 
         private static Token ScanWords(StreamReaderExpanded reader)
@@ -259,13 +258,13 @@ namespace ScannerLib
             Other values, such as "if" and "play", are always the same, and are therefore discarded to save space. */
             if (Keywords.TryGetValue(value, out type))
             {
-                return (type == TokenType.boolval_token) ? new Token(value, type, line) : new Token(type, line);
+                return (type == TokenType.boolval_token) ? new Token(value, type, Line) : new Token(type, Line);
             }
             // Alternatively, the word is saved as an identifier token.
             else
             {
                 type = TokenType.id_token;
-                return new Token(value, type, line);
+                return new Token(value, type, Line);
             }
         }
     }
