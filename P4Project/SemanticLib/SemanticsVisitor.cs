@@ -479,6 +479,10 @@ namespace SemanticLib
                 {
                     throw new SemanticException($"Error on line {node.Line}: Formal parameters are not allowed in main.");
                 }
+                if (mainNode.ReturnType != "int" && mainNode.ReturnType != "void")
+                {
+                    throw new SemanticException($"Error on line {node.Line}: Only valid return types of main are void or int.");
+                }
             }
 
             node.TopDclNodes.ForEach(x => x.Accept(this));
