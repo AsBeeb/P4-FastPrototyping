@@ -313,7 +313,14 @@ namespace CodeGeneration
 
         public override void Visit(FuncCallExpressionNode node)
         {
-            node.Id.Accept(this);
+            if (node.Id.Id == "main")
+            {
+                CSharpString.Append("Main");
+            }
+            else
+            {
+                node.Id.Accept(this);
+            }
             CSharpString.Append("(");
             node.ActualParameters?.ForEach(x => 
             {
@@ -328,7 +335,14 @@ namespace CodeGeneration
 
         public override void Visit(FuncCallStmtNode node)
         {
-            node.Id.Accept(this);
+            if (node.Id.Id == "main")
+            {
+                CSharpString.Append("Main");
+            }
+            else
+            {
+                node.Id.Accept(this);
+            }
             CSharpString.Append("(");
             node.ActualParameters?.ForEach(x => 
             {
