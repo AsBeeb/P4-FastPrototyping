@@ -85,13 +85,7 @@
     <None Include="Properties\app.manifest" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="KodeEksempler\Demo1.txt" />
-    <Content Include="KodeEksempler\Demo2.txt" />
-    <Content Include="KodeEksempler\Demo4.txt" />
-    <Content Include="KodeEksempler\Demo6.txt" />
-    <Content Include="KodeEksempler\Michaels Demo.txt" />
     <Content Include="KodeEksempler\Minesweeper.txt" />
-    <Content Include="KodeEksempler\Numbers.txt" />
     <Content Include="KodeEksempler\TurBaseretKampspil.txt" />
   </ItemGroup>
   <ItemGroup>
