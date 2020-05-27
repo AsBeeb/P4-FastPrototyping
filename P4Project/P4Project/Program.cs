@@ -78,6 +78,8 @@ namespace P4Project
 
             // After .cs code is generated, run Roslyn compiler
             CSharpCompiler.CompileAndStartConsole(codeGeneratorVisitor.CSharpString);
+
+            Console.ReadKey();
         }
 
         private static void SaveProgram(string Program, string filePath)
